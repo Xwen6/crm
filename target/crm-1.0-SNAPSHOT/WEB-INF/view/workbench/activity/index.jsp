@@ -22,6 +22,9 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 <script type="text/javascript">
 
 	$(function (){
+		/*页面加载完查询用户列表*/
+		getUserList();
+
 		/*页面加载完成后，要加载活动数据*/
 		pageList(1,2);
 		/*更新操作*/
@@ -172,19 +175,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 			pickerPosition: "bottom-left"
 		});
 
-		$.ajax({
-			url :"workbench/activity/getUserList.do",
-			type :"get",
-			dataType :"json",
-			success : function (data){
-				$.each(data,function (index,element) {
 
-					$("#create-owner").append("<option value='"+element.id+"'>"+element.name+"</option>")
-				})
-				/*下拉列表默认显示登录的用户*/
-				$("#create-owner").val("${sessionScope.user.id}")
-			}
-		})
 		
 		$("#addBtn").click(function () {
 			$("#createActivityModal").modal("show");
@@ -293,6 +284,22 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 			}
 		})
 	}
+
+	function getUserList() {
+		$.ajax({
+			url :"workbench/activity/getUserList.do",
+			type :"get",
+			dataType :"json",
+			success : function (data){
+				$.each(data,function (index,element) {
+					/*填充新建用户的模态窗口*/
+					$("#create-owner").append("<option value='"+element.id+"'>"+element.name+"</option>")
+				})
+				/*下拉列表默认显示登录的用户*/
+				$("#create-owner").val("${sessionScope.user.id}")
+			}
+		})
+	}
 	
 </script>
 </head>
@@ -395,11 +402,11 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 						<div class="form-group">
 							<label for="edit-startDate" class="col-sm-2 control-label">开始日期</label>
 							<div class="col-sm-10" style="width: 300px;">
-								<input type="text" class="form-control time" id="edit-startDate" value="2020-10-10" readonly>
+								<input type="text" class="form-control time" id="edit-startDate"  readonly>
 							</div>
 							<label for="edit-endDate" class="col-sm-2 control-label">结束日期</label>
 							<div class="col-sm-10" style="width: 300px;">
-								<input type="text" class="form-control time" id="edit-endDate" value="2020-10-20" readonly>
+								<input type="text" class="form-control time" id="edit-endDate"  readonly>
 							</div>
 						</div>
 						
@@ -462,13 +469,13 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 				  <div class="form-group">
 				    <div class="input-group">
 				      <div class="input-group-addon">开始日期</div>
-					  <input class="form-control" type="text" id="search-startDate" />
+					  <input class="form-control " type="text" id="search-startDate" />
 				    </div>
 				  </div>
 				  <div class="form-group">
 				    <div class="input-group">
 				      <div class="input-group-addon">结束日期</div>
-					  <input class="form-control" type="text" id="search-endDate">
+					  <input class="form-control " type="text" id="search-endDate">
 				    </div>
 				  </div>
 				  

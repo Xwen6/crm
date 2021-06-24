@@ -31,6 +31,10 @@
         <param-name>contextConfigLocation</param-name>
         <param-value>classpath:conf/applicationContext.xml</param-value>
     </context-param>
+    <!--监听全局作用域对象-->
+    <listener>
+        <listener-class>wyu.xwen.web.listener.DicListener</listener-class>
+    </listener>
     
     <!--过滤器-->
     <filter>

@@ -22,6 +22,9 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 <script type="text/javascript">
 
 	$(function (){
+		/*页面加载完查询用户列表*/
+		getUserList();
+
 		/*页面加载完成后，要加载活动数据*/
 		pageList(1,2);
 		/*更新操作*/
@@ -172,19 +175,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 			pickerPosition: "bottom-left"
 		});
 
-		$.ajax({
-			url :"workbench/activity/getUserList.do",
-			type :"get",
-			dataType :"json",
-			success : function (data){
-				$.each(data,function (index,element) {
 
-					$("#create-owner").append("<option value='"+element.id+"'>"+element.name+"</option>")
-				})
-				/*下拉列表默认显示登录的用户*/
-				$("#create-owner").val("${sessionScope.user.id}")
-			}
-		})
 		
 		$("#addBtn").click(function () {
 			$("#createActivityModal").modal("show");
@@ -290,6 +281,22 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 					}
 				});
 
+			}
+		})
+	}
+
+	function getUserList() {
+		$.ajax({
+			url :"workbench/activity/getUserList.do",
+			type :"get",
+			dataType :"json",
+			success : function (data){
+				$.each(data,function (index,element) {
+					/*填充新建用户的模态窗口*/
+					$("#create-owner").append("<option value='"+element.id+"'>"+element.name+"</option>")
+				})
+				/*下拉列表默认显示登录的用户*/
+				$("#create-owner").val("${sessionScope.user.id}")
 			}
 		})
 	}

@@ -7,7 +7,9 @@
 
         <!--组件扫描器-->
     <context:component-scan base-package="wyu.xwen.settings.web.controller"/>
+    <context:component-scan base-package="wyu.xwen.workbench.web.controller"/>
     <context:component-scan base-package="wyu.xwen.web.controller"/>
+
 
         <!--视图解析器-->
     <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
@@ -18,4 +20,13 @@
     <mvc:annotation-driven/>
     <!--静态资源访问-->
   <!--  <mvc:resources mapping="/static/**" location="/static/"/>-->
+    <!--拦截器-->
+    <mvc:interceptors>
+        <!--声明第一个拦截器-->
+        <mvc:interceptor>
+            <mvc:mapping path="/**"/>
+            <!--声明拦截器对象-->
+            <bean class="wyu.xwen.handler.LoginHandler" />
+        </mvc:interceptor>
+    </mvc:interceptors>
 </beans>

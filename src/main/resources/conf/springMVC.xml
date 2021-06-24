@@ -10,6 +10,7 @@
     <context:component-scan base-package="wyu.xwen.workbench.web.controller"/>
     <context:component-scan base-package="wyu.xwen.web.controller"/>
 
+
         <!--视图解析器-->
     <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
         <property name="prefix" value="/WEB-INF/view/"/>

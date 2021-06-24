@@ -49,8 +49,7 @@ public class ActivityController {
     /*获取用户列表*/
     @RequestMapping("getUserList.do")
     public List<User> getUserList(){
-      List<User> userList =  activityService.getUserList();
-      return userList;
+      return activityService.getUserList();
     }
 
 }

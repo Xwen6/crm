@@ -12,6 +12,7 @@
    
     <typeAliases>
         <package name="wyu.xwen.settings.domain"/>
+        <package name="wyu.xwen.workbench.domain"/>
     </typeAliases>
 
     <!-- sql mapper(sql映射文件)的位置-->
