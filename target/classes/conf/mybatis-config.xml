@@ -16,7 +16,8 @@
 
     <!-- sql mapper(sql映射文件)的位置-->
     <mappers>
-        <package name="wyu.xwen.settings.dao"/>
+        <mapper resource="mapper/settings/UserDao.xml"/>
+        <mapper resource="mapper/workbench/ActivityDao.xml"/>
 
 
     </mappers>

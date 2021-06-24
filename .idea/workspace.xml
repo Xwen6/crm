@@ -9,7 +9,20 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8ce43648-9856-4efc-9ee6-5dddaaa08bfb" name="Default Changelist" comment="" />
+    <list default="true" id="8ce43648-9856-4efc-9ee6-5dddaaa08bfb" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/wyu/xwen/settings/dao/UserDao.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/wyu/xwen/workbench/dao/ActivityDao.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/wyu/xwen/workbench/service/impl/ActivityServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/wyu/xwen/workbench/service/impl/ActivityServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/conf/applicationContext.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/conf/applicationContext.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/conf/mybatis-config.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/conf/mybatis-config.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/conf/applicationContext.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/conf/applicationContext.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/conf/mybatis-config.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/conf/mybatis-config.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/wyu/xwen/settings/dao/UserDao.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/crm-1.0-SNAPSHOT/WEB-INF/classes/conf/applicationContext.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/crm-1.0-SNAPSHOT/WEB-INF/classes/conf/applicationContext.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/crm-1.0-SNAPSHOT/WEB-INF/classes/conf/mybatis-config.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/crm-1.0-SNAPSHOT/WEB-INF/classes/conf/mybatis-config.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/crm-1.0-SNAPSHOT/WEB-INF/classes/wyu/xwen/settings/dao/UserDao.xml" beforeDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -18,6 +31,8 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
+        <option value="mybatis-mapper" />
+        <option value="Interface" />
         <option value="Class" />
       </list>
     </option>
@@ -65,7 +80,7 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/main/resources/mapper/workbench" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.tslint" value="true" />
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
@@ -79,10 +94,11 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\25021\Desktop\SpringSSMOASystem-master\crm\src\main\resources\mapper\workbench" />
+      <recent name="C:\Users\25021\Desktop\SpringSSMOASystem-master\crm\src\main\resources\mapper\settings" />
+      <recent name="C:\Users\25021\Desktop\SpringSSMOASystem-master\crm\src\main\java\wyu\xwen\workbench\domain" />
       <recent name="C:\Users\25021\Desktop\SpringSSMOASystem-master\crm\src\main\java\wyu\xwen" />
       <recent name="C:\Users\25021\Desktop\SpringSSMOASystem-master\crm\src\main\java\wyu\xwen\setting\dao" />
-      <recent name="C:\Users\25021\Desktop\SpringSSMOASystem-master\crm\target\classes\conf" />
-      <recent name="C:\Users\25021\Desktop\SpringSSMOASystem-master\crm\src\main\resources\conf" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
       <recent name="wyu.xwen.setting.web.controller" />
@@ -92,6 +108,17 @@
     </key>
   </component>
   <component name="RunManager">
+    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
+      <option name="arquillianRunConfiguration">
+        <value>
+          <option name="containerStateName" value="" />
+        </value>
+      </option>
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="CRM-Tomcat" type="#com.intellij.j2ee.web.tomcat.TomcatRunConfigurationFactory" factoryName="Local" APPLICATION_SERVER_NAME="CRM-Tomcat" ALTERNATIVE_JRE_ENABLED="false" nameIsGenerated="true">
       <option name="UPDATE_ON_FRAME_DEACTIVATION" value="true" />
       <option name="UPDATE_CLASSES_ON_FRAME_DEACTIVATION" value="true" />
@@ -195,11 +222,23 @@
       <workItem from="1624505641170" duration="3173000" />
       <workItem from="1624510209987" duration="8000" />
       <workItem from="1624510235816" duration="1664000" />
-      <workItem from="1624517500182" duration="349000" />
+      <workItem from="1624517500182" duration="1516000" />
     </task>
+    <task id="LOCAL-00001" summary="v1">
+      <created>1624518094908</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1624518094908</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="v1" />
+    <option name="LAST_COMMIT_MESSAGE" value="v1" />
   </component>
 </project>

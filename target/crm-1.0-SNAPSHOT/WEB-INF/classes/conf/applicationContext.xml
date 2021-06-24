@@ -26,10 +26,10 @@
     <!--创建dao对象-->
     <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
         <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"/>
-        <property name="basePackage" value="wyu.xwen.settings.dao"/>
+        <property name="basePackage" value="wyu.xwen.settings.dao,wyu.xwen.workbench.dao"/>
     </bean>
     <!--组件扫描器-->
-    <context:component-scan base-package="wyu.xwen.settings.service"/>
+    <context:component-scan base-package="wyu.xwen"/>
 
     <!--事务管理器-->
     <!--<bean id="dataSourceTransactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
