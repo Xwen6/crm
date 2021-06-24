@@ -395,11 +395,11 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 						<div class="form-group">
 							<label for="edit-startDate" class="col-sm-2 control-label">开始日期</label>
 							<div class="col-sm-10" style="width: 300px;">
-								<input type="text" class="form-control time" id="edit-startDate" value="2020-10-10" readonly>
+								<input type="text" class="form-control time" id="edit-startDate"  readonly>
 							</div>
 							<label for="edit-endDate" class="col-sm-2 control-label">结束日期</label>
 							<div class="col-sm-10" style="width: 300px;">
-								<input type="text" class="form-control time" id="edit-endDate" value="2020-10-20" readonly>
+								<input type="text" class="form-control time" id="edit-endDate"  readonly>
 							</div>
 						</div>
 						
@@ -462,13 +462,13 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 				  <div class="form-group">
 				    <div class="input-group">
 				      <div class="input-group-addon">开始日期</div>
-					  <input class="form-control" type="text" id="search-startDate" />
+					  <input class="form-control " type="text" id="search-startDate" />
 				    </div>
 				  </div>
 				  <div class="form-group">
 				    <div class="input-group">
 				      <div class="input-group-addon">结束日期</div>
-					  <input class="form-control" type="text" id="search-endDate">
+					  <input class="form-control " type="text" id="search-endDate">
 				    </div>
 				  </div>
 				  
