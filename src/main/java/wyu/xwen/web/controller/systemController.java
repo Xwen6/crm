@@ -37,4 +37,22 @@ public class systemController {
     @RequestMapping("toTransaction.do")
     public  String toTransaction(){return "workbench/transaction/index";}
 
+    /*workbench/visit/index.jsp*/
+    @RequestMapping("toVisit.do")
+    public String toVisit()
+    {
+        return "workbench/visit/index";
+    }
+
+    @RequestMapping("toVisitDetail.do")
+    public String toVisitDetail()
+    {
+        return "workbench/visit/detail";
+    }
+
+    @RequestMapping("toVisitSaveTask.do")
+    public String toVisitSaveTask()
+    {
+        return "workbench/visit/saveTask";
+    }
 }

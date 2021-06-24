@@ -1,54 +1,59 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%
+String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath() + "/";
+%>
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
+	<base href="<%=basePath%>">
+	<meta charset="UTF-8">
 
-<link href="../../jquery/bootstrap_3.3.0/css/bootstrap.min.css" type="text/css" rel="stylesheet" />
-<script type="text/javascript" src="../../jquery/jquery-1.11.1-min.js"></script>
-<script type="text/javascript" src="../../jquery/bootstrap_3.3.0/js/bootstrap.min.js"></script>
+	<link href="static/jquery/bootstrap_3.3.0/css/bootstrap.min.css" type="text/css" rel="stylesheet" />
+	<script type="text/javascript" src="static/jquery/jquery-1.11.1-min.js"></script>
+	<script type="text/javascript" src="static/jquery/bootstrap_3.3.0/js/bootstrap.min.js"></script>
 
-<script type="text/javascript">
+	<script type="text/javascript">
 
-	//默认情况下取消和保存按钮是隐藏的
-	var cancelAndSaveBtnDefault = true;
-	
-	$(function(){
-		$("#remark").focus(function(){
-			if(cancelAndSaveBtnDefault){
-				//设置remarkDiv的高度为130px
-				$("#remarkDiv").css("height","130px");
+		//默认情况下取消和保存按钮是隐藏的
+		var cancelAndSaveBtnDefault = true;
+
+		$(function(){
+			$("#remark").focus(function(){
+				if(cancelAndSaveBtnDefault){
+					//设置remarkDiv的高度为130px
+					$("#remarkDiv").css("height","130px");
+					//显示
+					$("#cancelAndSaveBtn").show("2000");
+					cancelAndSaveBtnDefault = false;
+				}
+			});
+
+			$("#cancelBtn").click(function(){
 				//显示
-				$("#cancelAndSaveBtn").show("2000");
-				cancelAndSaveBtnDefault = false;
-			}
+				$("#cancelAndSaveBtn").hide();
+				//设置remarkDiv的高度为130px
+				$("#remarkDiv").css("height","90px");
+				cancelAndSaveBtnDefault = true;
+			});
+
+			$(".remarkDiv").mouseover(function(){
+				$(this).children("div").children("div").show();
+			});
+
+			$(".remarkDiv").mouseout(function(){
+				$(this).children("div").children("div").hide();
+			});
+
+			$(".myHref").mouseover(function(){
+				$(this).children("span").css("color","red");
+			});
+
+			$(".myHref").mouseout(function(){
+				$(this).children("span").css("color","#E6E6E6");
+			});
 		});
-		
-		$("#cancelBtn").click(function(){
-			//显示
-			$("#cancelAndSaveBtn").hide();
-			//设置remarkDiv的高度为130px
-			$("#remarkDiv").css("height","90px");
-			cancelAndSaveBtnDefault = true;
-		});
-		
-		$(".remarkDiv").mouseover(function(){
-			$(this).children("div").children("div").show();
-		});
-		
-		$(".remarkDiv").mouseout(function(){
-			$(this).children("div").children("div").hide();
-		});
-		
-		$(".myHref").mouseover(function(){
-			$(this).children("span").css("color","red");
-		});
-		
-		$(".myHref").mouseout(function(){
-			$(this).children("span").css("color","#E6E6E6");
-		});
-	});
-	
-</script>
+
+	</script>
 
 </head>
 <body>
@@ -82,7 +87,7 @@
 		<div style="position: relative; left: 40px; height: 30px; top: 10px;">
 			<div style="width: 300px; color: gray;">联系人</div>
 			<div style="width: 300px;position: relative; left: 200px; top: -20px;"><b>李四先生</b></div>
-			<div style="width: 300px;position: relative; left: 450px; top: -40px; color: gray;">未启动</div>
+			<div style="width: 300px;position: relative; left: 450px; top: -40px; color: gray;">状态</div>
 			<div style="width: 300px;position: relative; left: 650px; top: -60px;"><b>未启动</b></div>
 			<div style="height: 1px; width: 400px; background: #D5D5D5; position: relative; top: -60px;"></div>
 			<div style="height: 1px; width: 400px; background: #D5D5D5; position: relative; top: -60px; left: 450px;"></div>
@@ -125,7 +130,7 @@
 		
 		<!-- 备注1 -->
 		<div class="remarkDiv" style="height: 60px;">
-			<img title="zhangsan" src="../../image/user-thumbnail.png" style="width: 30px; height:30px;">
+			<img title="zhangsan" src="static/image/user-thumbnail.png" style="width: 30px; height:30px;">
 			<div style="position: relative; top: -40px; left: 40px;" >
 				<h5>呵呵！</h5>
 				<font color="gray">任务</font> <font color="gray">-</font> <b>拜访客户</b> <small style="color: gray;"> 2017-01-22 10:10:10 星期二由zhangsan</small>
@@ -139,7 +144,7 @@
 		
 		<!-- 备注2 -->
 		<div class="remarkDiv" style="height: 60px;">
-			<img title="zhangsan" src="../../image/user-thumbnail.png" style="width: 30px; height:30px;">
+			<img title="zhangsan" src="static/image/user-thumbnail.png" style="width: 30px; height:30px;">
 			<div style="position: relative; top: -40px; left: 40px;" >
 				<h5>哎呦！</h5>
 				<font color="gray">任务</font> <font color="gray">-</font> <b>拜访客户</b> <small style="color: gray;"> 2017-01-22 10:10:10 星期二由zhangsan</small>
