@@ -25,7 +25,46 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 					$("#reminderTimeDiv").hide("200");
 				}
 			});
+			$("#addBtn").on("click",function () {
+				$("#addVisitForm").submit();
+			})
+			$("#submitContacts").on("click",function () {
+				$("#hiddenContactsId").val($("input[name=contacts]:checked").val());
+				let $contactsId = $("#hiddenContactsId").val()
+				$("#create-contactsName").val($("#"+$contactsId).text());
+				$("#findContacts").modal("hide");
+			})
+
 		});
+		function showContacts() {
+			$("#contactsTBody").empty();
+			$.ajax({
+				url:"workbench/contacts/getContactsList.do",
+				data:{"name":$.trim($("#searchContacts").val())},
+				dataType:"json",
+				type:"get",
+				success:function (resp) {
+					$.each(resp,function (i,n) {
+						$("#contactsTBody").append(
+								/*'<tr>'+
+								'<td><input type="radio" value="'+n.id+'" name="xz"/></td>'+
+								'<td id="activityName">'+n.name+'</td>'+
+								'<td>'+n.startDate+'</td>'+
+								'<td>'+n.endDate+'</td>'+
+								'<td>'+n.owner+'</td>'+
+								'</tr>'*/
+								'<tr>'+
+								'<td><input type="radio" value="'+n.id+'" name="contacts"/></td>'+
+								'<td id="'+n.id+'">'+n.fullname+'</td>'+
+								'<td>'+n.email+'</td>'+
+								'<td>'+n.mphone+'</td>'+
+								'</tr>'
+						);
+					})
+				}
+			})
+			$("#findContacts").modal("show");
+		}
 	</script>
 </head>
 <body>
@@ -58,8 +97,8 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 								<td>手机</td>
 							</tr>
 						</thead>
-						<tbody>
-							<tr>
+						<tbody id="contactsTBody">
+							<%--<tr>
 								<td><input type="radio" name="activity"/></td>
 								<td>李四</td>
 								<td>lisi@bjpowernode.com</td>
@@ -70,9 +109,13 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 								<td>李四</td>
 								<td>lisi@bjpowernode.com</td>
 								<td>12345678901</td>
-							</tr>
+							</tr>--%>
 						</tbody>
 					</table>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+					<button type="button" class="btn btn-primary" id="submitContacts">添加</button>
 				</div>
 			</div>
 		</div>
@@ -81,16 +124,16 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 	<div style="position:  relative; left: 30px;">
 		<h3>创建任务</h3>
 	  	<div style="position: relative; top: -40px; left: 70%;">
-			<button type="button" class="btn btn-primary">保存</button>
+			<button type="button" id="addBtn" class="btn btn-primary">保存</button>
 			<button type="button" class="btn btn-default">取消</button>
 		</div>
 		<hr style="position: relative; top: -40px;">
 	</div>
-	<form class="form-horizontal" role="form">
+	<form class="form-horizontal" role="form" method="post" action="visit/addVisit.do" id="addVisitForm">
 		<div class="form-group">
-			<label for="create-taskOwner" class="col-sm-2 control-label">所有者<span style="font-size: 15px; color: red;">*</span></label>
+			<label for="create-owner" class="col-sm-2 control-label">所有者<span style="font-size: 15px; color: red;">*</span></label>
 			<div class="col-sm-10" style="width: 300px;">
-				<select class="form-control" id="create-taskOwner">
+				<select class="form-control" id="create-owner" name="owner">
 				  <option></option>
 				  <option selected>zhangsan</option>
 				  <option>lisi</option>
@@ -99,24 +142,25 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 			</div>
 			<label for="create-subject" class="col-sm-2 control-label">主题<span style="font-size: 15px; color: red;">*</span></label>
 			<div class="col-sm-10" style="width: 300px;">
-				<input type="text" class="form-control" id="create-subject">
+				<input type="text" class="form-control" id="create-subject" name="subject">
 			</div>
 		</div>
 		<div class="form-group">
-			<label for="create-expiryDate" class="col-sm-2 control-label">到期日期</label>
+			<label for="create-endDate" class="col-sm-2 control-label">到期日期</label>
 			<div class="col-sm-10" style="width: 300px;">
-				<input type="text" class="form-control" id="create-expiryDate">
+				<input type="text" class="form-control" id="create-endDate" name="endDate">
 			</div>
-			<label for="create-contacts" class="col-sm-2 control-label">联系人&nbsp;&nbsp;<a href="javascript:void(0);" data-toggle="modal" data-target="#findContacts"><span class="glyphicon glyphicon-search"></span></a></label>
+			<label for="create-contacts" class="col-sm-2 control-label">联系人&nbsp;&nbsp;<a href="javascript:void(0);" onclick="showContacts()" id="showContacts" data-toggle="modal" data-target="#findContacts"><span class="glyphicon glyphicon-search"></span></a></label>
 			<div class="col-sm-10" style="width: 300px;">
 				<input type="text" class="form-control" id="create-contacts">
+				<input type="hidden" name="contactsId" id="hiddenContactsId">
 			</div>
 		</div>
 	
 		<div class="form-group">
-			<label for="create-state" class="col-sm-2 control-label">状态</label>
+			<label for="create-stage" class="col-sm-2 control-label">状态</label>
 			<div class="col-sm-10" style="width: 300px;">
-				<select class="form-control" id="create-state">
+				<select class="form-control" id="create-stage">
 				  <option></option>
 				  <option>未启动</option>
 				  <option>推迟</option>
@@ -139,9 +183,9 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 		</div>
 		
 		<div class="form-group">
-			<label for="create-describe" class="col-sm-2 control-label">描述</label>
+			<label for="create-description" class="col-sm-2 control-label">描述</label>
 			<div class="col-sm-10" style="width: 70%;">
-				<textarea class="form-control" rows="3" id="create-describe"></textarea>
+				<textarea class="form-control" rows="3" id="create-description"></textarea>
 			</div>
 		</div>
 		
