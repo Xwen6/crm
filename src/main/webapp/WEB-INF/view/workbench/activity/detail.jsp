@@ -27,7 +27,6 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 				cancelAndSaveBtnDefault = false;
 			}
 		});
-		
 		$("#cancelBtn").click(function(){
 			//显示
 			$("#cancelAndSaveBtn").hide();
@@ -52,8 +51,6 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 			$(this).children("span").css("color","#E6E6E6");
 		});
 
-		showRemarkList()
-
 		/*动画效果*/
 		$("#remarkBody").on("mouseover",".remarkDiv",function(){
 			$(this).children("div").children("div").show();
@@ -61,6 +58,12 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 		$("#remarkBody").on("mouseout",".remarkDiv",function(){
 			$(this).children("div").children("div").hide();
 		})
+
+
+
+		/*---------------------------------------------------*/
+		/*页面加载完展示数据*/
+		showRemarkList()
 
 		$("#saveBtn").click(function () {
 
