@@ -1,6 +1,5 @@
 package wyu.xwen.web.listener;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 import wyu.xwen.settings.domain.DicValue;
 import wyu.xwen.settings.service.DicService;

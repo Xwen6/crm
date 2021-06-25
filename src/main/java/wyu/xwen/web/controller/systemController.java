@@ -4,9 +4,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
+import wyu.xwen.exception.SelectUserListException;
+import wyu.xwen.settings.domain.User;
 import wyu.xwen.settings.service.UserService;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 @Controller
 @RequestMapping("/web/system")
@@ -59,10 +62,12 @@ public class systemController {
     }
     /*跳转到回访添加页面*/
     @RequestMapping("toVisitSaveTask.do")
-    public ModelAndView toVisitSaveTask(HttpServletRequest request)
+    public ModelAndView toVisitSaveTask(HttpServletRequest request) throws SelectUserListException
     {
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.addObject(request.getSession().getAttribute("user"));
+        List<User> list = userService.selectUserList();
+        modelAndView.addObject("list",list);
+        modelAndView.addObject("user",request.getSession().getAttribute("user"));
         modelAndView.setViewName("workbench/visit/saveTask");
         return modelAndView;
     }

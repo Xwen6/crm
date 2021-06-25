@@ -22,6 +22,7 @@
         <mapper resource="mapper/workbench/ContactsDao.xml"/>
         <mapper resource="mapper/settings/DicTypeDao.xml"/>
         <mapper resource="mapper/settings/DicValueDao.xml"/>
+        <mapper resource="mapper/workbench/VisitDao.xml"/>
 
 
     </mappers>

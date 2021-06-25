@@ -180,12 +180,12 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 						<li class="liClass"><a href="workbench/chart/transaction/index.jsp" target="workareaFrame">&nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-chevron-right"></span> 交易统计图表</a></li>
 					</ul>
 				</li>
-				<li class="liClass"><a href="javascript:void(0);" target="workareaFrame"><span class="glyphicon glyphicon-file"></span> 报表</a></li>
+				<li class="liClass"><a href="javascript:void(0);" target="workareaFme"><span class="glyphicon glyphicon-file"></span> 报表</a></li>
 				<li class="liClass"><a href="javascript:void(0);" target="workareaFrame"><span class="glyphicon glyphicon-shopping-cart"></span> 销售订单</a></li>
 				<li class="liClass"><a href="javascript:void(0);" target="workareaFrame"><span class="glyphicon glyphicon-send"></span> 发货单</a></li>
 				<li class="liClass"><a href="javascript:void(0);" target="workareaFrame"><span class="glyphicon glyphicon-earphone"></span> 跟进</a></li>
 				<li class="liClass"><a href="javascript:void(0);" target="workareaFrame"><span class="glyphicon glyphicon-leaf"></span> 产品</a></li>
-				<li class="liClass"><a href="javascript:void(0);" target="workareaFrame"><span class="glyphicon glyphicon-usd"></span> 报价</a></li>
+				<li class="liClass"><a href="javascript:void(0);" target="workareaFrame">ra<span class="glyphicon glyphicon-usd"></span> 报价</a></li>
 			</ul>
 
 			<!-- 分割线 -->

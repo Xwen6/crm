@@ -19,4 +19,10 @@ public class ContactsServiceImpl implements ContactsService
     {
         return contactsDao.getContactsList();
     }
+
+    @Override
+    public List<Contacts> getContactsListByName(String name)
+    {
+        return contactsDao.getContactsListByName(name);
+    }
 }

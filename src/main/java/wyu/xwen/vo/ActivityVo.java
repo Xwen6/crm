@@ -2,7 +2,8 @@ package wyu.xwen.vo;
 
 import wyu.xwen.workbench.domain.Activity;
 
-public class ActivityVo extends Activity {
+public class ActivityVo extends Activity
+{
    private String pageNo;
    private String pageSize;
 

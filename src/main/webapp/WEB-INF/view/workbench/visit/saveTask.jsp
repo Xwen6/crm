@@ -1,6 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%
-String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath() + "/";
+	String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath() + "/";
 %>
 <!DOCTYPE html>
 <html>
@@ -13,11 +14,20 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 
 	<script type="text/javascript" src="static/jquery/jquery-1.11.1-min.js"></script>
 	<script type="text/javascript" src="static/jquery/bootstrap_3.3.0/js/bootstrap.min.js"></script>
-	<script type="text/javascript" src="static/jquery/bootstrap-datetimepicker-master/js/bootstrap-datetimepicker.min.js"></script>
+	<script type="text/javascript" src="static/jquery/bs_typeahead/bootstrap3-typeahead.min.js"></script>
+	<script type="text/javascript" src="static/jquery/bootstrap-datetimepicker-master/js/bootstrap-datetimepicker.js"></script>
 	<script type="text/javascript" src="static/jquery/bootstrap-datetimepicker-master/locale/bootstrap-datetimepicker.zh-CN.js"></script>
 
 	<script type="text/javascript">
 		$(function(){
+			$(".time").datetimepicker({
+				minView: "month",
+				language:  'zh-CN',
+				format: 'yyyy-mm-dd',
+				autoclose: true,
+				todayBtn: true,
+				pickerPosition: "button-left"
+			});
 			$("#reminderTime").click(function(){
 				if(this.checked){
 					$("#reminderTimeDiv").show("200");
@@ -31,16 +41,37 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 			$("#submitContacts").on("click",function () {
 				$("#hiddenContactsId").val($("input[name=contacts]:checked").val());
 				let $contactsId = $("#hiddenContactsId").val()
-				$("#create-contactsName").val($("#"+$contactsId).text());
+				$("#create-contacts").val($("#"+$contactsId).text());
 				$("#findContacts").modal("hide");
 			})
+			$("#queryContactsByName").keydown(function (event) {
+				if (event.keyCode == 13)
+				{
+					showContacts();
+					return false;
+				}
+			})
+			$("#queryContactsByName").typeahead({
+				source: function (query, process) {
+					$.get(
+							"contacts/getContactsListByName.do",
+							{ "name" : query },
+							function (data) {
+								//alert(data);
+								process(data);
+							},
+							"json"
+					);
+				},
+				delay: 1500
+			});
 
 		});
 		function showContacts() {
 			$("#contactsTBody").empty();
 			$.ajax({
 				url:"contacts/getContactsList.do",
-				data:{"name":$.trim($("#searchContacts").val())},
+				data:{"name":$.trim($("#queryContactsByName").val())},
 				dataType:"json",
 				type:"get",
 				success:function (resp) {
@@ -83,7 +114,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 					<div class="btn-group" style="position: relative; top: 18%; left: 8px;">
 						<form class="form-inline" role="form">
 						  <div class="form-group has-feedback">
-						    <input type="text" class="form-control" style="width: 300px;" placeholder="请输入联系人名称，支持模糊查询">
+						    <input type="text" class="form-control" id="queryContactsByName" style="width: 300px;" placeholder="请输入联系人名称，支持模糊查询">
 						    <span class="glyphicon glyphicon-search form-control-feedback"></span>
 						  </div>
 						</form>
@@ -134,10 +165,9 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 			<label for="create-owner" class="col-sm-2 control-label">所有者<span style="font-size: 15px; color: red;">*</span></label>
 			<div class="col-sm-10" style="width: 300px;">
 				<select class="form-control" id="create-owner" name="owner">
-				  <option></option>
-				  <option selected>zhangsan</option>
-				  <option>lisi</option>
-				  <option>wangwu</option>
+				  <c:forEach items="${list}" var="u">
+					  <option value="${u.id}" ${u.id == user.id ? "selected":""}>${u.name}</option>
+				  </c:forEach>
 				</select>
 			</div>
 			<label for="create-subject" class="col-sm-2 control-label">主题<span style="font-size: 15px; color: red;">*</span></label>
@@ -148,9 +178,9 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 		<div class="form-group">
 			<label for="create-endDate" class="col-sm-2 control-label">到期日期</label>
 			<div class="col-sm-10" style="width: 300px;">
-				<input type="text" class="form-control" id="create-endDate" name="endDate">
+				<input type="text" class="form-control time" id="create-endDate" name="endDate">
 			</div>
-			<label for="create-contacts" class="col-sm-2 control-label">联系人&nbsp;&nbsp;<a href="javascript:void(0);" onclick="showContacts()" id="showContacts" data-toggle="modal" data-target="#findContacts"><span class="glyphicon glyphicon-search"></span></a></label>
+			<label for="create-contacts" class="col-sm-2 control-label">联系人&nbsp;&nbsp;<a href="javascript:void(0);" onclick="showContacts()" id="showContacts"><span class="glyphicon glyphicon-search"></span></a></label>
 			<div class="col-sm-10" style="width: 300px;">
 				<input type="text" class="form-control" id="create-contacts">
 				<input type="hidden" name="contactsId" id="hiddenContactsId">
@@ -160,24 +190,30 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 		<div class="form-group">
 			<label for="create-stage" class="col-sm-2 control-label">状态</label>
 			<div class="col-sm-10" style="width: 300px;">
-				<select class="form-control" id="create-stage">
-				  <option></option>
+				<select class="form-control" id="create-stage" name="stage">
+					<c:forEach items="${applicationScope.returnState}" var="r">
+						<option value="${r.value}">${r.text}</option>
+					</c:forEach>
+				  <%--<option></option>
 				  <option>未启动</option>
 				  <option>推迟</option>
 				  <option>进行中</option>
 				  <option>完成</option>
-				  <option>等待某人</option>
+				  <option>等待某人</option>--%>
 				</select>
 			</div>
 			<label for="create-priority" class="col-sm-2 control-label">优先级</label>
 			<div class="col-sm-10" style="width: 300px;">
-				<select class="form-control" id="create-priority">
-				  <option></option>
+				<select class="form-control" id="create-priority" name="priority">
+					<c:forEach items="${applicationScope.returnPriority}" var="r">
+						<option value="${r.value}">${r.text}</option>
+					</c:forEach>
+				  <%--<option></option>
 				  <option>高</option>
 				  <option>最高</option>
 				  <option>低</option>
 				  <option>最低</option>
-				  <option>常规</option>
+				  <option>常规</option>--%>
 				</select>
 			</div>
 		</div>
@@ -185,7 +221,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 		<div class="form-group">
 			<label for="create-description" class="col-sm-2 control-label">描述</label>
 			<div class="col-sm-10" style="width: 70%;">
-				<textarea class="form-control" rows="3" id="create-description"></textarea>
+				<textarea class="form-control" rows="3" id="create-description" name="description"></textarea>
 			</div>
 		</div>
 		
@@ -199,14 +235,14 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 			<div class="form-group" style="position: relative; top: 10px;">
 				<label for="create-startTime" class="col-sm-2 control-label">开始日期</label>
 				<div class="col-sm-10" style="width: 300px;">
-					<input type="text" class="form-control" id="create-startTime">
+					<input type="text" class="form-control time" id="create-startTime" name="startTime">
 				</div>
 			</div>
 			
 			<div class="form-group" style="position: relative; top: 15px;">
 				<label for="create-repeatType" class="col-sm-2 control-label">重复类型</label>
 				<div class="col-sm-10" style="width: 300px;">
-					<select class="form-control" id="create-repeatType">
+					<select class="form-control" id="create-repeatType" name="repeatType">
 					  <option></option>
 					  <option>每天</option>
 					  <option>每周</option>
@@ -219,7 +255,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 			<div class="form-group" style="position: relative; top: 20px;">
 				<label for="create-noticeType" class="col-sm-2 control-label">通知类型</label>
 				<div class="col-sm-10" style="width: 300px;">
-					<select class="form-control" id="create-noticeType">
+					<select class="form-control" id="create-noticeType" name="noticeType">
 					  <option></option>
 					  <option>邮箱</option>
 					  <option>弹窗</option>

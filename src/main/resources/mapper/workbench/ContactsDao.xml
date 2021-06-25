@@ -7,4 +7,8 @@
         select id, owner, source, customerId, fullname, appellation, email, mphone, job, birth, createBy, createTime, editBy, editTime, description, contactSummary, nextContactTime, address
         from tbl_contacts
     </select>
+    <select id="getContactsListByName" resultType="Contacts">
+        select fullname from tbl_contacts
+        where fullname like '%' #{name} '%'
+    </select>
 </mapper>

@@ -19,7 +19,7 @@
     <!--注解驱动-->
     <mvc:annotation-driven/>
     <!--静态资源访问-->
-  <!--  <mvc:resources mapping="/static/**" location="/static/"/>-->
+      <mvc:resources mapping="/static/**" location="/static/"/>
     <!--拦截器-->
     <mvc:interceptors>
         <!--声明第一个拦截器-->
