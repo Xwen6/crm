@@ -9,6 +9,8 @@
     <context:component-scan base-package="wyu.xwen.settings.web.controller"/>
     <context:component-scan base-package="wyu.xwen.workbench.web.controller"/>
     <context:component-scan base-package="wyu.xwen.web.controller"/>
+    <context:component-scan base-package="wyu.xwen.handler"/>
+
 
 
         <!--视图解析器-->
