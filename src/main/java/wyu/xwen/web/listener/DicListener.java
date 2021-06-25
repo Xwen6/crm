@@ -8,10 +8,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 @WebListener
 public class DicListener implements ServletContextListener {
@@ -31,9 +28,22 @@ public class DicListener implements ServletContextListener {
         ) {
             List<DicValue> dicList = (List<DicValue>) dicMap.get(key);
             application.setAttribute(key,dicList);
-
         }
+
+        /*处理完数据字典之后处理可能性
+       resourceBundle 要把properties去掉 */
+        ResourceBundle rb = ResourceBundle.getBundle("conf/Stage2Possibility");
+        Map<String,String> pMap = new HashMap<>();
+        Enumeration<String> e =  rb.getKeys();
+        while (e.hasMoreElements()){
+            String key = e.nextElement();
+            String value = rb.getString(key);
+            pMap.put(key,value);
+        }
+        application.setAttribute("pMap",pMap);
     }
+
+
 
     @Override
     public void contextDestroyed(ServletContextEvent servletContextEvent) {

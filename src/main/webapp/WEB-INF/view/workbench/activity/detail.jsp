@@ -8,9 +8,12 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 	<base href="<%=basePath%>">
 <meta charset="UTF-8">
 
-<link href="jquery/bootstrap_3.3.0/css/bootstrap.min.css" type="text/css" rel="stylesheet" />
-<script type="text/javascript" src="jquery/jquery-1.11.1-min.js"></script>
-<script type="text/javascript" src="jquery/bootstrap_3.3.0/js/bootstrap.min.js"></script>
+<link href="static/jquery/bootstrap_3.3.0/css/bootstrap.min.css" type="text/css" rel="stylesheet" />
+	<link href="static/jquery/bootstrap-datetimepicker-master/css/bootstrap-datetimepicker.min.css" type="text/css" rel="stylesheet" />
+<script type="text/javascript" src="static/jquery/jquery-1.11.1-min.js"></script>
+<script type="text/javascript" src="static/jquery/bootstrap_3.3.0/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="static/jquery/bootstrap-datetimepicker-master/js/bootstrap-datetimepicker.js"></script>
+	<script type="text/javascript" src="static/jquery/bootstrap-datetimepicker-master/locale/bootstrap-datetimepicker.zh-CN.js"></script>
 
 <script type="text/javascript">
 
@@ -59,10 +62,92 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 			$(this).children("div").children("div").hide();
 		})
 
-
-
 		/*---------------------------------------------------*/
-		/*页面加载完展示数据*/
+
+		getUserList();
+		/*日历插件*/
+		$(".time").datetimepicker({
+			minView: "month",
+			language:  'zh-CN',
+			format: 'yyyy-mm-dd',
+			autoclose: true,
+			todayBtn: true,
+			pickerPosition: "bottom-left"
+		});
+
+		/*更新操作*/
+		$("#updateBtn").click(function (){
+
+			/*获取用户的修改后的值*/
+			var id = "${requestScope.activity.id}"
+			var name = $.trim($("#edit-name").val());
+			var owner = $.trim($("#edit-owner").val());
+			var startDate = $.trim($("#edit-startDate").val());
+			var endDate = $.trim($("#edit-endDate").val());
+			var description = $.trim($("#edit-description").val());
+			var cost = $.trim($("#edit-cost").val());
+			var editBy = "${sessionScope.user.name}";
+
+			$.ajax({
+				url : "workbench/activity/Update.do",
+				data : {
+					"id":id,
+					"name":name,
+					"owner":owner,
+					"startDate":startDate,
+					"endDate":endDate,
+					"description":description,
+					"cost":cost,
+					"editBy":editBy},
+				dataType : "json",
+				type : "post",
+				success : function (data) {
+					if (data.success){
+						/*清除所有者下拉框*/
+						window.location.reload()
+						/*清除所有者下拉框*/
+						$("#edit-owner").empty();
+						/*成功后刷新页面*/
+						/*pageList($("#activityPage").bs_pagination('getOption', 'currentPage')
+								,$("#activityPage").bs_pagination('getOption', 'rowsPerPage'));
+*/						alert("修改成功")
+						/*成功后更新request的内容*/
+
+					}
+					else {
+						alert("更新失败")
+					}
+				}
+			})
+
+		})
+
+		/*删除操作*/
+		$("#deleteActivityBtn").click(function (){
+			/*绑定所有选中的复选框*/
+
+				if (confirm("确定要删除吗？")){
+					/*		alert(param);*/
+					$.ajax({
+						url : "workbench/activity/Delete.do",
+						data :{"id":"${requestScope.activity.id}"},
+						type :  "get",
+						dataType : "json",
+						success : function (data){
+							if(data.success){
+								/*刷新删除后的的跳转到index页面*/
+								document.location.href = "web/system/toActivity.do";
+
+							}else{
+								alert("删除失败")
+							}
+						}
+					})
+				}
+		})
+
+		/********************************************************/
+		/*页面加载完备注数据*/
 		showRemarkList()
 
 		$("#saveBtn").click(function () {
@@ -73,7 +158,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 
 			var noteContent = $.trim($("#remark").val());
 			$.ajax({
-				url : "workbench/activity/remarkSave.do",
+				url : "workbench/activity/saveRemark.do",
 				data : {"noteContent":noteContent,"activityId":"${requestScope.activity.id}"},
 				dataType : "json",
 				type : "post",
@@ -115,10 +200,27 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 
 	});
 
+	/*填充所有者下拉列表*/
+	function getUserList() {
+		$.ajax({
+			url :"workbench/activity/getUserList.do",
+			type :"get",
+			dataType :"json",
+			success : function (data){
+				$.each(data,function (index,element) {
+
+					/*填充修改用户的模态窗口*/
+					$("#edit-owner").append("<option value='"+element.id+"'>"+element.name+"</option>")
+				})
+				/*下拉列表默认显示原本所有者*/
+				$("#edit-owner").val("${sessionScope.user.id}")
+			}
+		})
+	}
 
 	function showRemarkList() {
 		$.ajax({
-			url : "workbench/activity/selectRemarkListByAid.do",
+			url : "workbench/activity/getRemarkListByAid.do",
 			data : {"activityId" : "${requestScope.activity.id}"},
 			dataType : "json",
 			type : "get",
@@ -129,7 +231,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 				$.each(data,function (index,element) {
 
 					html += '<div id="'+element.id+'" class="remarkDiv" style="height: 60px;">';
-					html += '<img title="zhangsan" src="image/user-thumbnail.png" style="width: 30px; height:30px;">';
+					html += '<img title="zhangsan" src="static/image/user-thumbnail.png" style="width: 30px; height:30px;">';
 					html += '<div style="position: relative; top: -40px; left: 40px;" >';
 					html += '<h5 id="e'+element.id+'">'+element.noteContent+'</h5>';
 					html += '<font color="gray">市场活动</font> <font color="gray">-</font> <b>${requestScope.activity.name}</b> <small style="color: gray;" id="s'+element.id+'"> '+(element.editFlag==0?element.createTime:element.editTime)+' 由'+(element.editFlag==0?element.createBy:element.editBy)+'</small>';
@@ -183,6 +285,70 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 <body>
 
 
+<!-- 修改市场活动的模态窗口 -->
+<div class="modal fade" id="editActivityModal" role="dialog">
+	<div class="modal-dialog" role="document" style="width: 85%;">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">
+					<span aria-hidden="true">×</span>
+				</button>
+				<h4 class="modal-title" id="myModalLabel2">修改市场活动</h4>
+			</div>
+			<div class="modal-body">
+
+				<form class="form-horizontal" role="form">
+
+					<div class="form-group">
+						<label for="edit-owner" class="col-sm-2 control-label">所有者<span style="font-size: 15px; color: red;">*</span></label>
+						<div class="col-sm-10" style="width: 300px;">
+							<select class="form-control" id="edit-owner">
+
+
+							</select>
+						</div>
+						<label for="edit-name" class="col-sm-2 control-label">名称<span style="font-size: 15px; color: red;">*</span></label>
+						<div class="col-sm-10" style="width: 300px;">
+							<input type="text" class="form-control" id="edit-name" value="${requestScope.activity.name}">
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label for="edit-startDate" class="col-sm-2 control-label">开始日期</label>
+						<div class="col-sm-10" style="width: 300px;">
+							<input type="text" class="form-control time" id="edit-startDate" value="${requestScope.activity.startDate}"  readonly>
+						</div>
+						<label for="edit-endDate" class="col-sm-2 control-label">结束日期</label>
+						<div class="col-sm-10" style="width: 300px;">
+							<input type="text" class="form-control time" id="edit-endDate" value="${requestScope.activity.endDate}"  readonly>
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label for="edit-cost" class="col-sm-2 control-label">成本</label>
+						<div class="col-sm-10" style="width: 300px;">
+							<input type="text" class="form-control" id="edit-cost" value="${requestScope.activity.cost}">
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label for="edit-description" class="col-sm-2 control-label">描述</label>
+						<div class="col-sm-10" style="width: 81%;">
+							<textarea class="form-control" rows="3" id="edit-description">${requestScope.activity.description}</textarea>
+						</div>
+					</div>
+
+				</form>
+
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+				<button type="button" id="updateBtn" class="btn btn-primary" data-dismiss="modal">更新</button>
+			</div>
+		</div>
+	</div>
+</div>
+
 <!-- 修改市场活动备注的模态窗口 -->
 <div class="modal fade" id="editRemarkModal" role="dialog">
 	<%-- 备注的id --%>
@@ -226,8 +392,8 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 			<h3>活动名称：${requestScope.activity.name}<small>2020-10-10 ~ 2020-10-20</small></h3>
 		</div>
 		<div style="position: relative; height: 50px; width: 250px;  top: -72px; left: 700px;">
-			<button type="button" class="btn btn-default" data-toggle="modal" data-target="#editActivityModal"><span class="glyphicon glyphicon-edit"></span> 编辑</button>
-			<button type="button" class="btn btn-danger"><span class="glyphicon glyphicon-minus"></span> 删除</button>
+			<button type="button" id="editActivityBtn" class="btn btn-default" data-toggle="modal" data-target="#editActivityModal"><span class="glyphicon glyphicon-edit"></span> 编辑</button>
+			<button type="button" id="deleteActivityBtn" class="btn btn-danger"><span class="glyphicon glyphicon-minus"></span> 删除</button>
 		</div>
 	</div>
 	
@@ -282,7 +448,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 			<h4>备注</h4>
 		</div>
 		
-		<%--<!-- 备注1 -->
+		<!-- 备注1 -->
 		<div class="remarkDiv" style="height: 60px;" id="remarkD">
 			<img title="zhangsan" src="image/user-thumbnail.png" style="width: 30px; height:30px;">
 			<div style="position: relative; top: -40px; left: 40px;" >
@@ -308,7 +474,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 					<a class="myHref" href="javascript:void(0);"><span class="glyphicon glyphicon-remove" style="font-size: 20px; color: #E6E6E6;"></span></a>
 				</div>
 			</div>
-		</div>--%>
+		</div>
 		<div id="remarks"></div>
 		
 		<div id="remarkDiv" style="background-color: #E6E6E6; width: 870px; height: 90px;">
