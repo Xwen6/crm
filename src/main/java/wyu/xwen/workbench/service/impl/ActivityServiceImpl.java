@@ -38,4 +38,37 @@ public class ActivityServiceImpl implements ActivityService {
     public List<User> getUserList() {
         return userDao.getUserList();
     }
+
+    /*保存活动*/
+
+    @Override
+    public Boolean saveActivity(Activity activity) {
+        if (activity !=null ){
+         int count =  activityDao.saveActivity(activity);
+         if (count>0){
+             return true;
+         }
+         else return false;
+        }
+        return false;
+    }
+
+    /*修改市场活动*/
+
+    @Override
+    public Activity getActivityById(String id) {
+        return activityDao.getActivityById(id);
+    }
+
+    @Override
+    public Boolean doUpdate(Activity activity) {
+        if (null!=activity){
+           int count =  activityDao.doUpdate(activity);
+           if (count>0){
+               return true;
+           }
+           return false;
+        }
+        return false;
+    }
 }

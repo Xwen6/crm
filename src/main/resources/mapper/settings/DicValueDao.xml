@@ -3,7 +3,8 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="wyu.xwen.settings.dao.DicValueDao">
-<select id="getDicValueByTypeCode" resultType="DicValue">
+
+<select id="getDicValueByTypeCode" resultType="wyu.xwen.settings.domain.DicValue">
     select id,text,value,orderNo,typeCode from tbl_dic_value where typeCode=#{typeCode}
 </select>
 
