@@ -30,7 +30,7 @@
     </bean>
     <!--组件扫描器-->
     <context:component-scan base-package="wyu.xwen.workbench.service"/>
-
+    <context:component-scan base-package="wyu.xwen.settings.service"/>
     <!--事务管理器-->
     <!--<bean id="dataSourceTransactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
         <property name="dataSource" ref="myDataSource"/>

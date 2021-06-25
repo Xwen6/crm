@@ -1,14 +1,19 @@
 package wyu.xwen.web.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
+import wyu.xwen.settings.service.UserService;
 
 import javax.servlet.http.HttpServletRequest;
 
 @Controller
 @RequestMapping("/web/system")
 public class systemController {
+
+    @Autowired
+    private UserService userService;
 
     /*跳转到登录页面*/
     @RequestMapping("toLogin.do")

@@ -39,7 +39,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 		function showContacts() {
 			$("#contactsTBody").empty();
 			$.ajax({
-				url:"workbench/contacts/getContactsList.do",
+				url:"contacts/getContactsList.do",
 				data:{"name":$.trim($("#searchContacts").val())},
 				dataType:"json",
 				type:"get",

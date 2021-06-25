@@ -19,6 +19,7 @@
     <mappers>
         <mapper resource="mapper/settings/UserDao.xml"/>
         <mapper resource="mapper/workbench/ActivityDao.xml"/>
+        <mapper resource="mapper/workbench/ContactsDao.xml"/>
 
 
     </mappers>
