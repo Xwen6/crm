@@ -1,4 +1,4 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="utf-8" %>
 <%
 String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath() + "/";
 %>
@@ -22,6 +22,9 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 <script type="text/javascript">
 
 	$(function (){
+		/*页面加载完查询用户列表*/
+		getUserList();
+
 		/*页面加载完成后，要加载活动数据*/
 		pageList(1,2);
 		/*更新操作*/
@@ -35,7 +38,6 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 			var description = $.trim($("#edit-description").val());
 			var cost = $.trim($("#edit-cost").val());
 			var editBy = "${sessionScope.user.name}";
-
 
 			$.ajax({
 				url : "workbench/activity/Update.do",
@@ -52,11 +54,13 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 				type : "post",
 				success : function (data) {
 					if (data.success){
-
+						/*清除所有者复选框*/
+						$("#edit-owner").empty();
 						/*成功后刷新页面*/
 						/*pageList($("#activityPage").bs_pagination('getOption', 'currentPage')
 								,$("#activityPage").bs_pagination('getOption', 'rowsPerPage'));
-*/							pageList(1,2);
+*/						alert("修改成功")
+						pageList(1,2);
 
 					}
 					else {
@@ -72,7 +76,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 
 			var $selectCheckBox = $("input[name=selectCheckBox]:checked");
 			if ($selectCheckBox.length==0){
-				alert("请选择要删除的记录")
+				alert("请选择要修改的记录")
 			}else if ($selectCheckBox.length>1){
 				/*清空全面复选框*/
 				$("#selectAllCheckBox").prop("checked",false);
@@ -85,27 +89,18 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 				/*获取记录的id*/
 				var id = $("input[name=selectCheckBox]:checked").val()
 				$.ajax({
-					url : "workbench/activity/UserAndActivity.do",
+					url : "workbench/activity/getActivityById.do",
 					data : {"id":id},
 					dataType : "json",
 					type : "get",
 					success : function (data) {
-						$("#edit-owner").empty();
-						/*{"userList":userList,"Activity:Activity:Activity}*/
-						$.each(data.userList,function (index,element) {
-							$("#edit-owner").append("<option value='"+element.id+"'>"+element.name+"</option>")
-						})
-						/*下拉列表默认显示登录的用户*/
-						$("#edit-owner").val(data.activity.owner);
 
 						/*填充模态窗口*/
-						$("#edit-name").val(data.activity.name);
-						$("#edit-startDate").val(data.activity.startDate);
-						$("#edit-endDate").val(data.activity.endDate);
-						$("#edit-cost").val(data.activity.cost);
-						$("#edit-description").val(data.activity.description);
-
-
+						$("#edit-name").val(data.name);
+						$("#edit-startDate").val(data.startDate);
+						$("#edit-endDate").val(data.endDate);
+						$("#edit-cost").val(data.cost);
+						$("#edit-description").val(data.description);
 
 					}
 				})
@@ -172,19 +167,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 			pickerPosition: "bottom-left"
 		});
 
-		$.ajax({
-			url :"workbench/activity/getUserList.do",
-			type :"get",
-			dataType :"json",
-			success : function (data){
-				$.each(data,function (index,element) {
 
-					$("#create-owner").append("<option value='"+element.id+"'>"+element.name+"</option>")
-				})
-				/*下拉列表默认显示登录的用户*/
-				$("#create-owner").val("${sessionScope.user.id}")
-			}
-		})
 		
 		$("#addBtn").click(function () {
 			$("#createActivityModal").modal("show");
@@ -193,7 +176,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 		/*用户保存*/
 		$("#saveBtn").click(function () {
 			$.ajax({
-				url :"workbench/activity/MarkActivitySave.do",
+				url :"workbench/activity/ActivitySave.do",
 				data : {
 					"owner" : $.trim($("#create-owner").val()),
 					"name" :  $.trim($("#create-name").val()),
@@ -207,7 +190,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 				dataType :"json",
 				success : function (data){
 					/*{"success":true}*/
-
+					/*alert(data.success)*/
 					if (data.success){
 						/*重置表单*/
 						$("#MarkActivityAdd")[0].reset();
@@ -290,6 +273,26 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 					}
 				});
 
+			}
+		})
+	}
+
+	function getUserList() {
+		$.ajax({
+			url :"workbench/activity/getUserList.do",
+			type :"get",
+			dataType :"json",
+			success : function (data){
+				$.each(data,function (index,element) {
+					/*填充新建用户的模态窗口*/
+					$("#create-owner").append("<option value='"+element.id+"'>"+element.name+"</option>")
+					/*填充修改用户的模态窗口*/
+					$("#edit-owner").append("<option value='"+element.id+"'>"+element.name+"</option>")
+				})
+				/*下拉列表默认显示登录的用户*/
+				$("#create-owner").val("${sessionScope.user.id}")
+				/*下拉列表默认显示原本所有者*/
+				$("#edit-owner").val("${sessionScope.user.id}")
 			}
 		})
 	}

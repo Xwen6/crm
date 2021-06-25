@@ -12,4 +12,11 @@
         select name,id from tbl_user
     </select>
 
+    <select id="getUserList" resultType="User">
+        select id,name,loginAct,loginPwd,email,expireTime
+         ,lockState,deptno,allowIps,createTime
+        ,createBy,editTime,editBy,editBy
+        from tbl_user
+    </select>
+
 </mapper>

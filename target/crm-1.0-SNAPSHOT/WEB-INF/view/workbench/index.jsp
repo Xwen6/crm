@@ -6,42 +6,40 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 <html>
 <head>
 	<base href="<%=basePath%>">
-<meta charset="UTF-8">
-<link href="static/jquery/bootstrap_3.3.0/css/bootstrap.min.css" type="text/css" rel="stylesheet" />
-<script type="text/javascript" src="static/jquery/jquery-3.6.0.js"></script>
-<script type="text/javascript" src="static/jquery/bootstrap_3.3.0/js/bootstrap.min.js"></script>
-<script type="text/javascript">
+	<meta charset="UTF-8">
+	<link href="static/jquery/bootstrap_3.3.0/css/bootstrap.min.css" type="text/css" rel="stylesheet" />
+	<script type="text/javascript" src="static/jquery/jquery-3.6.0.js"></script>
+	<script type="text/javascript" src="static/jquery/bootstrap_3.3.0/js/bootstrap.min.js"></script>
+	<script type="text/javascript">
 
-	//页面加载完毕
-	$(function(){
-		//导航中所有文本颜色为黑色
-		$(".liClass > a").css("color" , "black");
-
-		//默认选中导航菜单中的第一个菜单项
-		$(".liClass:first").addClass("active");
-
-		//第一个菜单项的文字变成白色
-		$(".liClass:first > a").css("color" , "white");
-
-		//给所有的菜单项注册鼠标单击事件
-		$(".liClass").click(function(){
-			//移除所有菜单项的激活状态
-			$(".liClass").removeClass("active");
+		//页面加载完毕
+		$(function(){
 			//导航中所有文本颜色为黑色
 			$(".liClass > a").css("color" , "black");
-			//当前项目被选中
-			$(this).addClass("active");
-			//当前项目颜色变成白色
-			$(this).children("a").css("color","white");
+
+			//默认选中导航菜单中的第一个菜单项
+			$(".liClass:first").addClass("active");
+
+			//第一个菜单项的文字变成白色
+			$(".liClass:first > a").css("color" , "white");
+
+			//给所有的菜单项注册鼠标单击事件
+			$(".liClass").click(function(){
+				//移除所有菜单项的激活状态
+				$(".liClass").removeClass("active");
+				//导航中所有文本颜色为黑色
+				$(".liClass > a").css("color" , "black");
+				//当前项目被选中
+				$(this).addClass("active");
+				//当前项目颜色变成白色
+				$(this).children("a").css("color","white");
+			});
+
+
+			window.open("workbench/main/index.html","workareaFrame");
+
 		});
-
-
-		window.open("workbench/main/index.html","workareaFrame");
-
-	});
-
-</script>
-
+	</script>
 </head>
 <body>
 
@@ -172,7 +170,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 				<li class="liClass"><a href="web/system/toCustomer.do" target="workareaFrame"><span class="glyphicon glyphicon-user"></span> 客户</a></li>
 				<li class="liClass"><a href="web/system/toContacts.do" target="workareaFrame"><span class="glyphicon glyphicon-earphone"></span> 联系人</a></li>
 				<li class="liClass"><a href="web/system/toTransaction.do" target="workareaFrame"><span class="glyphicon glyphicon-usd"></span> 交易（商机）</a></li>
-				<li class="liClass"><a href="visit/index.html" target="workareaFrame"><span class="glyphicon glyphicon-phone-alt"></span> 售后回访</a></li>
+				<li class="liClass"><a href="web/system/toVisit.do" target="workareaFrame"><span class="glyphicon glyphicon-phone-alt"></span> 售后回访</a></li>
 				<li class="liClass">
 					<a href="#no2" class="collapsed" data-toggle="collapse"><span class="glyphicon glyphicon-stats"></span> 统计图表</a>
 					<ul id="no2" class="nav nav-pills nav-stacked collapse">
