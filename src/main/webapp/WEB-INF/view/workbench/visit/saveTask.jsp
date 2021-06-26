@@ -65,6 +65,9 @@
 				},
 				delay: 1500
 			});
+			$("#cancelBtn").on("click",function () {
+				window.history.go(-1);
+			})
 
 		});
 		function showContacts() {
@@ -156,7 +159,7 @@
 		<h3>创建任务</h3>
 	  	<div style="position: relative; top: -40px; left: 70%;">
 			<button type="button" id="addBtn" class="btn btn-primary">保存</button>
-			<button type="button" class="btn btn-default">取消</button>
+			<button type="button" id="cancelBtn" class="btn btn-default">取消</button>
 		</div>
 		<hr style="position: relative; top: -40px;">
 	</div>

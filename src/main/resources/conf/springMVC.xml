@@ -12,7 +12,7 @@
     <context:component-scan base-package="wyu.xwen.handler"/>
 
 
-
+    <!--<mvc:default-servlet-handler/>-->
         <!--视图解析器-->
     <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
         <property name="prefix" value="/WEB-INF/view/"/>
@@ -21,7 +21,8 @@
     <!--注解驱动-->
     <mvc:annotation-driven/>
     <!--静态资源访问-->
-      <mvc:resources mapping="/static/**" location="/static/"/>
+    <!--<mvc:resources mapping="classpath:/static/jquery/" location="/static/"/>-->
+    <mvc:default-servlet-handler/>
     <!--拦截器-->
     <mvc:interceptors>
         <!--声明第一个拦截器-->
