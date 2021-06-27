@@ -16,4 +16,6 @@ public interface VisitService
     int getCount(VisitVo visitVo);
 
     Visit getVisitById(String id);
+
+    boolean updateVisit(Visit visit);
 }

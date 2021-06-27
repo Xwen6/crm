@@ -78,4 +78,20 @@
                       on visit.contactsId=contacts.id and visit.owner=user.id
         where visit.id=#{id}
     </select>
+    <update id="updateVisit">
+        update tbl_visit
+        set owner=(select name from tbl_user where id=#{owner}),
+            subject=#{subject},
+            contactsId=(select fullname from tbl_contacts where id=#{contactsId}),
+            stage=#{stage},
+            priority=#{priority},
+            endDate=#{endDate},
+            editBy=#{editBy},
+            editTime=#{editTime},
+            description=#{description},
+            startTime=#{startTime},
+            repeatType=#{repeatType},
+            noticeType=#{noticeType}
+        where id=#{id}
+    </update>
 </mapper>

@@ -26,6 +26,18 @@
 					$("#reminderTimeDiv").hide("200");
 				}
 			});
+			$("#submitContacts").on("click",function () {
+				$("#hiddenContactsId").val($("input[name=contacts]:checked").val());
+				let $contactsId = $("#hiddenContactsId").val()
+				$("#create-contacts").val($("#"+$contactsId).text());
+				$("#findContacts").modal("hide");
+			})
+			$("#cancelBtn").on("click",function () {
+				window.history.go(-1);
+			})
+			$("#updateBtn").on("click",function () {
+				$("#updateBtn").submit();
+			})
 		});
 		function showContacts() {
 			$("#contactsTBody").empty();
@@ -100,6 +112,10 @@
 						</tbody>
 					</table>
 				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+					<button type="button" class="btn btn-primary" id="submitContacts">添加</button>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -107,16 +123,18 @@
 	<div style="position:  relative; left: 30px;">
 		<h3>修改任务</h3>
 	  	<div style="position: relative; top: -40px; left: 70%;">
-			<button type="button" class="btn btn-primary">更新</button>
-			<button type="button" class="btn btn-default">取消</button>
+			<button type="button" id="updateBtn" class="btn btn-primary">更新</button>
+			<button type="button" id="cancelBtn" class="btn btn-default">取消</button>
 		</div>
 		<hr style="position: relative; top: -40px;">
 	</div>
-	<form class="form-horizontal" role="form">
+	<form class="form-horizontal" role="form" id="updateForm" action="workbench/visit/updateVisit.do" method="post">
+		<input type="hidden" name="id" value=${visit.id}>
+		<input type="hidden" name="editBy" value=${user.name}>
 		<div class="form-group">
 			<label for="create-taskOwner" class="col-sm-2 control-label">任务所有者<span style="font-size: 15px; color: red;">*</span></label>
 			<div class="col-sm-10" style="width: 300px;">
-				<select class="form-control" id="create-taskOwner">
+				<select class="form-control" id="create-taskOwner" name="owner">
 					<c:forEach items="${list}" var="u">
 						<option value="${u.id}" ${u.id == user.id ? "selected":""}>${u.name}</option>
 					</c:forEach>
@@ -128,13 +146,13 @@
 			</div>
 			<label for="create-subject" class="col-sm-2 control-label">主题<span style="font-size: 15px; color: red;">*</span></label>
 			<div class="col-sm-10" style="width: 300px;">
-				<input type="text" class="form-control" id="create-subject" value=${visit.subject}>
+				<input type="text" class="form-control" id="create-subject" name="subject" value=${visit.subject}>
 			</div>
 		</div>
 		<div class="form-group">
 			<label for="create-expiryDate" class="col-sm-2 control-label">到期日期</label>
 			<div class="col-sm-10" style="width: 300px;">
-				<input type="text" class="form-control" id="create-expiryDate" value=${visit.endDate}>
+				<input type="text" class="form-control" id="create-expiryDate" name="endDate" value=${visit.endDate}>
 			</div>
 			<label for="create-contacts" class="col-sm-2 control-label">联系人&nbsp;&nbsp;<a href="javascript:void(0);" onclick="showContacts()" id="showContacts"><span class="glyphicon glyphicon-search"></span></a></label>
 			<div class="col-sm-10" style="width: 300px;">
@@ -146,7 +164,7 @@
 		<div class="form-group">
 			<label for="create-state" class="col-sm-2 control-label">状态</label>
 			<div class="col-sm-10" style="width: 300px;">
-				<select class="form-control" id="create-state">
+				<select class="form-control" id="create-state" name="stage">
 					<c:forEach items="${applicationScope.returnState}" var="r">
 						<option value="${r.value}" ${r.value == visit.stage ? "selected":""}>${r.text}</option>
 					</c:forEach>
@@ -160,7 +178,7 @@
 			</div>
 			<label for="create-priority" class="col-sm-2 control-label">优先级</label>
 			<div class="col-sm-10" style="width: 300px;">
-				<select class="form-control" id="create-priority">
+				<select class="form-control" id="create-priority" name="priority">
 					<c:forEach items="${applicationScope.returnPriority}" var="r">
 						<option value="${r.value}" ${r.value == visit.priority ? "selected":""}>${r.text}</option>
 					</c:forEach>
@@ -177,7 +195,7 @@
 		<div class="form-group">
 			<label for="create-describe" class="col-sm-2 control-label">描述</label>
 			<div class="col-sm-10" style="width: 70%;">
-				<textarea class="form-control" rows="3" id="create-describe">${visit.description}</textarea>
+				<textarea class="form-control" rows="3" name="description" id="create-describe">${visit.description}</textarea>
 			</div>
 		</div>
 		
@@ -191,14 +209,14 @@
 			<div class="form-group" style="position: relative; top: 10px;">
 				<label for="create-startTime" class="col-sm-2 control-label">开始日期</label>
 				<div class="col-sm-10" style="width: 300px;">
-					<input type="text" class="form-control" id="create-startTime" value=${visit.startTime}>
+					<input type="text" class="form-control" id="create-startTime" name="startTime" value=${visit.startTime}>
 				</div>
 			</div>
 			
 			<div class="form-group" style="position: relative; top: 15px;">
 				<label for="create-repeatType" class="col-sm-2 control-label">重复类型</label>
 				<div class="col-sm-10" style="width: 300px;">
-					<select class="form-control" id="create-repeatType">
+					<select class="form-control" id="create-repeatType" name="repeatType">
 					  <option></option>
 					  <option selected>每天</option>
 					  <option>每周</option>
@@ -211,7 +229,7 @@
 			<div class="form-group" style="position: relative; top: 20px;">
 				<label for="create-noticeType" class="col-sm-2 control-label">通知类型</label>
 				<div class="col-sm-10" style="width: 300px;">
-					<select class="form-control" id="create-noticeType">
+					<select class="form-control" id="create-noticeType" name="noticeType">
 					  <option></option>
 					  <option selected>邮箱</option>
 					  <option>弹窗</option>

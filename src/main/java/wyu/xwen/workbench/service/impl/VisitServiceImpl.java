@@ -45,4 +45,11 @@ public class VisitServiceImpl implements VisitService
     {
         return visitDao.getVisitById(id);
     }
+
+    @Override
+    public boolean updateVisit(Visit visit)
+    {
+        int count = visitDao.updateVisit(visit);
+        return count == 1;
+    }
 }

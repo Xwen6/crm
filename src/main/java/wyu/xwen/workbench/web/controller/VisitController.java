@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 import wyu.xwen.settings.domain.User;
 import wyu.xwen.utils.DateTimeUtil;
 import wyu.xwen.utils.UUIDUtil;
@@ -53,5 +54,22 @@ public class VisitController
         map.put("list",list);
         map.put("total",count);
         return map;
+    }
+
+    @RequestMapping("/updateVisit.do")
+    public ModelAndView updateVisit(Visit visit)
+    {
+        ModelAndView modelAndView = new ModelAndView();
+        visit.setEditTime(DateTimeUtil.getSysTime());
+        boolean flag = visitService.updateVisit(visit);
+        String message = "添加失败";
+        modelAndView.addObject("flag",flag);
+        if (flag)
+        {
+            message = "添加成功";
+        }
+        modelAndView.addObject("message",message);
+        modelAndView.setViewName("/workbench/visit/index");
+        return modelAndView;
     }
 }

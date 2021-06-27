@@ -159,6 +159,16 @@
 				}
 			})
 		}
+		function checkFlag() {
+			let flag = ${flag};
+			if (flag != null)
+			{
+				if (flag)
+				{
+
+				}
+			}
+		}
 
 
 
