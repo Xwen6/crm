@@ -3,16 +3,21 @@ package wyu.xwen.workbench.web.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import wyu.xwen.settings.domain.User;
 import wyu.xwen.utils.DateTimeUtil;
 import wyu.xwen.utils.UUIDUtil;
+import wyu.xwen.vo.VisitVo;
 import wyu.xwen.workbench.domain.Visit;
 import wyu.xwen.workbench.service.VisitService;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Controller
-@RequestMapping("/visit")
+@RequestMapping("/workbench/visit")
 public class VisitController
 {
     @Autowired
@@ -27,5 +32,26 @@ public class VisitController
         visit.setCreateBy(user.getId());
         boolean flag = visitService.addVisit(visit);
         return "workbench/visit/index";
+    }
+
+    @RequestMapping("/getVisitLisit.do")
+    @ResponseBody
+    public List<Visit> getVisitList()
+    {
+        return visitService.getVisitList();
+    }
+
+    @RequestMapping("/PageList.do")
+    @ResponseBody
+    public Map<String,Object> PageList(VisitVo visitVo)
+    {
+        Integer skinPage = (visitVo.getPageNo() - 1) * visitVo.getPageSize();
+        visitVo.setSkipPage(skinPage);
+        List<Visit> list = visitService.PageList(visitVo);
+        int count = visitService.getCount(visitVo);
+        Map<String,Object> map = new HashMap<>();
+        map.put("list",list);
+        map.put("total",count);
+        return map;
     }
 }

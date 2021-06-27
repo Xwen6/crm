@@ -3,10 +3,13 @@ package wyu.xwen.web.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import wyu.xwen.exception.SelectUserListException;
 import wyu.xwen.settings.domain.User;
 import wyu.xwen.settings.service.UserService;
+import wyu.xwen.workbench.domain.Visit;
+import wyu.xwen.workbench.service.VisitService;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -17,6 +20,9 @@ public class systemController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private VisitService visitService;
 
     /*跳转到登录页面*/
     @RequestMapping("toLogin.do")
@@ -50,9 +56,14 @@ public class systemController {
 
     /*workbench/visit/index.jsp*/
     @RequestMapping("toVisit.do")
-    public String toVisit()
+    public ModelAndView toVisit(HttpServletRequest request) throws SelectUserListException
     {
-        return "workbench/visit/index";
+        ModelAndView modelAndView = new ModelAndView();
+        List<User> list = userService.selectUserList();
+        modelAndView.addObject("list",list);
+        modelAndView.addObject("user",request.getSession().getAttribute("user"));
+        modelAndView.setViewName("workbench/visit/index");
+        return modelAndView;
     }
     /*跳转到回访详细页面*/
     @RequestMapping("toVisitDetail.do")
@@ -69,6 +80,20 @@ public class systemController {
         modelAndView.addObject("list",list);
         modelAndView.addObject("user",request.getSession().getAttribute("user"));
         modelAndView.setViewName("workbench/visit/saveTask");
+        return modelAndView;
+    }
+
+    /*跳转到编辑页面*/
+    @RequestMapping("toVisitEditTask.do")
+    public ModelAndView toVisitEditTask(String id,HttpServletRequest request) throws SelectUserListException
+    {
+        ModelAndView modelAndView = new ModelAndView();
+        Visit visit = visitService.getVisitById(id);
+        modelAndView.addObject("visit",visit);
+        List<User> list = userService.selectUserList();
+        modelAndView.addObject("list",list);
+        modelAndView.addObject("user",request.getSession().getAttribute("user"));
+        modelAndView.setViewName("workbench/visit/editTask");
         return modelAndView;
     }
 }

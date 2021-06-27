@@ -7,4 +7,75 @@
         insert into tbl_visit(id, owner, subject, contactsId, stage, priority, endDate, createBy, createTime, editBy, editTime, description, startTime, repeatType, noticeType)
         values (#{id},#{owner},#{subject},#{contactsId},#{stage},#{priority},#{endDate},#{createBy},#{createTime},#{editBy},#{editTime},#{description},#{startTime},#{repeatType},#{noticeType})
     </insert>
+    <select id="getVisitList" resultType="Visit">
+        select user.name as owner, visit.subject, contacts.fullname as contactsId, visit.stage, visit.priority, visit.endDate
+        from tbl_visit visit
+            join tbl_contacts contacts
+                join tbl_user user
+                on visit.contactsId=contacts.id and visit.owner=user.id
+    </select>
+    <select id="PageList" resultType="Visit">
+        select visit.id,user.name as owner, visit.subject, contacts.fullname as contactsId, visit.stage, visit.priority, visit.endDate
+        from tbl_visit visit
+            join tbl_contacts contacts
+                join tbl_user user
+                on visit.contactsId=contacts.id and visit.owner=user.id
+        <where>
+            <if test="owner !=null and owner != ''">
+                user.name=#{owner}
+            </if>
+            <if test="subject != null and subject != ''">
+                and visit.subject like '%' #{subject} '%'
+            </if>
+            <if test="endDate != null and endDate != ''">
+                and visit.endDate=#{endDate}
+            </if>
+            <if test="contactsId != null and contacts != ''">
+                and contacts.fullname like '%' #{contactsId} '%'
+            </if>
+            <if test="stage != null and stage != ''">
+                and visit.stage=#{stage}
+            </if>
+            <if test="priority != null and priority != ''">
+                and visit.priority=#{priority}
+            </if>
+        </where>
+        order by visit.createTime desc
+        limit #{skipPage},#{pageSize}
+    </select>
+    <select id="getTotalByCondition" resultType="int">
+        select count(*)
+        from tbl_visit visit
+            join tbl_contacts contacts
+                join tbl_user user
+                on visit.contactsId=contacts.id and visit.owner=user.id
+        <where>
+            <if test="owner !=null and owner != ''">
+                user.name=#{owner}
+            </if>
+            <if test="subject != null and subject != ''">
+                and visit.subject like '%' #{subject} '%'
+            </if>
+            <if test="endDate != null and endDate != ''">
+                and visit.endDate=#{endDate}
+            </if>
+            <if test="contactsId != null and contacts != ''">
+                and contacts.fullname like '%' #{contactsId} '%'
+            </if>
+            <if test="stage != null and stage != ''">
+                and visit.stage=#{stage}
+            </if>
+            <if test="priority != null and priority != ''">
+                and visit.priority=#{priority}
+            </if>
+        </where>
+    </select>
+    <select id="getVisitById" resultType="Visit">
+        select user.name as owner, visit.subject, visit.endDate, contacts.fullname as contactsId, visit.stage, visit.priority, visit.description, visit.startTime, visit.repeatType, visit.noticeType
+        from tbl_visit visit
+                 join tbl_contacts contacts
+                 join tbl_user user
+                      on visit.contactsId=contacts.id and visit.owner=user.id
+        where visit.id=#{id}
+    </select>
 </mapper>

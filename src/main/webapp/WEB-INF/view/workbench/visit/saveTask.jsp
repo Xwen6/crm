@@ -36,6 +36,12 @@
 				}
 			});
 			$("#addBtn").on("click",function () {
+				if (!($("#reminderTime").is(":checked")))
+				{
+					$("#create-startTime").val("");
+					$("#create-repeatType").val("");
+					$("#create-noticeType").val("");
+				}
 				$("#addVisitForm").submit();
 			})
 			$("#submitContacts").on("click",function () {
@@ -54,7 +60,7 @@
 			$("#queryContactsByName").typeahead({
 				source: function (query, process) {
 					$.get(
-							"contacts/getContactsListByName.do",
+							"workbench/contacts/getContactsListByName.do",
 							{ "name" : query },
 							function (data) {
 								//alert(data);
@@ -73,7 +79,7 @@
 		function showContacts() {
 			$("#contactsTBody").empty();
 			$.ajax({
-				url:"contacts/getContactsList.do",
+				url:"workbench/contacts/getContactsList.do",
 				data:{"name":$.trim($("#queryContactsByName").val())},
 				dataType:"json",
 				type:"get",

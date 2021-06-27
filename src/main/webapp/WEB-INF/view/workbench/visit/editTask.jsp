@@ -1,6 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%
-String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath() + "/";
+	String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath() + "/";
 %>
 <!DOCTYPE html>
 <html>
@@ -26,6 +27,28 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 				}
 			});
 		});
+		function showContacts() {
+			$("#contactsTBody").empty();
+			$.ajax({
+				url:"workbench/contacts/getContactsList.do",
+				data:{"name":$.trim($("#queryContactsByName").val())},
+				dataType:"json",
+				type:"get",
+				success:function (resp) {
+					$.each(resp,function (i,n) {
+						$("#contactsTBody").append(
+								'<tr>'+
+								'<td><input type="radio" value="'+n.id+'" name="contacts"/></td>'+
+								'<td id="'+n.id+'">'+n.fullname+'</td>'+
+								'<td>'+n.email+'</td>'+
+								'<td>'+n.mphone+'</td>'+
+								'</tr>'
+						);
+					})
+				}
+			})
+			$("#findContacts").modal("show");
+		}
 	</script>
 </head>
 <body>
@@ -44,7 +67,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 					<div class="btn-group" style="position: relative; top: 18%; left: 8px;">
 						<form class="form-inline" role="form">
 						  <div class="form-group has-feedback">
-						    <input type="text" class="form-control" style="width: 300px;" placeholder="请输入联系人名称，支持模糊查询">
+						    <input type="text" class="form-control" id="queryContactsByName" style="width: 300px;" placeholder="请输入联系人名称，支持模糊查询">
 						    <span class="glyphicon glyphicon-search form-control-feedback"></span>
 						  </div>
 						</form>
@@ -59,8 +82,8 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 								<td>手机</td>
 							</tr>
 						</thead>
-						<tbody>
-							<tr>
+						<tbody id="contactsTBody">
+							<%--<tr>
 								<td><input type="radio" name="activity"/></td>
 								<td>李四</td>
 								<td>lisi@bjpowernode.com</td>
@@ -73,7 +96,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 								<td>lisi@bjpowernode.com</td>
 								<td></td>
 								<td>12345678901</td>
-							</tr>
+							</tr>--%>
 						</tbody>
 					</table>
 				</div>
@@ -94,25 +117,29 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 			<label for="create-taskOwner" class="col-sm-2 control-label">任务所有者<span style="font-size: 15px; color: red;">*</span></label>
 			<div class="col-sm-10" style="width: 300px;">
 				<select class="form-control" id="create-taskOwner">
-				  <option></option>
+					<c:forEach items="${list}" var="u">
+						<option value="${u.id}" ${u.id == user.id ? "selected":""}>${u.name}</option>
+					</c:forEach>
+				  <%--<option></option>
 				  <option selected>zhangsan</option>
 				  <option>lisi</option>
-				  <option>wangwu</option>
+				  <option>wangwu</option--%>>
 				</select>
 			</div>
 			<label for="create-subject" class="col-sm-2 control-label">主题<span style="font-size: 15px; color: red;">*</span></label>
 			<div class="col-sm-10" style="width: 300px;">
-				<input type="text" class="form-control" id="create-subject" value="拜访客户">
+				<input type="text" class="form-control" id="create-subject" value=${visit.subject}>
 			</div>
 		</div>
 		<div class="form-group">
 			<label for="create-expiryDate" class="col-sm-2 control-label">到期日期</label>
 			<div class="col-sm-10" style="width: 300px;">
-				<input type="text" class="form-control" id="create-expiryDate" value="2017-07-09">
+				<input type="text" class="form-control" id="create-expiryDate" value=${visit.endDate}>
 			</div>
-			<label for="create-contacts" class="col-sm-2 control-label">联系人&nbsp;&nbsp;<a href="javascript:void(0);" data-toggle="modal" data-target="#findContacts"><span class="glyphicon glyphicon-search"></span></a></label>
+			<label for="create-contacts" class="col-sm-2 control-label">联系人&nbsp;&nbsp;<a href="javascript:void(0);" onclick="showContacts()" id="showContacts"><span class="glyphicon glyphicon-search"></span></a></label>
 			<div class="col-sm-10" style="width: 300px;">
-				<input type="text" class="form-control" id="create-contacts" value="李四">
+				<input type="text" class="form-control" id="create-contacts" value=${visit.contactsId}>
+				<input type="hidden" name="contactsId" id="hiddenContactsId">
 			</div>
 		</div>
 	
@@ -120,23 +147,29 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 			<label for="create-state" class="col-sm-2 control-label">状态</label>
 			<div class="col-sm-10" style="width: 300px;">
 				<select class="form-control" id="create-state">
-				  <option></option>
+					<c:forEach items="${applicationScope.returnState}" var="r">
+						<option value="${r.value}" ${r.value == visit.stage ? "selected":""}>${r.text}</option>
+					</c:forEach>
+				  <%--<option></option>
 				  <option selected>未启动</option>
 				  <option>推迟</option>
 				  <option>进行中</option>
 				  <option>完成</option>
-				  <option>等待某人</option>
+				  <option>等待某人</option>--%>
 				</select>
 			</div>
 			<label for="create-priority" class="col-sm-2 control-label">优先级</label>
 			<div class="col-sm-10" style="width: 300px;">
 				<select class="form-control" id="create-priority">
-				  <option></option>
+					<c:forEach items="${applicationScope.returnPriority}" var="r">
+						<option value="${r.value}" ${r.value == visit.priority ? "selected":""}>${r.text}</option>
+					</c:forEach>
+				  <%--<option></option>
 				  <option selected>高</option>
 				  <option>最高</option>
 				  <option>低</option>
 				  <option>最低</option>
-				  <option>常规</option>
+				  <option>常规</option>--%>
 				</select>
 			</div>
 		</div>
@@ -144,7 +177,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 		<div class="form-group">
 			<label for="create-describe" class="col-sm-2 control-label">描述</label>
 			<div class="col-sm-10" style="width: 70%;">
-				<textarea class="form-control" rows="3" id="create-describe">任务描述信息</textarea>
+				<textarea class="form-control" rows="3" id="create-describe">${visit.description}</textarea>
 			</div>
 		</div>
 		
@@ -158,7 +191,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 			<div class="form-group" style="position: relative; top: 10px;">
 				<label for="create-startTime" class="col-sm-2 control-label">开始日期</label>
 				<div class="col-sm-10" style="width: 300px;">
-					<input type="text" class="form-control" id="create-startTime" value="2017-02-16 16:00">
+					<input type="text" class="form-control" id="create-startTime" value=${visit.startTime}>
 				</div>
 			</div>
 			

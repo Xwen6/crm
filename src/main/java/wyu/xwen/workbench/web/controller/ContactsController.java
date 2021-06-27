@@ -10,7 +10,7 @@ import wyu.xwen.workbench.service.ContactsService;
 import java.util.List;
 
 @Controller
-@RequestMapping("/contacts")
+@RequestMapping("/workbench/contacts")
 public class ContactsController
 {
     @Autowired
