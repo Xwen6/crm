@@ -14,17 +14,14 @@ import wyu.xwen.utils.PringFlag;
 import wyu.xwen.utils.UUIDUtil;
 import wyu.xwen.vo.ActivityVo;
 import wyu.xwen.vo.PageVo;
-import wyu.xwen.workbench.dao.ActivityRemarkDao;
 import wyu.xwen.workbench.domain.Activity;
 import wyu.xwen.workbench.domain.ActivityRemark;
 import wyu.xwen.workbench.service.ActivityService;
 
 import javax.servlet.http.HttpServletRequest;
-import java.net.http.HttpRequest;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 @Controller
 @RequestMapping("/workbench/activity")
@@ -32,10 +29,6 @@ public class ActivityController {
     @Autowired
     private ActivityService activityService;
 
-    @RequestMapping(value = "/selectRemarkListByAid.do", method = RequestMethod.GET)
-    public List<Activity> selectRemarkListByAid(String activityId) {
-        return null;
-    }
 
     /*获取市场活动数据*/
     @RequestMapping("/PageList.do")

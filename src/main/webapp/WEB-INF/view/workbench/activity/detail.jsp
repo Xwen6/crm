@@ -136,7 +136,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 						success : function (data){
 							if(data.success){
 								/*刷新删除后的的跳转到index页面*/
-								document.location.href = "web/system/toActivity.do";
+
 
 							}else{
 								alert("删除失败")
