@@ -20,8 +20,12 @@
     </servlet>
     <servlet-mapping>
         <servlet-name>DispatcherServlet</servlet-name>
-        <url-pattern>/</url-pattern>
+        <url-pattern>*.do</url-pattern>
     </servlet-mapping>
+   <!-- <servlet-mapping>
+        <servlet-name>default</servlet-name>
+        <url-pattern>/static/*</url-pattern>
+    </servlet-mapping>-->
     <!--监听器用于创建Spring容器-->
     <listener>
         <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>

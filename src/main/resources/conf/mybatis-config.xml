@@ -24,6 +24,15 @@
         <mapper resource="mapper/settings/DicValueDao.xml"/>
         <mapper resource="mapper/workbench/VisitDao.xml"/>
         <mapper resource="mapper/workbench/ActivityRemarkDao.xml"/>
+        <mapper resource="mapper/workbench/ClueDao.xml"/>
+        <mapper resource="mapper/workbench/ContactsActivityRelationDao.xml"/>
+        <mapper resource="mapper/workbench/ContactsRemarkDao.xml"/>
+        <mapper resource="mapper/workbench/CustomerDao.xml"/>
+        <mapper resource="mapper/workbench/CustomerRemarkDao.xml"/>
+        <mapper resource="mapper/workbench/TranDao.xml"/>
+        <mapper resource="mapper/workbench/TranHistoryDao.xml"/>
+        <mapper resource="mapper/workbench/ClueRemarkDao.xml"/>
+        <mapper resource="mapper/workbench/ClueActivityRelationDao.xml"/>
 
 
     </mappers>

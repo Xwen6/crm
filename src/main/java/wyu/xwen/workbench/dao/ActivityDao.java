@@ -17,4 +17,8 @@ public interface ActivityDao {
     int doUpdate(Activity activity);
 
     int deleteActivity(String id);
+
+    List<Activity> getActivityByClueId(String clueId);
+
+    List<Activity> getNotAssociatedActivity(Map<String,Object> map);
 }

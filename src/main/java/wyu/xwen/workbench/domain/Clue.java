@@ -1,7 +1,7 @@
 package wyu.xwen.workbench.domain;
 
 public class Clue {
-   private String tbl_clue;
+
    private String id;
    private String fullname;
    private String appellation;
@@ -16,20 +16,14 @@ public class Clue {
    private String source;
    private String createBy;
    private String createTime;
-   private String  editBy;
+   private String editBy;
    private String editTime;
    private String description;
    private String contactSummary;
    private String nextContactTime;
    private String address;
 
-    public String getTbl_clue() {
-        return tbl_clue;
-    }
 
-    public void setTbl_clue(String tbl_clue) {
-        this.tbl_clue = tbl_clue;
-    }
 
     public String getId() {
         return id;

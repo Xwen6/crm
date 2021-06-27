@@ -1,6 +1,6 @@
 package wyu.xwen.workbench.domain;
 
-public class ClueActivityRelation {
+public class ClueActivityRelation extends Activity {
    private String id;
    private String clueId;
    private String activityId;
@@ -27,5 +27,14 @@ public class ClueActivityRelation {
 
     public void setActivityId(String activityId) {
         this.activityId = activityId;
+    }
+
+    public ClueActivityRelation(String id, String clueId, String activityId) {
+        this.id = id;
+        this.clueId = clueId;
+        this.activityId = activityId;
+    }
+
+    public ClueActivityRelation() {
     }
 }

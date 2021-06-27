@@ -105,8 +105,6 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 				})
 				$("#editActivityModal").modal("show")
 			}
-
-
 		})
 		/*删除操作*/
 		$("#deleteBtn").click(function (){
