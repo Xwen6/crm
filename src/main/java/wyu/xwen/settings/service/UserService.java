@@ -15,4 +15,6 @@ public interface UserService {
     List<User> selectUserList() throws SelectUserListException;
     /*根据名字获取Id*/
     String getUserNameById(String id);
+    /*修改用户密码*/
+    boolean updatePassword(String id, String newPwd);
 }

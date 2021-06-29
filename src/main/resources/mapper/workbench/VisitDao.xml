@@ -22,7 +22,7 @@
                 on visit.contactsId=contacts.id and visit.owner=user.id
         <where>
             <if test="owner !=null and owner != ''">
-                user.name=#{owner}
+                visit.owner=#{owner}
             </if>
             <if test="subject != null and subject != ''">
                 and visit.subject like '%' #{subject} '%'

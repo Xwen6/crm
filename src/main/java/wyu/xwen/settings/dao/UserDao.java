@@ -1,6 +1,7 @@
 package wyu.xwen.settings.dao;
 
 
+import org.apache.ibatis.annotations.Param;
 import wyu.xwen.settings.domain.User;
 
 import java.util.List;
@@ -14,4 +15,6 @@ public interface UserDao {
     List<User> getUserList();
 
     String getUserNameById(String id);
+
+    int updatePassword(@Param("id") String id, @Param("newPwd") String newPwd);
 }

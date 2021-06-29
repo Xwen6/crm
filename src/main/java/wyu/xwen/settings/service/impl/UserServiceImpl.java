@@ -60,5 +60,12 @@ public class UserServiceImpl implements UserService {
     {
         return userdao.getUserNameById(id);
     }
+
+    @Override
+    public boolean updatePassword(String id, String newPwd)
+    {
+        int count = userdao.updatePassword(id,newPwd);
+        return count == 1;
+    }
 }
 

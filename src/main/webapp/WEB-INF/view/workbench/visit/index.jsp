@@ -36,7 +36,7 @@
 				format: 'yyyy-mm-dd',
 				autoclose: true,
 				todayBtn: true,
-				pickerPosition: "button-left"
+				pickerPosition: "bottom-left"
 			});
 			/*检查是否有保存或修改成功失败信息*/
 			checkFlag();
@@ -133,7 +133,7 @@
 			$("#queryBtn").on("click",function () {
 				/*点击查找的时候，将填入到text中的val保存到隐藏域当中*/
 				$("#hide-owner").val($.trim($("#search-owner").val()));
-				$("#hide-subject").val($.trim($("#search-owner").val()));
+				$("#hide-subject").val($.trim($("#search-subject").val()));
 				$("#hide-endDate").val($.trim($("#search-endDate").val()));
 				$("#hide-fullname").val($.trim($("#search-fullname").val()));
 				$("#hide-stage").val($.trim($("#search-stage").val()));
@@ -249,8 +249,9 @@
 				    <div class="input-group">
 				      <div class="input-group-addon">所有者</div>
 					  <select class="form-control" name="owner" id="search-owner">
+						  <option></option>
 						  <c:forEach items="${list}" var="u">
-							  <option value="${u.id}" ${u.id == user.id ? "selected":""}>${u.name}</option>
+							  <option value="${u.id}"}>${u.name}</option>
 						  </c:forEach>
 					  </select>
 				    </div>
@@ -283,6 +284,7 @@
 				    <div class="input-group">
 				      <div class="input-group-addon">状态</div>
 					  <select class="form-control" name="stage" id="search-stage">
+						  <option></option>
 						  <c:forEach items="${applicationScope.returnState}" var="r">
 							  <option value="${r.value}">${r.text}</option>
 						  </c:forEach>
@@ -300,6 +302,7 @@
 				    <div class="input-group">
 				      <div class="input-group-addon">优先级</div>
 					  <select class="form-control" name="priority" id="search-priority">
+						  <option></option>
 						  <c:forEach items="${applicationScope.returnPriority}" var="r">
 							  <option value="${r.value}">${r.text}</option>
 						  </c:forEach>

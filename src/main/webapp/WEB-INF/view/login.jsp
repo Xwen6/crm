@@ -68,7 +68,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 		<img src="static/image/IMG_7114.JPG" style="width: 100%; height: 90%; position: relative; top: 50px;">
 	</div>
 	<div id="top" style="height: 50px; background-color: #3C3C3C; width: 100%;">
-		<div style="position: absolute; top: 5px; left: 0px; font-size: 30px; font-weight: 400; color: white; font-family: 'times new roman'">CRM &nbsp;<span style="font-size: 12px;">&copy;2017&nbsp;动力节点</span></div>
+		<div style="position: absolute; top: 5px; left: 0px; font-size: 30px; font-weight: 400; color: white; font-family: 'times new roman'">CRM &nbsp;<span style="font-size: 12px;">&copy;2021&nbsp;五邑大学</span></div>
 	</div>
 	
 	<div style="position: absolute; top: 120px; right: 100px;width:450px;height:400px;border:1px solid #D5D5D5">
@@ -85,9 +85,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 						<input class="form-control" type="password" placeholder="密码" id="loginPwd">
 					</div>
 					<div class="checkbox"  style="position: relative;top: 30px; left: 10px;">
-						
-							<span id="msg" style="color: red"></span>
-						
+						<span id="msg" style="color: red"></span>
 					</div>
 					<button type="button" class="btn btn-primary btn-lg btn-block"  style="width: 350px; position: relative;top: 45px;" id="loginSubmitBtn">登录</button>
 				</div>

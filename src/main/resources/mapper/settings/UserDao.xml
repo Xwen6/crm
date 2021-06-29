@@ -21,4 +21,7 @@
     <select id="getUserNameById" resultType="string">
         select name from tbl_user where id=#{id}
     </select>
+    <update id="updatePassword">
+        update tbl_user set loginPwd=#{newPwd} where id=#{id}
+    </update>
 </mapper>
