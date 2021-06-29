@@ -23,10 +23,10 @@
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>default</servlet-name>
-        <url-pattern>/static/*</url-pattern>
-        <!--<url-pattern>/static/ECharts/*</url-pattern>
+        <!--<url-pattern>/static/*</url-pattern>-->
+        <url-pattern>/static/ECharts/*</url-pattern>
         <url-pattern>/static/image/*</url-pattern>
-        <url-pattern>/static/jquery/*</url-pattern>-->
+        <url-pattern>/static/jquery/*</url-pattern>
     </servlet-mapping>
     <!--监听器用于创建Spring容器-->
     <listener>

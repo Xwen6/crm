@@ -44,10 +44,10 @@
         limit #{skipPage},#{pageSize}
     </select>
     <select id="getTotalByCondition" resultType="int">
-        select count(*)
+        select count(visit.id)
         from tbl_visit visit
-            join tbl_contacts contacts
-                join tbl_user user
+             join tbl_contacts contacts
+                 join tbl_user user
                 on visit.contactsId=contacts.id and visit.owner=user.id
         <where>
             <if test="owner !=null and owner != ''">
@@ -70,8 +70,8 @@
             </if>
         </where>
     </select>
-    <select id="getVisitById" resultType="Visit">
-        select user.name as owner, visit.subject, visit.endDate, contacts.fullname as contactsId, visit.stage, visit.priority, visit.description, visit.startTime, visit.repeatType, visit.noticeType
+    <select id="getVisitById" resultType="wyu.xwen.vo.VisitVo">
+        select visit.id,user.name as ownerName, visit.owner, visit.subject, visit.endDate, contacts.fullname as contactsName,visit.contactsId, visit.stage, visit.priority, visit.description, visit.createBy, visit.createTime, visit.editBy, visit.editTime, visit.startTime, visit.repeatType, visit.noticeType
         from tbl_visit visit
                  join tbl_contacts contacts
                  join tbl_user user
@@ -80,9 +80,9 @@
     </select>
     <update id="updateVisit">
         update tbl_visit
-        set owner=(select name from tbl_user where id=#{owner}),
+        set owner=#{owner},
             subject=#{subject},
-            contactsId=(select fullname from tbl_contacts where id=#{contactsId}),
+            contactsId=#{contactsId},
             stage=#{stage},
             priority=#{priority},
             endDate=#{endDate},
@@ -94,4 +94,8 @@
             noticeType=#{noticeType}
         where id=#{id}
     </update>
+    <delete id="deleteVisit">
+        delete from tbl_visit where id in
+        <foreach collection="array" separator="," open="(" close=")" item="id">#{id}</foreach>
+    </delete>
 </mapper>

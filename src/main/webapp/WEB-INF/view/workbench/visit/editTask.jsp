@@ -36,7 +36,7 @@
 				window.history.go(-1);
 			})
 			$("#updateBtn").on("click",function () {
-				$("#updateBtn").submit();
+				$("#updateForm").submit();
 			})
 		});
 		function showContacts() {
@@ -130,13 +130,13 @@
 	</div>
 	<form class="form-horizontal" role="form" id="updateForm" action="workbench/visit/updateVisit.do" method="post">
 		<input type="hidden" name="id" value=${visit.id}>
-		<input type="hidden" name="editBy" value=${user.name}>
+		<input type="hidden" name="editBy" value=${user.id}>
 		<div class="form-group">
 			<label for="create-taskOwner" class="col-sm-2 control-label">任务所有者<span style="font-size: 15px; color: red;">*</span></label>
 			<div class="col-sm-10" style="width: 300px;">
 				<select class="form-control" id="create-taskOwner" name="owner">
 					<c:forEach items="${list}" var="u">
-						<option value="${u.id}" ${u.id == user.id ? "selected":""}>${u.name}</option>
+						<option value="${u.id}" ${u.id == visit.owner ? "selected":""}>${u.name}</option>
 					</c:forEach>
 				  <%--<option></option>
 				  <option selected>zhangsan</option>
@@ -156,8 +156,8 @@
 			</div>
 			<label for="create-contacts" class="col-sm-2 control-label">联系人&nbsp;&nbsp;<a href="javascript:void(0);" onclick="showContacts()" id="showContacts"><span class="glyphicon glyphicon-search"></span></a></label>
 			<div class="col-sm-10" style="width: 300px;">
-				<input type="text" class="form-control" id="create-contacts" value=${visit.contactsId}>
-				<input type="hidden" name="contactsId" id="hiddenContactsId">
+				<input type="text" class="form-control" id="create-contacts" value=${visit.contactsName}>
+				<input type="hidden" name="contactsId" id="hiddenContactsId" value=${visit.contactsId}>
 			</div>
 		</div>
 	

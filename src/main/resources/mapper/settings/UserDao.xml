@@ -18,5 +18,7 @@
         ,createBy,editTime,editBy,editBy
         from tbl_user
     </select>
-
+    <select id="getUserNameById" resultType="string">
+        select name from tbl_user where id=#{id}
+    </select>
 </mapper>

@@ -33,6 +33,7 @@
         <mapper resource="mapper/workbench/TranHistoryDao.xml"/>
         <mapper resource="mapper/workbench/ClueRemarkDao.xml"/>
         <mapper resource="mapper/workbench/ClueActivityRelationDao.xml"/>
+        <mapper resource="mapper/workbench/VisitRemarkDao.xml"/>
 
 
     </mappers>

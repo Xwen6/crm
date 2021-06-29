@@ -15,7 +15,9 @@ public interface VisitDao
 
     int getTotalByCondition(VisitVo visitVo);
 
-    Visit getVisitById(String id);
+    VisitVo getVisitById(String id);
 
     int updateVisit(Visit visit);
+
+    int deleteVisit(String[] ids);
 }

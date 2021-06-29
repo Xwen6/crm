@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="wyu.xwen.workbench.dao.VisitRemarkDao">
+    <insert id="addRemark">
+        insert into tbl_visit_remark(id, noteContent, createBy, createTime, editBy, editTime, editFlag, visitId)
+        values (#{id},#{noteContent},#{createBy},#{createTime},#{editBy},#{editTime},#{editFlag},#{visitId})
+    </insert>
+    <select id="getRemarkListByVisitId" resultType="VisitRemark">
+        select tvr.id, tvr.noteContent, tu.name as createBy, tvr.createTime, tvr.editBy, tvr.editTime, tvr.editFlag, tvr.visitId
+        from tbl_visit_remark tvr
+            join tbl_user tu
+        on tvr.createBy=tu.id
+        where visitId=#{id} order by tvr.createTime
+    </select>
+    <update id="editRemark">
+        update tbl_visit_remark
+        set editBy = #{editBy},editTime=#{editTime},editFlag='1',noteContent=#{noteContent}
+        where id=#{id};
+    </update>
+    <delete id="deleteRemark">
+        delete
+        from tbl_visit_remark
+        where id=#{id};
+    </delete>
+</mapper>

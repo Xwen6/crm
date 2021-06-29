@@ -169,7 +169,7 @@
 		</div>
 		<hr style="position: relative; top: -40px;">
 	</div>
-	<form class="form-horizontal" role="form" method="post" action="visit/addVisit.do" id="addVisitForm">
+	<form class="form-horizontal" role="form" method="post" action="workbench/visit/addVisit.do" id="addVisitForm">
 		<div class="form-group">
 			<label for="create-owner" class="col-sm-2 control-label">所有者<span style="font-size: 15px; color: red;">*</span></label>
 			<div class="col-sm-10" style="width: 300px;">

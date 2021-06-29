@@ -2,6 +2,13 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%
 	String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath() + "/";
+	Object o = request.getAttribute("flag");
+	String message = (String) request.getAttribute("message");
+	boolean flag = false;
+	if (o != null)
+	{
+		flag = (boolean) o;
+	}
 %>
 <!DOCTYPE html>
 <html>
@@ -31,13 +38,18 @@
 				todayBtn: true,
 				pickerPosition: "button-left"
 			});
+			/*检查是否有保存或修改成功失败信息*/
+			checkFlag();
+			/*分页插件和查询数据结合*/
 			pageList(1,2);
+			/*全选复选框按钮设置*/
 			$("#qx").on("click",function () {
 				$("input[name=xz]").prop("checked",this.checked);
 			})
 			$("#getVisitListTBody").on("click",function () {
 				$("#qx").prop("checked",$("input[name=xz]").length === $("input[name=xz]:checked").length)
 			})
+			/*编辑按钮绑定事件*/
 			$("#editBtn").on("click",function () {
 				let $box = $("input[name=xz]:checked");
 				if ($box.length === 0)
@@ -51,6 +63,43 @@
 				else
 				{
 					window.location.href="web/system/toVisitEditTask.do?id="+$box.val();
+				}
+			})
+			$("#deleteBtn").on("click",function () {
+				let $box = $("input[name=xz]:checked");
+				if ($box.length === 0)
+				{
+					alert("请选择您要删除的选项！")
+				}
+				else
+				{
+					if (confirm("是否要删除选中的记录？"))
+					{
+						let parma = "ids=";
+						$.each($box, function (i, n) {
+							parma += $(n).val();
+							if (i < $box.length - 1)
+							{
+								parma += ",";
+							}
+						})
+						$.ajax({
+							url:"workbench/visit/deleteVisit.do",
+							data:parma,
+							dataType:"json",
+							type:"post",
+							success:function (resp) {
+								if (resp)
+								{
+									pageList(1,$("#visitPage").bs_pagination('getOption', 'rowsPerPage'));
+								}
+								else
+								{
+									alert("删除失败！")
+								}
+							}
+						})
+					}
 				}
 			})
 
@@ -80,6 +129,7 @@
 				//防止下拉菜单消失
 				e.stopPropagation();
 			});
+			/*查询按钮绑定事件*/
 			$("#queryBtn").on("click",function () {
 				/*点击查找的时候，将填入到text中的val保存到隐藏域当中*/
 				$("#hide-owner").val($.trim($("#search-owner").val()));
@@ -123,7 +173,7 @@
 						$("#getVisitListTBody").append(
 								'<tr>'+
 									'<td><input type="checkbox" name="xz" value="'+n.id+'"/></td>'+
-									'<td><a style="text-decoration: none; cursor: pointer;" onclick="window.location.href=\'/web/system/toVisitDetail.do?id='+n.id+'\';">'+n.subject+'</a></td>'+
+									'<td><a style="text-decoration: none; cursor: pointer;" onclick="window.location.href=\'web/system/toVisitDetail.do?id='+n.id+'\';">'+n.subject+'</a></td>'+
 									'<td>'+n.endDate+'</td>'+
 									'<td>'+n.contactsId+'</td>'+
 									'<td>'+n.stage+'</td>'+
@@ -160,14 +210,13 @@
 			})
 		}
 		function checkFlag() {
-			let flag = ${flag};
-			if (flag != null)
-			{
-				if (flag)
-				{
-
-				}
-			}
+			 if (<%=flag%>)
+			 {
+			 	alert("<%=message%>");
+			 	<%
+			 	flag = false;
+			 	%>
+			 }
 		}
 
 
@@ -273,7 +322,7 @@
 				  <button type="button" class="btn btn-primary" onclick="window.location.href='web/system/toVisitSaveTask.do';"><span class="glyphicon glyphicon-plus"></span> 任务</button>
 				  <button type="button" class="btn btn-default" onclick="alert('可以自行实现对通话的管理');"><span class="glyphicon glyphicon-plus"></span> 通话</button>
 				  <button type="button" class="btn btn-default" id="editBtn"><span class="glyphicon glyphicon-pencil"></span> 修改</button>
-				  <button type="button" class="btn btn-danger"><span class="glyphicon glyphicon-minus"></span> 删除</button>
+				  <button type="button" class="btn btn-danger" id="deleteBtn"><span class="glyphicon glyphicon-minus"></span> 删除</button>
 				</div>
 				
 			</div>

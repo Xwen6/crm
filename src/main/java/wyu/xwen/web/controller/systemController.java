@@ -8,6 +8,7 @@ import org.springframework.web.servlet.ModelAndView;
 import wyu.xwen.exception.SelectUserListException;
 import wyu.xwen.settings.domain.User;
 import wyu.xwen.settings.service.UserService;
+import wyu.xwen.vo.VisitVo;
 import wyu.xwen.workbench.domain.Visit;
 import wyu.xwen.workbench.service.VisitService;
 
@@ -67,9 +68,18 @@ public class systemController {
     }
     /*跳转到回访详细页面*/
     @RequestMapping("toVisitDetail.do")
-    public String toVisitDetail()
+    public ModelAndView toVisitDetail(String id)
     {
-        return "workbench/visit/detail";
+        ModelAndView modelAndView = new ModelAndView();
+        VisitVo visitVo = visitService.getVisitById(id);
+        visitVo.setCreateName(userService.getUserNameById(visitVo.getCreateBy()));
+        if (visitVo.getEditBy() != null)
+        {
+            visitVo.setEditName(userService.getUserNameById(visitVo.getEditBy()));
+        }
+        modelAndView.addObject("visitVo",visitVo);
+        modelAndView.setViewName("workbench/visit/detail");
+        return modelAndView;
     }
     /*跳转到回访添加页面*/
     @RequestMapping("toVisitSaveTask.do")
@@ -88,8 +98,8 @@ public class systemController {
     public ModelAndView toVisitEditTask(String id,HttpServletRequest request) throws SelectUserListException
     {
         ModelAndView modelAndView = new ModelAndView();
-        Visit visit = visitService.getVisitById(id);
-        modelAndView.addObject("visit",visit);
+        VisitVo visitVo = visitService.getVisitById(id);
+        modelAndView.addObject("visit",visitVo);
         List<User> list = userService.selectUserList();
         modelAndView.addObject("list",list);
         modelAndView.addObject("user",request.getSession().getAttribute("user"));

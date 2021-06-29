@@ -12,4 +12,6 @@ public interface UserDao {
     User login(Map<Object,Object> map);
 
     List<User> getUserList();
+
+    String getUserNameById(String id);
 }
