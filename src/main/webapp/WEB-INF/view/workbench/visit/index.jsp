@@ -65,6 +65,7 @@
 					window.location.href="web/system/toVisitEditTask.do?id="+$box.val();
 				}
 			})
+			/*绑定删除事件*/
 			$("#deleteBtn").on("click",function () {
 				let $box = $("input[name=xz]:checked");
 				if ($box.length === 0)

@@ -4,6 +4,17 @@ public class DicType {
     private String code;
     private String name;
     private String description;
+    private String newCode;
+
+    public String getNewCode()
+    {
+        return newCode;
+    }
+
+    public void setNewCode(String newCode)
+    {
+        this.newCode = newCode;
+    }
 
     public String getCode() {
         return code;

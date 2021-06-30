@@ -35,4 +35,36 @@ public class DicServiceImpl implements DicService {
 
         return dicMap;
     }
+
+    @Override
+    public List<DicType> getDicTypeList()
+    {
+        return dicTypeDao.getDicTypeList();
+    }
+
+    @Override
+    public void addDicType(DicType dicType)
+    {
+        dicTypeDao.addDicType(dicType);
+    }
+
+    @Override
+    public boolean updateDicType(DicType dicType)
+    {
+        int count = dicTypeDao.updateDicType(dicType);
+        return count == 1;
+    }
+
+    @Override
+    public Object getDicTypeById(String code)
+    {
+        return dicTypeDao.getDicTypeById(code);
+    }
+
+    @Override
+    public boolean deleteDicType(String[] codes)
+    {
+        int count = dicTypeDao.deleteDicType(codes);
+        return count == codes.length;
+    }
 }

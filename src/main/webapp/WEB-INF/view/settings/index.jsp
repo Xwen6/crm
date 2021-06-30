@@ -1,13 +1,62 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%
+	String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath() + "/";
+%>
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<link href="../jquery/bootstrap_3.3.0/css/bootstrap.min.css" type="text/css" rel="stylesheet" />
-<script type="text/javascript" src="../jquery/jquery-1.11.1-min.js"></script>
-<script type="text/javascript" src="../jquery/bootstrap_3.3.0/js/bootstrap.min.js"></script>
+	<base href="<%=basePath%>">
+	<meta charset="UTF-8">
+	<link href="static/jquery/bootstrap_3.3.0/css/bootstrap.min.css" type="text/css" rel="stylesheet" />
+	<script type="text/javascript" src="static/jquery/jquery-1.11.1-min.js"></script>
+	<script type="text/javascript" src="static/jquery/bootstrap_3.3.0/js/bootstrap.min.js"></script>
+	<script type="text/javascript">
+		function updatePassword() {
+			let oldPwd = $.trim($("#oldPwd").val());
+			let newPwd = $.trim($("#newPwd").val());
+			let confirmPwd = $.trim($("#confirmPwd").val());
+			if (oldPwd === '')
+			{
+				alert("原密码不能为空！")
+			}
+			else
+			{
+				if (newPwd === '' || confirmPwd === '')
+				{
+					alert("新密码或确认密码不能为空！")
+				}
+				else
+				{
+					if (newPwd !== confirmPwd)
+					{
+						alert("新密码与确认密码不一致!")
+					}
+					else
+					{
+						$.ajax({
+							url:"web/system/updatePassword.do",
+							data:{"id":"${user.id}","oldPwd":oldPwd,"newPwd":newPwd},
+							dataType:"json",
+							type:"post",
+							success:function (resp) {
+								if (resp.flag)
+								{
+									alert("修改成功，请重新登录。")
+									window.location.href="web/system/logout.do"
+								}
+								else
+								{
+									alert(resp.message)
+								}
+							}
+						})
+					}
+				}
+			}
+		}
+	</script>
 </head>
 <body>
-
 	<!-- 我的资料 -->
 	<div class="modal fade" id="myInformation" role="dialog">
 		<div class="modal-dialog" role="document" style="width: 30%;">
@@ -20,12 +69,12 @@
 				</div>
 				<div class="modal-body">
 					<div style="position: relative; left: 40px;">
-						姓名：<b>张三</b><br><br>
-						登录帐号：<b>zhangsan</b><br><br>
-						组织机构：<b>1005，市场部，二级部门</b><br><br>
-						邮箱：<b>zhangsan@bjpowernode.com</b><br><br>
-						失效时间：<b>2017-02-14 10:10:10</b><br><br>
-						允许访问IP：<b>127.0.0.1,192.168.100.2</b>
+						姓名：<b>${user.name}</b><br><br>
+						登录帐号：<b>${user.loginAct}</b><br><br>
+						组织机构：<b>${user.deptno}，市场部，二级部门</b><br><br>
+						邮箱：<b>${user.email}</b><br><br>
+						失效时间：<b>${user.expireTime}</b><br><br>
+						允许访问IP：<b>${user.allowIps}</b>
 					</div>
 				</div>
 				<div class="modal-footer">
@@ -34,7 +83,7 @@
 			</div>
 		</div>
 	</div>
-	
+
 	<!-- 修改密码的模态窗口 -->
 	<div class="modal fade" id="editPwdModal" role="dialog">
 		<div class="modal-dialog" role="document" style="width: 70%;">
@@ -53,30 +102,30 @@
 								<input type="text" class="form-control" id="oldPwd" style="width: 200%;">
 							</div>
 						</div>
-						
+
 						<div class="form-group">
 							<label for="newPwd" class="col-sm-2 control-label">新密码</label>
 							<div class="col-sm-10" style="width: 300px;">
-								<input type="text" class="form-control" id="newPwd" style="width: 200%;">
+								<input type="password" class="form-control" id="newPwd" style="width: 200%;">
 							</div>
 						</div>
-						
+
 						<div class="form-group">
 							<label for="confirmPwd" class="col-sm-2 control-label">确认密码</label>
 							<div class="col-sm-10" style="width: 300px;">
-								<input type="text" class="form-control" id="confirmPwd" style="width: 200%;">
+								<input type="password" class="form-control" id="confirmPwd" style="width: 200%;">
 							</div>
 						</div>
 					</form>
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-					<button type="button" class="btn btn-primary" data-dismiss="modal" onclick="window.location.href='../login.jsp';">更新</button>
+					<button type="button" class="btn btn-primary" onclick="updatePassword();">更新</button>
 				</div>
 			</div>
 		</div>
 	</div>
-	
+
 	<!-- 退出系统的模态窗口 -->
 	<div class="modal fade" id="exitModal" role="dialog">
 		<div class="modal-dialog" role="document" style="width: 30%;">
@@ -92,24 +141,23 @@
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-					<button type="button" class="btn btn-primary" data-dismiss="modal" onclick="window.location.href='../login.jsp';">确定</button>
+					<button type="button" class="btn btn-primary" data-dismiss="modal" onclick="window.location.href='web/system/logout.do';">确定</button>
 				</div>
 			</div>
 		</div>
 	</div>
-	
 	<!-- 顶部 -->
 	<div id="top" style="height: 50px; background-color: #3C3C3C; width: 100%;">
-		<div style="position: absolute; top: 5px; left: 0px; font-size: 30px; font-weight: 400; color: white; font-family: 'times new roman'">CRM &nbsp;<span style="font-size: 12px;">&copy;2017&nbsp;动力节点</span></div>
+		<div style="position: absolute; top: 5px; left: 0px; font-size: 30px; font-weight: 400; color: white; font-family: 'times new roman'">CRM &nbsp;<span style="font-size: 12px;">&copy;2021&nbsp;五邑大学</span></div>
 		<div style="position: absolute; top: 15px; right: 15px;">
 			<ul>
 				<li class="dropdown user-dropdown">
 					<a href="javascript:void(0)" style="text-decoration: none; color: white;" class="dropdown-toggle" data-toggle="dropdown">
-						<span class="glyphicon glyphicon-user"></span> zhangsan <span class="caret"></span>
+						<span class="glyphicon glyphicon-user"></span> ${sessionScope.user.name} <span class="caret"></span>
+						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 					</a>
 					<ul class="dropdown-menu">
-						<li><a href="../workbench/index.jsp"><span class="glyphicon glyphicon-home"></span> 工作台</a></li>
-						<li><a href="../settings/index.html"><span class="glyphicon glyphicon-wrench"></span> 系统设置</a></li>
+						<li><a href="web/system/toSettings.do"><span class="glyphicon glyphicon-wrench"></span> 系统设置</a></li>
 						<li><a href="javascript:void(0)" data-toggle="modal" data-target="#myInformation"><span class="glyphicon glyphicon-file"></span> 我的资料</a></li>
 						<li><a href="javascript:void(0)" data-toggle="modal" data-target="#editPwdModal"><span class="glyphicon glyphicon-edit"></span> 修改密码</a></li>
 						<li><a href="javascript:void(0);" data-toggle="modal" data-target="#exitModal"><span class="glyphicon glyphicon-off"></span> 退出</a></li>
@@ -118,12 +166,12 @@
 			</ul>
 		</div>
 	</div>
-	
+
 	<!-- 中间 -->
 	<div id="center" style="position: absolute;top: 50px; bottom: 30px; left: 0px; right: 0px;">
 		<div style="position: relative; top: 30px; width: 60%; height: 100px; left: 20%;">
 			<div class="page-header">
-			  <h3>系统设置</h3>
+				<h3>系统设置</h3>
 			</div>
 		</div>
 		<div style="position: relative; width: 55%; height: 70%; left: 22%;">
@@ -135,14 +183,14 @@
 			<div style="position: relative; width: 33%; height: 50%;">
 				安全控制
 				<br><br>
-				<!-- 
-				<a href="org/index.jsp" style="text-decoration: none; color: red;">组织机构</a>
+				<!--
+				<a href="org/index.html" style="text-decoration: none; color: red;">组织机构</a>
 				 -->
 				<a href="dept/index.html">部门管理</a>
 				<br>
 				<a href="qx/index.html">权限管理</a>
 			</div>
-			
+
 			<div style="position: relative; width: 33%; height: 50%; left: 33%; top: -100%">
 				定制
 				<br><br>
@@ -165,7 +213,7 @@
 				<br>
 				<a href="javascript:void(0);">服务支持升级规则</a>
 			</div>
-			
+
 			<div style="position: relative; width: 34%; height: 50%;  left: 66%; top: -200%">
 				扩展及API
 				<br><br>
@@ -176,7 +224,7 @@
 			<div style="position: relative; width: 34%; height: 50%; left: 66%; top: -200%">
 				数据管理
 				<br><br>
-				<a href="dictionary/index.html">数据字典表</a>
+				<a href="web/system/toDicIndex.do">数据字典表</a>
 				<br>
 				<a href="javascript:void(0);">导入</a>
 				<br>

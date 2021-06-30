@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import wyu.xwen.exception.SelectUserListException;
 import wyu.xwen.settings.domain.User;
+import wyu.xwen.settings.service.DicService;
 import wyu.xwen.settings.service.UserService;
 import wyu.xwen.utils.MD5Util;
 import wyu.xwen.vo.VisitVo;
@@ -27,6 +28,9 @@ public class systemController {
     @Autowired
     private VisitService visitService;
 
+    @Autowired
+    private DicService dicService;
+
     /*跳转到登录页面*/
     @RequestMapping("toLogin.do")
     public String toLogin(){
@@ -35,13 +39,9 @@ public class systemController {
 
     /*跳转到工作台首页*/
     @RequestMapping("toWorkBench.do")
-    public ModelAndView toWorkBench(HttpServletRequest request)
+    public String toWorkBench(HttpServletRequest request)
     {
-        User user = (User) request.getSession().getAttribute("user");
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.addObject("user",user);
-        modelAndView.setViewName("workbench/index");
-        return modelAndView;
+        return "workbench/index";
     }
 
     /*退出登录*/
@@ -147,6 +147,44 @@ public class systemController {
         List<User> list = userService.selectUserList();
         modelAndView.addObject("list",list);
         modelAndView.setViewName("workbench/visit/editTask");
+        return modelAndView;
+    }
+
+    /*跳转到系统设置页面*/
+    @RequestMapping("toSettings.do")
+    public String toSettings()
+    {
+        return "settings/index";
+    }
+
+    /*跳转到数据字典设置页面*/
+    @RequestMapping("toDicIndex.do")
+    public String toDicIndex()
+    {
+        return "settings/dictionary/index";
+    }
+
+    /*跳转类型导航页*/
+    @RequestMapping("toDIcTypeIndex.do")
+    public String toDIcTypeIndex()
+    {
+        return "settings/dictionary/type/index";
+    }
+
+    /*跳转到类型增加页*/
+    @RequestMapping("toDicTypeSave.do")
+    public String toDicTypeSave()
+    {
+        return "settings/dictionary/type/save";
+    }
+
+    /*跳转到类型编辑页*/
+    @RequestMapping("toDicTypeEdit.do")
+    public ModelAndView toDicTypeEdit(String code)
+    {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.addObject("dicType",dicService.getDicTypeById(code));
+        modelAndView.setViewName("settings/dictionary/type/edit");
         return modelAndView;
     }
 }
