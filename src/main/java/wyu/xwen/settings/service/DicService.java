@@ -22,4 +22,10 @@ public interface DicService {
     List<DicValue> getDicValueList();
 
     void addDicValue(DicValue dicValue);
+
+    DicValue getDicValueById(String id);
+
+    boolean deleteDicValue(DicValue dicValue);
+
+    boolean editDicValue(DicValue dicValue);
 }

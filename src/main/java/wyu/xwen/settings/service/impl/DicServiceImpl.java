@@ -79,4 +79,23 @@ public class DicServiceImpl implements DicService {
     {
         dicValueDao.addDicValue(dicValue);
     }
+
+    @Override
+    public DicValue getDicValueById(String id)
+    {
+        return dicValueDao.getDicValueById(id);
+    }
+
+    @Override
+    public boolean deleteDicValue(DicValue dicValue)
+    {
+        return false;
+    }
+
+    @Override
+    public boolean editDicValue(DicValue dicValue)
+    {
+        int count = dicValueDao.editDicValue(dicValue);
+        return count == 1;
+    }
 }

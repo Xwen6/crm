@@ -77,4 +77,38 @@ public class DictionaryController
         dicService.addDicValue(dicValue);
         return "settings/dictionary/value/index";
     }
+
+    /*修改字典值*/
+    @RequestMapping("/updateDicValue.do")
+    public ModelAndView editDicValue(DicValue dicValue)
+    {
+        ModelAndView modelAndView = new ModelAndView();
+        boolean flag = dicService.editDicValue(dicValue);
+        String message = "修改失败";
+        if (flag)
+        {
+            message = "修改成功";
+        }
+        modelAndView.addObject("flag",flag);
+        modelAndView.addObject("message",message);
+        modelAndView.setViewName("settings/dictionary/value/index");
+        return modelAndView;
+    }
+
+    /*删除字典值*/
+    @RequestMapping("/deleteDicValue.do")
+    public ModelAndView deleteDicValue(DicValue dicValue)
+    {
+        ModelAndView modelAndView = new ModelAndView();
+        boolean flag = dicService.deleteDicValue(dicValue);
+        String message = "修改失败";
+        if (flag)
+        {
+            message = "修改成功";
+        }
+        modelAndView.addObject("flag",flag);
+        modelAndView.addObject("message",message);
+        modelAndView.setViewName("settings/dictionary/value/index");
+        return modelAndView;
+    }
 }

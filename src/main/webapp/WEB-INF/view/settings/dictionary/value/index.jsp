@@ -34,7 +34,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 				}
 				else
 				{
-					window.location.href="web/system/toDicValueEdit.do?code="+$box.val();
+					window.location.href="web/system/toDicValueEdit.do?id="+$box.val();
 				}
 			})
 			/*绑定删除事件*/
@@ -111,7 +111,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 <div class="btn-toolbar" role="toolbar" style="background-color: #F7F7F7; height: 50px; position: relative;left: 30px;">
 	<div class="btn-group" style="position: relative; top: 18%;">
 		<button type="button" class="btn btn-primary" onclick="window.location.href='web/system/toDicValueSave.do'"><span class="glyphicon glyphicon-plus"></span> 创建</button>
-		<button type="button" class="btn btn-default" onclick="window.location.href='edit.html'"><span class="glyphicon glyphicon-edit"></span> 编辑</button>
+		<button type="button" class="btn btn-default" id="editBtn"><span class="glyphicon glyphicon-edit"></span> 编辑</button>
 		<button type="button" class="btn btn-danger" id="deleteBtn"><span class="glyphicon glyphicon-minus"></span> 删除</button>
 	</div>
 </div>
@@ -128,7 +128,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 		</tr>
 		</thead>
 		<tbody id="dicValueTBody">
-		<tr class="active">
+		<%--<tr class="active">
 			<td><input type="checkbox" /></td>
 			<td>1</td>
 			<td>m</td>
@@ -167,7 +167,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 			<td>三级部门</td>
 			<td>3</td>
 			<td>orgType</td>
-		</tr>
+		</tr>--%>
 		</tbody>
 	</table>
 </div>

@@ -14,4 +14,12 @@
         insert into tbl_dic_value(id, value, text, orderNo, typeCode)
         values (#{id},#{value},#{text},#{orderNo},#{typeCode})
     </insert>
+    <select id="getDicValueById" resultType="wyu.xwen.settings.domain.DicValue">
+        select id, value, text, orderNo, typeCode from tbl_dic_value where id=#{id}
+    </select>
+    <update id="editDicValue">
+        update tbl_dic_value
+        set value=#{value},text=#{text},orderNo=#{orderNo}
+        where id=#{id}
+    </update>
 </mapper>

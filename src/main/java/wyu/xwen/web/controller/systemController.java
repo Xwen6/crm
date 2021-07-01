@@ -201,4 +201,14 @@ public class systemController {
     {
         return "settings/dictionary/value/save";
     }
+
+    /*跳转到数据字典值编辑页*/
+    @RequestMapping("/toDicValueEdit.do")
+    public ModelAndView toDicValueEdit(String id)
+    {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.addObject("dicValue",dicService.getDicValueById(id));
+        modelAndView.setViewName("settings/dictionary/value/edit");
+        return modelAndView;
+    }
 }

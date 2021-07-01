@@ -10,4 +10,8 @@ public interface DicValueDao {
     List<DicValue> getDicValueList();
 
     void addDicValue(DicValue dicValue);
+
+    DicValue getDicValueById(String id);
+
+    int editDicValue(DicValue dicValue);
 }
