@@ -179,4 +179,17 @@
         </where>
     </select>
 
+    <select id="getActivityList" resultType="Activity">
+/*名称 	开始日期 	结束日期 	所有者*/
+        select a.name,a.startDate,a.endDate,u.name as owner
+        from tbl_activity a
+        join tbl_user u
+        on a.owner = u.id
+            <where>
+                <if test="name!=null and name!=''">
+                    a.name like '%' #{name} '%'
+                </if>
+            </where>
+    </select>
+
 </mapper>

@@ -18,4 +18,6 @@ public interface ClueDao {
     int updateClue(Clue clue);
 
     int deleteClue(String id);
+
+    Clue getClueById2(String clueId);
 }

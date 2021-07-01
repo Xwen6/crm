@@ -1,5 +1,6 @@
 package wyu.xwen.workbench.dao;
 
+import org.apache.ibatis.annotations.Param;
 import wyu.xwen.workbench.domain.Activity;
 
 import java.util.List;
@@ -21,4 +22,6 @@ public interface ActivityDao {
     List<Activity> getActivityByClueId(String clueId);
 
     List<Activity> getNotAssociatedActivity(Map<String,Object> map);
+
+    List<Activity> getActivityList(@Param("name") String name);
 }

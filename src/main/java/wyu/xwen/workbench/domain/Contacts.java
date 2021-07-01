@@ -22,7 +22,15 @@ public class Contacts
   private String contactSummary;
   private String nextContactTime;
   private String address;
+  private String customerName;
 
+  public String getCustomerName() {
+    return customerName;
+  }
+
+  public void setCustomerName(String customerName) {
+    this.customerName = customerName;
+  }
 
   public String getId() {
     return id;

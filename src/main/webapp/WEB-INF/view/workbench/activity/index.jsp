@@ -273,22 +273,6 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 
 			}
 		})
-
-		function getUserList() {
-			$.ajax({
-				url :"workbench/activity/getUserList.do",
-				type :"get",
-				dataType :"json",
-				success : function (data){
-					$.each(data,function (index,element) {
-
-						$("#create-owner").append("<option value='"+element.id+"'>"+element.name+"</option>")
-					})
-					/*下拉列表默认显示登录的用户*/
-					$("#create-owner").val("${sessionScope.user.id}")
-				}
-			})
-		}
 	}
 
 	function getUserList() {

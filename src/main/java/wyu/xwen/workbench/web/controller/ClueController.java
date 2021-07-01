@@ -6,16 +6,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import wyu.xwen.exception.ActivityDeleteException;
+import wyu.xwen.exception.CLueConvertException;
 import wyu.xwen.exception.ClueDeleteException;
 import wyu.xwen.settings.domain.User;
 import wyu.xwen.utils.DateTimeUtil;
 import wyu.xwen.utils.PringFlag;
 import wyu.xwen.utils.UUIDUtil;
 import wyu.xwen.vo.ClueVo;
-import wyu.xwen.workbench.domain.Activity;
-import wyu.xwen.workbench.domain.Clue;
-import wyu.xwen.workbench.domain.ClueActivityRelation;
-import wyu.xwen.workbench.domain.ClueRemark;
+import wyu.xwen.workbench.domain.*;
 import wyu.xwen.workbench.service.ClueService;
 
 import javax.servlet.http.HttpServletRequest;
@@ -78,8 +76,8 @@ public class ClueController {
     @RequestMapping("Update.do")
     @ResponseBody
     public Object updateClue(Clue clue, HttpServletRequest request){
-        clue.setCreateTime(DateTimeUtil.getSysTime());
-        clue.setCreateBy(((User)(request.getSession().getAttribute("user"))).getName());
+        clue.setEditTime(DateTimeUtil.getSysTime());
+        clue.setEditBy(((User)(request.getSession().getAttribute("user"))).getName());
       Boolean success = clueService.updateClue(clue);
 
       return PringFlag.printnFlag(success);
@@ -198,6 +196,41 @@ public class ClueController {
         Boolean success =  clueService.saveRelation(activityId,clueId);
         return PringFlag.printnFlag(success);
     }
+
+    /*转换时的市场活动源
+    *
+    * workbench/clue/getActivityList.do
+    * */
+    @RequestMapping("getActivityList.do")
+    @ResponseBody
+    public List<Activity> getActivityList(String name){
+        return clueService.getActivityList(name);
+    }
+
+    /*线索转换
+    * workbench/clue/convert.do
+    * */
+    @RequestMapping("convert.do")
+    public String convert(String clueId, boolean flag, Tran t,HttpServletRequest request)throws CLueConvertException{
+        String createBy = ((User)(request.getSession().getAttribute("user"))).getName();
+        Tran tran = null;
+        if (flag){
+            /*完善交易的参数*/
+            t.setId(UUIDUtil.getUUID());
+            t.setCreateTime(DateTimeUtil.getSysTime());
+            tran = t;
+        }
+        System.out.println(tran);
+        System.out.println(flag);
+        System.out.println(clueId);
+        clueService.convert(clueId,tran,createBy);
+        return "workbench/clue/index";
+
+
+
+    }
+
+
 
 
 

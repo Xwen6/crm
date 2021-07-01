@@ -1,6 +1,6 @@
 <%@ page import="java.util.Map" %>
 <%@ page import="java.util.Set" %>
-<%@ page import="wyu.xwen.crm.settings.domain.DicValue" %>
+<%@ page import="wyu.xwen.settings.domain.DicValue" %>
 <%@ page import="java.util.List" %>
 <%@ page import="wyu.xwen.crm.vo.TranVo" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
@@ -29,7 +29,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 	<base href="<%=basePath%>">
 <meta charset="UTF-8">
 
-<link href="jquery/bootstrap_3.3.0/css/bootstrap.min.css" type="text/css" rel="stylesheet" />
+<link href="static/jquery/bootstrap_3.3.0/css/bootstrap.min.css" type="text/css" rel="stylesheet" />
 
 <style type="text/css">
 .mystage{

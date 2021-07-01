@@ -1,4 +1,4 @@
 package wyu.xwen.workbench.web.controller;
 
-public interface TranController {
+public class TranController {
 }

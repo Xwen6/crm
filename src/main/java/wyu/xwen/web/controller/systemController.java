@@ -7,6 +7,7 @@ import org.springframework.web.servlet.ModelAndView;
 import wyu.xwen.exception.SelectUserListException;
 import wyu.xwen.settings.domain.User;
 import wyu.xwen.settings.service.UserService;
+import wyu.xwen.workbench.domain.Clue;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -17,6 +18,9 @@ public class systemController {
 
     @Autowired
     private UserService userService;
+
+    @RequestMapping("toIndex.do")
+    public String toIndex(){return "index";}
 
     /*跳转到登录页面*/
     @RequestMapping("toLogin.do")
@@ -35,6 +39,19 @@ public class systemController {
     /*workbench/clue/index*/
     @RequestMapping("toClue.do")
     public  String toClue(){return "workbench/clue/index";}
+
+    /*跳转到转换页面*/
+    /*跳转到回访添加页面*/
+    @RequestMapping("toConvert.do")
+    public ModelAndView toConvert(Clue clue)
+    {
+        ModelAndView modelAndView = new ModelAndView();
+
+        modelAndView.addObject("clue",clue);
+
+        modelAndView.setViewName("workbench/clue/convert");
+        return modelAndView;
+    }
 
     /*workbench/customer/index.jsp*/
     @RequestMapping("toCustomer.do")
