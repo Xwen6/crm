@@ -206,7 +206,7 @@
 		
 			<ul id="no1" class="nav nav-pills nav-stacked">
 				<li class="liClass"><a href="web/system/toDIcTypeIndex.do" target="workareaFrame"><span class="glyphicon glyphicon-book"></span> 字典类型</a></li>
-				<li class="liClass"><a href="value/index.html" target="workareaFrame"><span class="glyphicon glyphicon-list"></span> 字典值</a></li>
+				<li class="liClass"><a href="web/system/toDicValueIndex.do" target="workareaFrame"><span class="glyphicon glyphicon-list"></span> 字典值</a></li>
 			</ul>
 			
 			<!-- 分割线 -->

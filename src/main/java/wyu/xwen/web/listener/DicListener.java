@@ -1,6 +1,7 @@
 package wyu.xwen.web.listener;
 
 import org.springframework.web.context.support.WebApplicationContextUtils;
+import wyu.xwen.settings.domain.DicType;
 import wyu.xwen.settings.domain.DicValue;
 import wyu.xwen.settings.service.DicService;
 
@@ -26,6 +27,12 @@ public class DicListener implements ServletContextListener {
         Set<String> keys = dicMap.keySet();
         for (String key:keys
         ) {
+            if (key.equals("dicTypeList"))
+            {
+                List<DicType> dicTypeList = (List<DicType>) dicMap.get(key);
+                application.setAttribute(key,dicTypeList);
+                continue;
+            }
             List<DicValue> dicList = (List<DicValue>) dicMap.get(key);
             application.setAttribute(key,dicList);
         }

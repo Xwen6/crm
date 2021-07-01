@@ -32,7 +32,7 @@ public class DicServiceImpl implements DicService {
           List<DicValue> dicValueList = dicValueDao.getDicValueByTypeCode(typeCode);
           dicMap.put(typeCode,dicValueList);
         }
-
+        dicMap.put("dicTypeList",dicTypes);
         return dicMap;
     }
 
@@ -66,5 +66,17 @@ public class DicServiceImpl implements DicService {
     {
         int count = dicTypeDao.deleteDicType(codes);
         return count == codes.length;
+    }
+
+    @Override
+    public List<DicValue> getDicValueList()
+    {
+        return dicValueDao.getDicValueList();
+    }
+
+    @Override
+    public void addDicValue(DicValue dicValue)
+    {
+        dicValueDao.addDicValue(dicValue);
     }
 }
