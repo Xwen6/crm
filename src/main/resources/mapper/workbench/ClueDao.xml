@@ -138,8 +138,8 @@
             mphone = #{mphone},
             state = #{state},
             source = #{source},
-            createBy = #{createBy},
-            createTime = #{createTime},
+            editBy = #{editBy},
+            editTime = #{editTime},
             description = #{description},
             contactSummary = #{contactSummary},
             nextContactTime = #{nextContactTime},
@@ -150,6 +150,10 @@
     <delete id="deleteClue">
         delete from tbl_clue where id = #{id}
     </delete>
+
+    <select id="getClueById2" resultType="Clue">
+        select * from tbl_clue where id = #{clueId}
+    </select>
 
 
 

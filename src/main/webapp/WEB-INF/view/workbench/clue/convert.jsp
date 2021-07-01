@@ -10,14 +10,14 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 	<base href="<%=basePath%>">
 <meta charset="UTF-8">
 
-<link href="jquery/bootstrap_3.3.0/css/bootstrap.min.css" type="text/css" rel="stylesheet" />
-<script type="text/javascript" src="jquery/jquery-1.11.1-min.js"></script>
-<script type="text/javascript" src="jquery/bootstrap_3.3.0/js/bootstrap.min.js"></script>
+<link href="static/jquery/bootstrap_3.3.0/css/bootstrap.min.css" type="text/css" rel="stylesheet" />
+<script type="text/javascript" src="static/jquery/jquery-1.11.1-min.js"></script>
+<script type="text/javascript" src="static/jquery/bootstrap_3.3.0/js/bootstrap.min.js"></script>
 
 
-<link href="jquery/bootstrap-datetimepicker-master/css/bootstrap-datetimepicker.min.css" type="text/css" rel="stylesheet" />
-<script type="text/javascript" src="jquery/bootstrap-datetimepicker-master/js/bootstrap-datetimepicker.js"></script>
-<script type="text/javascript" src="jquery/bootstrap-datetimepicker-master/locale/bootstrap-datetimepicker.zh-CN.js"></script>
+<link href="static/jquery/bootstrap-datetimepicker-master/css/bootstrap-datetimepicker.min.css" type="text/css" rel="stylesheet" />
+<script type="text/javascript" src="static/jquery/bootstrap-datetimepicker-master/js/bootstrap-datetimepicker.js"></script>
+<script type="text/javascript" src="static/jquery/bootstrap-datetimepicker-master/locale/bootstrap-datetimepicker.zh-CN.js"></script>
 
 <script type="text/javascript">
 	$(function(){
@@ -79,6 +79,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 				$("#searchActivityModal").modal("hide")
 				$("#searchActivity").val("请输入市场活动名称，支持模糊查询")
 			}
+
 			else {
 				alert("请选择")
 			}
@@ -92,7 +93,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 			}
 			else{
 				/*创建客户*/
-				var clueId = "${param.id}";
+				var clueId = "${clue.id}";
 				window.location.href="workbench/clue/convert.do?flag=false&clueId="+clueId
 			}
 		})
@@ -160,13 +161,13 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 	</div>
 
 	<div id="title" class="page-header" style="position: relative; left: 20px;">
-		<h4>转换线索 <small>${param.fullname}${param.appellation}-${param.company}</small></h4>
+		<h4>转换线索 <small>${clue.fullname}${clue.appellation}-${clue.company}</small></h4>
 	</div>
 	<div id="create-customer" style="position: relative; left: 40px; height: 35px;">
-		新建客户：${param.company}
+		新建客户：${clue.company}
 	</div>
 	<div id="create-contact" style="position: relative; left: 40px; height: 35px;">
-		新建联系人：${param.fullname}${param.appellation}
+		新建联系人：${clue.fullname}${clue.appellation}
 	</div>
 	<div id="create-transaction1" style="position: relative; left: 40px; height: 35px; top: 25px;">
 		<input type="checkbox" id="isCreateTransaction"/>
@@ -176,14 +177,14 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 	
 		<form id="tranForm" action="workbench/clue/convert.do" method="get">
 			<input TYPE="hidden" name="flag" value="true"/>
-			<input type="hidden" id="clueIdHidden" name="clueId" value="${param.id}"/>
+			<input type="hidden" id="clueIdHidden" name="clueId" value="${clue.id}"/>
 		  <div class="form-group" style="width: 400px; position: relative; left: 20px;">
 		    <label for="amountOfMoney">金额</label>
 		    <input type="text" class="form-control" id="amountOfMoney" name="money">
 		  </div>
 		  <div class="form-group" style="width: 400px;position: relative; left: 20px;">
 		    <label for="tradeName">交易名称</label>
-		    <input type="text" class="form-control" id="tradeName" name="name" value="动力节点-">
+		    <input type="text" class="form-control" id="tradeName" name="name" >
 		  </div>
 		  <div class="form-group" style="width: 400px;position: relative; left: 20px;">
 		    <label for="expectedClosingDate">预计成交日期</label>
@@ -209,7 +210,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 	
 	<div id="owner" style="position: relative; left: 40px; height: 35px; top: 50px;">
 		记录的所有者：<br>
-		<b>${param.owner}</b>
+		<b>${clue.owner}</b>
 	</div>
 	<div id="operation" style="position: relative; left: 40px; height: 35px; top: 100px;">
 		<input class="btn btn-primary" id="convertBtn" type="button" value="转换">

@@ -27,7 +27,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 <script type="text/javascript">
 
 	$(function(){
-		/*create-owner*/
+		/*修改和新增取消时清空模态窗口*/
 		$("#closeBtnX").click(function () {
 			$("#createClueForm")[0].reset();
 			$("#create-owner").empty();

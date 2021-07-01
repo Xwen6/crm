@@ -11,4 +11,207 @@
         select fullname from tbl_contacts
         where fullname like '%' #{name} '%'
     </select>
+
+    <insert id="saveContacts">
+        insert into tbl_contacts (
+            id,
+            owner,
+            source,
+            customerId,
+            fullname,
+            appellation,
+            email,
+            mphone,
+            job,
+            birth,
+            createBy,
+            createTime,
+            editBy,
+            editTime,
+            description,
+            contactSummary,
+            nextContactTime,
+            address
+        ) values (
+            #{id},
+            #{owner},
+            #{source},
+            #{customerId},
+            #{fullname},
+            #{appellation},
+            #{email},
+            #{mphone},
+            #{job},
+            #{birth},
+            #{createBy},
+            #{createTime},
+            #{editBy},
+            #{editTime},
+            #{description},
+            #{contactSummary},
+            #{nextContactTime},
+            #{address}
+
+                 )
+    </insert>
+    <select id="getContactsListByCId" resultType="Contacts">
+        select id,fullname,email,mphone
+        from tbl_contacts
+        where customerId = #{customerId}
+    </select>
+
+    <delete id="deleteContacts">
+        delete from tbl_contacts where id =#{id}
+    </delete>
+
+    <insert id="saveContacts2">
+        insert into tbl_contacts (
+            id,
+            owner,
+            source,
+            customerId,
+            fullname,
+            appellation,
+            email,
+            mphone,
+            job,
+            birth,
+            createBy,
+            createTime,
+            editBy,
+            editTime,
+            description,
+            contactSummary,
+            nextContactTime,
+            address
+        ) values (
+           #{id},
+           #{owner},
+           #{source},
+           #{customerId},
+           #{fullname},
+           #{appellation},
+           #{email},
+           #{mphone},
+           #{job},
+           #{birth},
+           #{createBy},
+           #{createTime},
+           #{editBy},
+           #{editTime},
+           #{description},
+           #{contactSummary},
+           #{nextContactTime},
+           #{address}
+                 )
+
+    </insert>
+
+    <select id="getTotalByCondition" resultType="int">
+        select count(*)
+        from tbl_contacts contacts
+        join tbl_user user
+        on contacts.owner = user.id
+        join tbl_customer customer
+        on contacts.customerId = customer.id
+        <where>
+            <if test="fullname!=null and fullname!=''">
+                contacts.name like '%' #{fullname} '%'
+            </if>
+
+            <if test="owner!=null and owner!=''">
+
+                and user.name like '%' #{owner} '%'
+
+            </if>
+
+            <if test="customerName!=null and customerName!=''">
+
+                and customer.name like '%' #{customerName} '%'
+
+            </if>
+
+            <if test="source!=null and source!=''">
+
+                and contacts.source like '%' #{source} '%'
+
+            </if>
+            <if test="birth!=null and birth!=''">
+
+                and contacts.birth like '%' #{birth} '%'
+
+            </if>
+        </where>
+    </select>
+
+    <select id="getContactsListByCondition" resultType="Contacts">
+        select contacts.id,fullname,user.name as owner,customer.name as customerName,source,birth
+        from tbl_contacts contacts
+        join tbl_user user
+        on contacts.owner = user.id
+        join tbl_customer customer
+        on contacts.customerId = customer.id
+        <where>
+            <if test="fullname!=null and fullname!=''">
+                contacts.name like '%' #{fullname} '%'
+            </if>
+
+            <if test="owner!=null and owner!=''">
+
+                and user.name like '%' #{owner} '%'
+
+            </if>
+
+            <if test="customerName!=null and customerName!=''">
+
+                and customer.name like '%' #{customerName} '%'
+
+            </if>
+
+            <if test="source!=null and source!=''">
+
+                and contacts.source like '%' #{source} '%'
+
+            </if>
+            <if test="birth!=null and birth!=''">
+
+                and contacts.birth like '%' #{birth} '%'
+
+            </if>
+        </where>
+        order by contacts.createTime desc
+        limit #{skinPage},#{pageSize}
+    </select>
+
+    <select id="getContactsListById" resultType="Contacts">
+        select
+               contacts.id,fullname,
+               user.name as owner,
+               customer.name as customerName,
+               contacts.source,contacts.birth,contacts.fullname,
+               contacts.appellation,contacts.email,
+               contacts.mphone,contacts.job,
+               contacts.birth,contacts.createBy,
+               contacts.createTime,contacts.editBy,contacts.editTime,
+               contacts.description,contacts.contactSummary,
+               contacts.nextContactTime,contacts.address
+        from tbl_contacts contacts
+        join tbl_user user
+        on contacts.owner = user.id
+        join tbl_customer customer
+        on contacts.customerId = customer.id
+        where contacts.id = #{id}
+    </select>
+
+    <update id="updateContacts">
+
+        update tbl_contacts set
+            fullname = #{fullname},owner = #{owner},appellation = #{appellation},source = #{source},mphone = #{mphone},
+                                customerId = #{customerId},job = #{job},birth = #{birth},
+                                email = #{email},contactSummary = #{contactSummary},description = #{description},
+                                nextContactTime = #{nextContactTime},address = #{address},editTime = #{editTime},
+                                editBy  = #{editBy}
+            where id = #{id}
+
+    </update>
 </mapper>

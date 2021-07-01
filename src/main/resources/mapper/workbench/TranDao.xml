@@ -4,6 +4,32 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="wyu.xwen.workbench.dao.TranDao">
 
+    <insert id="saveTran">
+        insert into tbl_tran(
+            id,owner,money,name,expectedDate,customerId,stage,type,source,
+            activityId,contactsId,createBy,createTime,editBy,editTime,
+            description,contactSummary,nextContactTime
+        ) values (
+           #{id},#{owner},#{money},#{name},#{expectedDate},#{customerId},
+           #{stage},#{type},#{source},#{activityId},#{contactsId},#{createBy},#{createTime},
+           #{editBy},#{editTime},#{description},#{contactSummary},#{nextContactTime}
+                 )
+    </insert>
 
+    <select id="getTranListByCid" resultType="Tran">
+        select id,name,money,stage,type,expectedDate
+        from tbl_tran
+        where customerId = #{customerId}
+    </select>
+
+    <delete id="deleteTran">
+        delete from tbl_tran where id = #{id}
+    </delete>
+
+    <select id="getTranListByContactsId" resultType="Tran">
+        select id,name,money,stage,type,expectedDate
+        from tbl_tran
+        where contactsId = #{contactsId}
+    </select>
 
 </mapper>

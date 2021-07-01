@@ -159,7 +159,11 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 			var noteContent = $.trim($("#remark").val());
 			$.ajax({
 				url : "workbench/activity/saveRemark.do",
-				data : {"noteContent":noteContent,"activityId":"${requestScope.activity.id}"},
+				data : {
+							"noteContent":noteContent,
+							"activityId":"${requestScope.activity.id}",
+							"createBy":"${sessionScope.user.name}"
+						},
 				dataType : "json",
 				type : "post",
 				success : function (data) {
