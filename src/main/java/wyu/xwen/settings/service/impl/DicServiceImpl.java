@@ -87,9 +87,10 @@ public class DicServiceImpl implements DicService {
     }
 
     @Override
-    public boolean deleteDicValue(DicValue dicValue)
+    public boolean deleteDicValue(String[] ids)
     {
-        return false;
+        int count = dicValueDao.deleteDicValue(ids);
+        return count == ids.length;
     }
 
     @Override

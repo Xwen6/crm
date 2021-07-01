@@ -369,7 +369,6 @@
 			<div style="height: 50px; position: relative;top: 30px;">
 				<div id="visitPage">
 				</div>
-
 			</div>
 			
 		</div>

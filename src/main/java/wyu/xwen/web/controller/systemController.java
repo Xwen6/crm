@@ -211,4 +211,11 @@ public class systemController {
         modelAndView.setViewName("settings/dictionary/value/edit");
         return modelAndView;
     }
+
+    /*跳转到部门管理页面*/
+    @RequestMapping("/toDeptIndex.do")
+    public String toDeptIndex()
+    {
+        return "settings/dept/index";
+    }
 }

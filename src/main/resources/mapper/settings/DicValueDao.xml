@@ -22,4 +22,10 @@
         set value=#{value},text=#{text},orderNo=#{orderNo}
         where id=#{id}
     </update>
+    <delete id="deleteDicValue">
+        delete from tbl_dic_value where id in
+        <foreach collection="array" item="ids" open="(" close=")" separator=",">
+            #{ids}
+        </foreach>
+    </delete>
 </mapper>

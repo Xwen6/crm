@@ -54,6 +54,7 @@
 				}
 			}
 		}
+
 	</script>
 </head>
 <body>
@@ -186,7 +187,7 @@
 				<!--
 				<a href="org/index.html" style="text-decoration: none; color: red;">组织机构</a>
 				 -->
-				<a href="dept/index.html">部门管理</a>
+				<a href="web/system/toDeptIndex.do">部门管理</a>
 				<br>
 				<a href="qx/index.html">权限管理</a>
 			</div>

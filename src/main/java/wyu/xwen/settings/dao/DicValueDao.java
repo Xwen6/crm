@@ -14,4 +14,6 @@ public interface DicValueDao {
     DicValue getDicValueById(String id);
 
     int editDicValue(DicValue dicValue);
+
+    int deleteDicValue(String[] ids);
 }

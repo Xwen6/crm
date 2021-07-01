@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="wyu.xwen.settings.dao.DepartmentDao">
+    <select id="pageList" resultType="wyu.xwen.settings.domain.Department">
+        select id, name, manager, phone, description
+        from tbl_dept limit #{skipPage},#{pageSize}
+    </select>
+    <select id="getCount" resultType="int">
+        select count(id) from tbl_dept
+    </select>
+    <insert id="addDepartment">
+        insert into tbl_dept(id, name, manager, phone, description)
+        values (#{id},#{name},#{manager},#{phone},#{description})
+    </insert>
+    <select id="getDeptById" resultType="wyu.xwen.settings.domain.Department">
+        select id, name, manager, phone, description from tbl_dept where id=#{id}
+    </select>
+    <update id="updateDepartment">
+        update tbl_dept
+        set id=#{newId},name=#{name},manager=#{manager},phone=#{phone},description=#{description}
+        where id=#{id}
+    </update>
+    <delete id="deleteDepartment">
+        delete from tbl_dept where id in
+        <foreach collection="array" item="ids" open="(" close=")" separator=",">
+            #{ids}
+        </foreach>
+    </delete>
+</mapper>

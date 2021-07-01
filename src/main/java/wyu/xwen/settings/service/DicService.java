@@ -25,7 +25,7 @@ public interface DicService {
 
     DicValue getDicValueById(String id);
 
-    boolean deleteDicValue(DicValue dicValue);
+    boolean deleteDicValue(String[] ids);
 
     boolean editDicValue(DicValue dicValue);
 }

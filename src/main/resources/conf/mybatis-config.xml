@@ -34,6 +34,7 @@
         <mapper resource="mapper/workbench/ClueRemarkDao.xml"/>
         <mapper resource="mapper/workbench/ClueActivityRelationDao.xml"/>
         <mapper resource="mapper/workbench/VisitRemarkDao.xml"/>
+        <mapper resource="mapper/settings/DepartmentDao.xml"/>
 
 
     </mappers>

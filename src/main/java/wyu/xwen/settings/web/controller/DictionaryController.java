@@ -97,18 +97,9 @@ public class DictionaryController
 
     /*删除字典值*/
     @RequestMapping("/deleteDicValue.do")
-    public ModelAndView deleteDicValue(DicValue dicValue)
+    @ResponseBody
+    public Boolean deleteDicValue(String[] ids)
     {
-        ModelAndView modelAndView = new ModelAndView();
-        boolean flag = dicService.deleteDicValue(dicValue);
-        String message = "修改失败";
-        if (flag)
-        {
-            message = "修改成功";
-        }
-        modelAndView.addObject("flag",flag);
-        modelAndView.addObject("message",message);
-        modelAndView.setViewName("settings/dictionary/value/index");
-        return modelAndView;
+        return dicService.deleteDicValue(ids);
     }
 }
