@@ -29,6 +29,91 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 			$("#qx").prop("checked",$("input[name=xz]").length==$("input[name=xz]:checked").length)
 		})
 		pageList(1,2);
+		/*模糊查询*/
+		$("#searchBtn").click(function () {
+
+			/*点击查找的时候，将填入到text中的val保存到隐藏域当中*/
+			$("#hidden-name").val($.trim($("#search-name").val()));
+			$("#hidden-owner").val($.trim($("#search-owner").val()));
+			$("#hidden-customerName").val($.trim($("#search-customerName").val()));
+			$("#hidden-phone").val($.trim($("#search-phone").val()));
+			$("#hidden-stage").val($.trim($("#search-stage option:selected").val()));
+			$("#hidden-type").val($.trim($("#search-type option:selected").val()));
+			$("#hidden-source").val($.trim($("#search-source option:selected").val()));
+			$("#hidden-contactsName").val($.trim($("#search-contactsName").val()));
+
+			pageList(1,2);
+		})
+
+
+		/*复选框选择*/
+		/*一，全选中*/
+		$("#qx").click(function () {
+			$("input[name=xz]").prop("checked",this.checked);
+		})
+		/*选择全*/
+		$("#searchList").on("click",$("input[name=xz]"),function () {
+			/*选择复选框的长度等于所以复选框的长度，则选中*/
+			$("#qx").prop("checked",$("input[name=xz]").length==$("input[name=xz]:checked").length)
+		})
+
+		/*删除操作*/
+		$("#deleteBtn").click(function (){
+			/*绑定所有选中的复选框*/
+			var $selectCheckBox =  $("input[name=xz]:checked");
+			if ($selectCheckBox.length===0){
+				alert("请选择要删除的记录")
+			}else {
+				if (confirm("确定要删除吗？")){
+					/*访问参数拼接*/
+					var param = "ids=";
+					$.each($selectCheckBox,function (index,element) {
+						param += $(element).val();
+						/*如果不是最后一条id，则加上&*/
+						if (index != ($selectCheckBox.length-1)){
+							param += ","
+						}
+					})
+
+					/*	alert(param);*/
+					$.ajax({
+						url : "workbench/transaction/deleteTran.do",
+						data : param,
+						type :  "get",
+						dataType : "json",
+						success : function (data){
+							if(data.success){
+								/*刷新删除后的的pageList*/
+								pageList($("#activityPage").bs_pagination('getOption', 'currentPage')
+										,$("#activityPage").bs_pagination('getOption', 'rowsPerPage'));
+
+							}else{
+								alert("删除失败")
+							}
+						}
+					})
+				}
+
+			}
+		})
+
+		/*修改*/
+		$("#editBtn").click(function () {
+			var $selectCheckBox = $("input[name=xz]:checked");
+			if ($selectCheckBox.length==0){
+				alert("请选择要修改的记录")
+			}else if ($selectCheckBox.length>1){
+				/*清空复选框*/
+				$("#qx").prop("checked",false);
+				$("input[name=xz]:checked").prop("checked",false);
+				alert("只能修改一条记录")
+
+			}else{
+				var id = $("input[name=xz]:checked").val()
+				window.location.href="workbench/transaction/toEditTran.do?id="+id
+			}
+		})
+
 	});
 
 	function pageList(pageNo,pageSize){
@@ -37,13 +122,13 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 			data: {
 				"pageNo":pageNo,
 				"pageSize":pageSize,
-				"name":$.trim($("#search-name").val()),
-				"owner":$.trim($("#search-owner").val()),
-				"customerName":$.trim($("#customerName").val()),
-				"type":$.trim($("#search-type option:selected").val()),
-				"state":$.trim($("#search-state option:selected").val()),
-				"source":$.trim($("#search-source option:selected").val()),
-				"contactsName":$.trim($("#contactsName").val())
+				"name":$.trim($("#hidden-name").val()),
+				"owner":$.trim($("#hidden-owner").val()),
+				"customerName":$.trim($("#hidden-customerName").val()),
+				"type":$.trim($("#hidden-type").val()),
+				"stage":$.trim($("#hidden-stage").val()),
+				"source":$.trim($("#hidden-source").val()),
+				"contactsName":$.trim($("#hidden-contactsName").val())
 			},
 			dataType:"json",
 			type:"get",
@@ -98,13 +183,13 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 <body>
 
 	<%--保存上次查询的条件--%>
-	<input type="hidden" id="hide-name">
-	<input type="hidden" id="hide-owner">
-	<input type="hidden" id="hide-customer">
-	<input type="hidden" id="hide-stage">
-	<input type="hidden" id="hide-type">
-	<input type="hidden" id="hide-source">
-	<input type="hidden" id="hide-contacts">
+	<input type="hidden" id="hidden-name">
+	<input type="hidden" id="hidden-owner">
+	<input type="hidden" id="hidden-customerName">
+	<input type="hidden" id="hidden-stage">
+	<input type="hidden" id="hidden-type">
+	<input type="hidden" id="hidden-source">
+	<input type="hidden" id="hidden-contactsName">
 
 	
 	<div>
@@ -150,7 +235,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 				      <div class="input-group-addon">阶段</div>
 					  <select class="form-control" id="search-stage">
 					  	<option></option>
-						  <c:forEach items="${applicationScope.clueState}" var="s">
+						  <c:forEach items="${applicationScope.stage}" var="s">
 							  <option value="${s.value}">${s.text}</option>
 						  </c:forEach>
 					  </select>
@@ -172,7 +257,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 				  <div class="form-group">
 				    <div class="input-group">
 				      <div class="input-group-addon">来源</div>
-				      <select class="form-control" id="create-source">
+				      <select class="form-control" id="search-source">
 						  <option></option>
 						 <c:forEach items="${source}" var="s">
 							 <option value="${s.value}">${s.text}</option>
@@ -184,7 +269,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 				  <div class="form-group">
 				    <div class="input-group">
 				      <div class="input-group-addon">联系人名称</div>
-				      <input class="form-control" type="text" id="contactsName">
+				      <input class="form-control" type="text" id="search-contactsName">
 				    </div>
 				  </div>
 				  
@@ -194,9 +279,9 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 			</div>
 			<div class="btn-toolbar" role="toolbar" style="background-color: #F7F7F7; height: 50px; position: relative;top: 10px;">
 				<div class="btn-group" style="position: relative; top: 18%;">
-				  <button type="button" class="btn btn-primary" onclick="window.location.href='workbench/transaction/add.do';"><span class="glyphicon glyphicon-plus"></span> 创建</button>
-				  <button type="button" class="btn btn-default" onclick="window.location.href='workbench/transaction/edit.jsp';"><span class="glyphicon glyphicon-pencil"></span> 修改</button>
-				  <button type="button" class="btn btn-danger"><span class="glyphicon glyphicon-minus"></span> 删除</button>
+				  <button type="button" class="btn btn-primary" onclick="window.location.href='web/system/toTranSave.do';"><span class="glyphicon glyphicon-plus"></span> 创建</button>
+				  <button type="button" id="editBtn" class="btn btn-default"><span class="glyphicon glyphicon-pencil"></span> 修改</button>
+				  <button type="button" id="deleteBtn" class="btn btn-danger"><span class="glyphicon glyphicon-minus"></span> 删除</button>
 				</div>
 				
 				

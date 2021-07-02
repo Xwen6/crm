@@ -5,16 +5,19 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
+import wyu.xwen.exception.ContactsDeleteException;
 import wyu.xwen.utils.DateTimeUtil;
 import wyu.xwen.utils.PringFlag;
 import wyu.xwen.utils.UUIDUtil;
 import wyu.xwen.vo.ContactsVo;
 import wyu.xwen.vo.PageVo;
+import wyu.xwen.workbench.domain.Activity;
 import wyu.xwen.workbench.domain.Contacts;
 import wyu.xwen.workbench.domain.ContactsRemark;
 import wyu.xwen.workbench.domain.Tran;
 import wyu.xwen.workbench.service.ContactsService;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -87,7 +90,7 @@ public class ContactsController
     * */
     @RequestMapping("deleteContacts.do")
     @ResponseBody
-    public Object deleteContacts(String[] ids){
+    public Object deleteContacts(String[] ids) throws ContactsDeleteException {
         boolean success = contactsService.deleteContacts(ids);
         return PringFlag.printnFlag(success);
     }
@@ -165,6 +168,49 @@ public class ContactsController
         boolean success = contactsService.deleteTran(id);
         return PringFlag.printnFlag(success);
     }
+
+    /*获取关联的市场活动
+    * workbench/contacts/getActivityByContactsId.do
+    * */
+    @RequestMapping("getActivityByContactsId.do")
+    @ResponseBody
+    public List<Activity> getActivityLIst(String contactsId){
+        return contactsService.getActivityListByCId(contactsId);
+    }
+
+    /*解除关联
+    * workbench/contacts/relieveRelation.do
+    * */
+    @RequestMapping("relieveRelation.do")
+    @ResponseBody
+    public Object relieveRelation(String id){
+        boolean success = contactsService.relieveRelation(id);
+        return PringFlag.printnFlag(success);
+    }
+    /*填充查询市场活动的模态窗口
+    * workbench/contacts/getActivityByContactsId2.do
+    * */
+
+    @RequestMapping("getActivityByContactsId2.do")
+    @ResponseBody
+    public List<Activity> getActivityList(String name,String contactsId){
+        return contactsService.getActivityList(name,contactsId);
+    }
+
+    /*添加联系
+    *workbench/contacts/saveRelation.do
+     */
+    @RequestMapping("saveRelation.do")
+    @ResponseBody
+    public Object saveRelation(HttpServletRequest request){
+     String[] activityIds = request.getParameterValues("activityId");
+     String contactsId = request.getParameter("contactsId");
+     boolean success = contactsService.saveRelation(activityIds,contactsId);
+     return PringFlag.printnFlag(success);
+    }
+
+
+
 
 
 

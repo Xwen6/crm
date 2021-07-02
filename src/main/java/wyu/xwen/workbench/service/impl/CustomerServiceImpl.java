@@ -69,9 +69,13 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public boolean deleteCustomer(String[] ids) {
         int count = 0;
+        int remarkNum = 0;
+        int remarkCount = 0;
         for (String id:ids
              ) {
+            remarkNum = customerRemarkDao.deleteRemarkByCId(id);
            count +=  customerDao.deleteCustomer(id);
+           remarkCount += customerRemarkDao.getRemarksCount(id);
         }
         return count== ids.length;
     }

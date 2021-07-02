@@ -133,7 +133,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 				if (event.keyCode==13){
 					$.ajax({
 						url : "workbench/transaction/getContactsList.do",
-						data : {"name":$("#searchContacts").val()},
+						data : {"fullname":$("#searchContacts").val()},
 						dataType : "json",
 						success :function (data){
 							var html = ""
@@ -282,7 +282,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 		</div>
 		<hr style="position: relative; top: -40px;">
 	</div>
-	<form action="workbench/transaction/insert.do" id="saveTranForm" class="form-horizontal" role="form" style="position: relative; top: -30px;">
+	<form action="workbench/transaction/saveTran.do" id="saveTranForm" class="form-horizontal" role="form" style="position: relative; top: -30px;">
 		<div class="form-group">
 			<label for="create-transactionOwner" class="col-sm-2 control-label">所有者<span style="font-size: 15px; color: red;">*</span></label>
 			<div class="col-sm-10" style="width: 300px;">
@@ -367,9 +367,9 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 		</div>
 		
 		<div class="form-group">
-			<label for="create-describe" class="col-sm-2 control-label">描述</label>
+			<label for="create-description" class="col-sm-2 control-label">描述</label>
 			<div class="col-sm-10" style="width: 70%;">
-				<textarea class="form-control" rows="3" id="create-describe" name="description"></textarea>
+				<textarea class="form-control" rows="3" id="create-description" name="description"></textarea>
 			</div>
 		</div>
 		

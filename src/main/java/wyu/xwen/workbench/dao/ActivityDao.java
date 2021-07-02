@@ -24,4 +24,8 @@ public interface ActivityDao {
     List<Activity> getNotAssociatedActivity(Map<String,Object> map);
 
     List<Activity> getActivityList(@Param("name") String name);
+
+    List<Activity> getActivityByContactsId(String contactsId);
+
+    List<Activity> getActivityList2(@Param("name")String name,@Param("contactsId")String contactsId);
 }

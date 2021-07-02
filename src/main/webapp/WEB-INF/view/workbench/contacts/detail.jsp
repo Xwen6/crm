@@ -1,10 +1,14 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="java.util.List" %>
 <%@ page import="wyu.xwen.settings.domain.DicValue" %>
+<%@ page import="java.util.Set" %>
+<%@ page import="java.util.Map" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%
 String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath() + "/";
+	Map<String,String> pMap = (Map<String, String>) application.getAttribute("pMap");
+	Set<String> keySet = pMap.keySet();
 %>
 <!DOCTYPE html>
 <html>
@@ -25,8 +29,24 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 
 	//默认情况下取消和保存按钮是隐藏的
 	var cancelAndSaveBtnDefault = true;
+
+	/*拼接Json*/
+	var jsonObj = {
+		<%
+             for (String key : keySet) {
+                String value = pMap.get(key);
+            %>
+
+		"<%=key%>":<%=value%>,
+
+
+		<%
+        }
+        %>
+	}
 	
 	$(function(){
+
 
 		/*日历插件*/
 		$(".time").datetimepicker({
@@ -261,6 +281,68 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 			})
 
 		})
+		/*+++++++++++++++++++++++++++++++*/
+		/*添加联系复选框选中*/
+		$("#relationCheckBox").click(function () {
+			$("input[name=selectCheckBox]").prop("checked",this.checked)
+		})
+
+		$("#activityList2").on("click",$("input[name=selectCheckBox]"),function (){
+			$("#relationCheckBox").prop("checked",$("input[name=selectCheckBox]:checked").length==$("input[name=selectCheckBox]").length)
+		})
+
+		showContactsAndActivity();
+
+		$("#searchActivityBtn").keydown(function (event) {
+			if (event.keyCode===13)
+			{
+				/*清空*/
+				$("#activityList2").empty()
+				editRelation();
+				return false;
+			}
+		})
+
+
+		/*添加关联*/
+		$("#addRelation").click(function (){
+			/*绑定所有选中的复选框*/
+			var $selectCheckBox =  $("input[name=selectCheckBox]:checked");
+			if ($selectCheckBox.length==0){
+				alert("请选择要关联的活动")
+			}else {
+				if (confirm("确定要关联吗？")){
+					/*访问参数拼接*/
+					var param = "";
+					$.each($selectCheckBox,function (index,element) {
+						param += "activityId="+$(element).val();
+
+						/*如果不是最后一条id，则加上&*/
+						if (index != ($selectCheckBox.length-1)){
+							param += "&"
+						}
+					})
+					param += "&contactsId="+"${requestScope.contacts.id}"
+
+					/*alert(param)*/
+					$.ajax({
+						url : "workbench/contacts/saveRelation.do",
+						data : param,
+						type :  "get",
+						dataType : "json",
+						success : function (data){
+							if(data.success){
+								showContactsAndActivity();
+								$("#bundActivityModal").modal("hide")
+							}else{
+								alert("关联失败")
+							}
+						}
+					})
+				}
+
+			}
+		})
 
 
 
@@ -358,11 +440,13 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 				var html = "";
 
 				$.each(data,function (index,element) {
+					var stage = element.stage
+					var possibility = jsonObj[stage];
 					html += '<tr id="'+element.id+'">'
 					html +=		'<td><a href="transaction/detail.html" style="text-decoration: none;">'+element.name+'</a></td>'
 					html +=		'<td>'+element.money+'</td>'
 					html +=		'<td>'+element.stage+'</td>'
-					html +=		'<td>90</td>'
+					html +=		'<td>'+possibility+'</td>'
 					html +=		'<td>'+element.expectedDate+'</td>'
 					html +=		'<td>'+element.type+'</td>'
 					html +=		'<td><a href="javascript:void(0);" onclick=deleteTran(\''+element.id+'\') style="text-decoration: none;"><span class="glyphicon glyphicon-remove"></span>删除</a></td>'
@@ -378,6 +462,76 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 	function deleteTran(id){
 		$("#tranId").val(id);
 		$("#removeTransactionModal").modal("show");
+	}
+
+	/*获取市场活动*/
+	function showContactsAndActivity(){
+		$("#relationCheckBox").prop("checked",false);
+		$.ajax({
+			url : "workbench/contacts/getActivityByContactsId.do",
+			data : {"contactsId":"${requestScope.contacts.id}"},
+			dataType : "json",
+			type : "get",
+			success : function (data) {
+				/*填充*/
+				var html = "";
+				$.each(data,function (index,element) {
+					html += '<tr id="'+element.id+'">'
+					html += '<td>'+element.name+'</td>'
+					html += '<td>'+element.startDate+'</td>'
+					html += '<td>'+element.endDate+'</td>'
+					html += '<td>'+element.owner+'</td>'
+					html += '<td><a href="javascript:void(0);" onclick = releaseRelation(\''+element.id+'\') style="text-decoration: none;"><span class="glyphicon glyphicon-remove"></span>解除关联</a></td>'
+					html += '</tr>'
+				})
+				$("#activityList").html(html);
+			}
+		})
+	}
+
+	function releaseRelation(id){
+		if (confirm("确定要解除关联吗？")){
+			$.ajax({
+				url: "workbench/contacts/relieveRelation.do",
+				data: {"id":id},
+				dataType: "json",
+				type: "post",
+				success : function (data){
+					if (data.success){
+						/*刷新关系列表*/
+						showContactsAndActivity();
+					}
+					else {
+						alert("解除失败");
+					}
+				}
+			})
+		}
+	}
+
+	function editRelation(){
+		$("#activityList2").empty();
+		$.ajax({
+			url : "workbench/contacts/getActivityByContactsId2.do",
+			dataType :  "json",
+			type : "get",
+			data : {"name":$("#searchActivityBtn").val(),"contactsId":"${requestScope.contacts.id}"},
+			success : function (data){
+				var html = "";
+				$.each(data,function (index,element){
+					html += '<tr>'
+					html += '<td><input type="checkbox" name="selectCheckBox" value="'+element.id+'"/></td>'
+					html += '<td>'+element.name+'</td>'
+					html += '<td>'+element.startDate+'</td>'
+					html += '<td>'+element.endDate+'</td>'
+					html += '<td>'+element.owner+'</td>'
+					html += '</tr>'
+				})
+				$("#activityList2").append(html);
+				$("#bundActivityModal").modal("show");
+
+			}
+		})
 	}
 	
 </script>
@@ -420,7 +574,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 					<div class="btn-group" style="position: relative; top: 18%; left: 8px;">
 						<form class="form-inline" role="form">
 						  <div class="form-group has-feedback">
-						    <input type="text" class="form-control" style="width: 300px;" placeholder="请输入市场活动名称，支持模糊查询">
+						    <input type="text" id="searchActivityBtn" class="form-control" style="width: 300px;" placeholder="请输入市场活动名称，支持模糊查询">
 						    <span class="glyphicon glyphicon-search form-control-feedback"></span>
 						  </div>
 						</form>
@@ -428,7 +582,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 					<table id="activityTable2" class="table table-hover" style="width: 900px; position: relative;top: 10px;">
 						<thead>
 							<tr style="color: #B3B3B3;">
-								<td><input type="checkbox"/></td>
+								<td><input type="checkbox" id="relationCheckBox"/></td>
 								<td>名称</td>
 								<td>开始日期</td>
 								<td>结束日期</td>
@@ -436,8 +590,8 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 								<td></td>
 							</tr>
 						</thead>
-						<tbody>
-							<tr>
+						<tbody id="activityList2">
+							<%--<tr>
 								<td><input type="checkbox"/></td>
 								<td>发传单</td>
 								<td>2020-10-10</td>
@@ -450,13 +604,13 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 								<td>2020-10-10</td>
 								<td>2020-10-20</td>
 								<td>zhangsan</td>
-							</tr>
+							</tr>--%>
 						</tbody>
 					</table>
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-					<button type="button" class="btn btn-primary" data-dismiss="modal">关联</button>
+					<button type="button" id="addRelation" class="btn btn-primary" >关联</button>
 				</div>
 			</div>
 		</div>
@@ -804,7 +958,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 			</div>
 			
 			<div>
-				<a href="transaction/save.html" style="text-decoration: none;"><span class="glyphicon glyphicon-plus"></span>新建交易</a>
+				<a href="web/system/toTranSave.do" style="text-decoration: none;"><span class="glyphicon glyphicon-plus"></span>新建交易</a>
 			</div>
 		</div>
 	</div>
@@ -819,6 +973,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 				<table id="activityTable" class="table table-hover" style="width: 900px;">
 					<thead>
 						<tr style="color: #B3B3B3;">
+
 							<td>名称</td>
 							<td>开始日期</td>
 							<td>结束日期</td>
@@ -826,20 +981,20 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 							<td></td>
 						</tr>
 					</thead>
-					<tbody>
-						<tr>
+					<tbody id="activityList">
+					<%--	<tr>
 							<td><a href="activity/detail.jsp" style="text-decoration: none;">发传单</a></td>
 							<td>2020-10-10</td>
 							<td>2020-10-20</td>
 							<td>zhangsan</td>
 							<td><a href="javascript:void(0);" data-toggle="modal" data-target="#unbundActivityModal" style="text-decoration: none;"><span class="glyphicon glyphicon-remove"></span>解除关联</a></td>
-						</tr>
+						</tr>--%>
 					</tbody>
 				</table>
 			</div>
 			
 			<div>
-				<a href="javascript:void(0);" data-toggle="modal" data-target="#bundActivityModal" style="text-decoration: none;"><span class="glyphicon glyphicon-plus"></span>关联市场活动</a>
+				<a href="javascript:void(0);" onclick = editRelation() style="text-decoration: none;"><span class="glyphicon glyphicon-plus"></span>关联市场活动</a>
 			</div>
 		</div>
 	</div>

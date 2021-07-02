@@ -181,7 +181,7 @@
 
     <select id="getActivityList" resultType="Activity">
 /*名称 	开始日期 	结束日期 	所有者*/
-        select a.name,a.startDate,a.endDate,u.name as owner
+        select a.id,a.name,a.startDate,a.endDate,u.name as owner
         from tbl_activity a
         join tbl_user u
         on a.owner = u.id
@@ -190,6 +190,47 @@
                     a.name like '%' #{name} '%'
                 </if>
             </where>
+    </select>
+
+    <select id="getActivityByContactsId" resultType="Activity">
+        select
+            car.id as id,
+            act.name,
+            user.name as owner,
+            act.name,
+            act.startDate,
+            act.endDate,
+            act.cost,
+            act.description,
+            act.createTime,
+            act.createBy,
+            act.editTime,
+            act.editBy
+
+        from tbl_activity act
+                 join tbl_user user
+                      on act.owner = user.id
+                 join tbl_contacts_activity_relation car
+                      on act.id = car.activityId
+        where car.contactsId = #{contactsId}
+    </select>
+
+    <select id="getActivityList2" resultType="Activity">
+        select
+        a.id,
+        a.name,
+        u.name as owner,
+        a.startDate,
+        a.endDate
+        from tbl_activity a
+        join tbl_user u
+        on a.owner = u.id
+        <where>
+            <if test="name !=null and name !=''">
+                a.name like '%' #{name} '%'
+            </if>
+            and  a.id not in (select activityId from tbl_contacts_activity_relation where contactsId = #{contactsId})
+        </where>
     </select>
 
 </mapper>
