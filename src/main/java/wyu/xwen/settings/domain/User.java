@@ -14,6 +14,17 @@ public class User {
     private String createBy ;
     private String editTime;
     private String editBy;
+    private String deptName;
+
+    public String getDeptName()
+    {
+        return deptName;
+    }
+
+    public void setDeptName(String deptName)
+    {
+        this.deptName = deptName;
+    }
 
     public User() {
     }

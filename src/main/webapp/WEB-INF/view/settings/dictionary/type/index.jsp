@@ -1,6 +1,13 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
 	String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath() + "/";
+	Object o = request.getAttribute("flag");
+	String message = (String) request.getAttribute("message");
+	boolean flag = false;
+	if (o != null)
+	{
+		flag = (boolean) o;
+	}
 %>
 <!DOCTYPE html>
 <html>
@@ -13,6 +20,7 @@
 	<script type="text/javascript" src="static/jquery/bootstrap_3.3.0/js/bootstrap.min.js"></script>
 	<script type="text/javascript">
 		$(function () {
+			checkFlag();
 			showDicTypeList();
 			/*全选复选框按钮设置*/
 			$("#qx").on("click",function () {
@@ -96,6 +104,15 @@
 					})
 				}
 			})
+		}
+		function checkFlag() {
+			if (<%=flag%>)
+			{
+				alert("<%=message%>");
+				<%
+                flag = false;
+                %>
+			}
 		}
 	</script>
 	</head>

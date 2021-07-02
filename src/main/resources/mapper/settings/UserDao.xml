@@ -5,7 +5,12 @@
 <mapper namespace="wyu.xwen.settings.dao.UserDao">
 
     <select id="login" resultType="User">
-    select * from tbl_user where loginAct = #{loginAct} and loginPwd = #{md5LoginPwd}
+    select user.id, user.loginAct, user.name, user.loginPwd, user.email, user.expireTime, user.lockState, user.deptno,
+           user.allowIps, user.createTime, user.createBy, user.editTime, user.editBy,dept.name as deptName
+    from tbl_user user
+    join tbl_dept dept
+    on user.deptno=dept.id
+    where loginAct = #{loginAct} and loginPwd = #{md5LoginPwd}
     </select>
 
     <select id="selectUser" resultType="User">

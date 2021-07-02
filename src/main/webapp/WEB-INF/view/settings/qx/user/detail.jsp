@@ -1,29 +1,34 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%
+	String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath() + "/";
+%>
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<link href="../../../jquery/bootstrap_3.3.0/css/bootstrap.min.css" type="text/css" rel="stylesheet" />
-<link href="../../../jquery/zTree_v3-master/css/zTreeStyle/zTreeStyle.css" type="text/css" rel="stylesheet" />
+	<base href="<%=basePath%>">
+	<meta charset="UTF-8">
+	<link href="static/jquery/bootstrap_3.3.0/css/bootstrap.min.css" type="text/css" rel="stylesheet" />
+	<link href="static/jquery/zTree_v3-master/css/zTreeStyle/zTreeStyle.css" type="text/css" rel="stylesheet" />
 
-<script type="text/javascript" src="../../../jquery/jquery-1.11.1-min.js"></script>
-<script type="text/javascript" src="../../../jquery/bootstrap_3.3.0/js/bootstrap.min.js"></script>
-<script type="text/javascript" src="../../../jquery/zTree_v3-master/js/jquery.ztree.all.min.js"></script>
+	<script type="text/javascript" src="static/jquery/jquery-1.11.1-min.js"></script>
+	<script type="text/javascript" src="static/jquery/bootstrap_3.3.0/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="static/jquery/zTree_v3-master/js/jquery.ztree.all.min.js"></script>
 
-<SCRIPT type="text/javascript">
-	var setting = {
-		data: {
-			simpleData: {
-				enable: true
+	<script type="text/javascript">
+		var setting = {
+			data: {
+				simpleData: {
+					enable: true
+				}
 			}
-		}
-	};
+		};
 
-	
-	$(document).ready(function(){
-		$.fn.zTree.init($("#treeDemo"), setting, zNodes);
-	});
-	
-</SCRIPT>
+
+		$(document).ready(function(){
+			$.fn.zTree.init($("#treeDemo"), setting, zNodes);
+		});
+
+	</script>
 
 </head>
 <body>

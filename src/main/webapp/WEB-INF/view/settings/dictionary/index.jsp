@@ -102,7 +102,7 @@
 					<div style="position: relative; left: 40px;">
 						姓名：<b>${user.name}</b><br><br>
 						登录帐号：<b>${user.loginAct}</b><br><br>
-						组织机构：<b>${user.deptno}，市场部，二级部门</b><br><br>
+						组织机构：<b>${user.deptno}，${user.deptName}</b><br><br>
 						邮箱：<b>${user.email}</b><br><br>
 						失效时间：<b>${user.expireTime}</b><br><br>
 						允许访问IP：<b>${user.allowIps}</b>
