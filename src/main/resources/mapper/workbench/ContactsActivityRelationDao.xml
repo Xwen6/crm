@@ -18,4 +18,12 @@
 
     </insert>
 
+    <delete id="relieveRelation">
+        delete from tbl_contacts_activity_relation where id = #{id}
+    </delete>
+
+    <delete id="relieveRelationByContactsId">
+        delete from tbl_contacts_activity_relation where contactsId = #{id}
+    </delete>
+
 </mapper>

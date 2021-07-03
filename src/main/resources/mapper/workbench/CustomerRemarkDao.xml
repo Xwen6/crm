@@ -46,4 +46,12 @@
         delete from tbl_customer_remark where id = #{id}
     </delete>
 
+    <delete id="deleteRemarkByCId">
+        delete from tbl_customer_remark where customerId = #{id}
+    </delete>
+
+    <select id="getRemarksCount" resultType="int">
+        select count(*)from tbl_customer_remark where customerId = #{id}
+    </select>
+
 </mapper>

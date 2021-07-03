@@ -231,4 +231,17 @@ public class systemController {
     {
         return "settings/qx/user/index";
     }
+
+    /*新增交易页面*/
+    @RequestMapping("toTranSave.do")
+    public ModelAndView toTranSave() throws SelectUserListException {
+        ModelAndView modelAndView = new ModelAndView();
+        List<User> userList = userService.selectUserList();
+        modelAndView.addObject("userList",userList);
+        modelAndView.setViewName("workbench/transaction/save");
+        return modelAndView;
+    }
+
+
+
 }

@@ -2,14 +2,15 @@ package wyu.xwen.workbench.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+import wyu.xwen.exception.ClueDeleteException;
+import wyu.xwen.exception.ContactsDeleteException;
+import wyu.xwen.utils.UUIDUtil;
 import wyu.xwen.vo.PageVo;
-import wyu.xwen.workbench.dao.ContactsDao;
-import wyu.xwen.workbench.dao.ContactsRemarkDao;
-import wyu.xwen.workbench.dao.CustomerDao;
-import wyu.xwen.workbench.dao.TranDao;
-import wyu.xwen.workbench.domain.Contacts;
-import wyu.xwen.workbench.domain.ContactsRemark;
-import wyu.xwen.workbench.domain.Tran;
+import wyu.xwen.workbench.dao.*;
+import wyu.xwen.workbench.domain.*;
 import wyu.xwen.workbench.service.ContactsService;
 
 import java.util.List;
@@ -26,6 +27,10 @@ public class ContactsServiceImpl implements ContactsService
     private ContactsRemarkDao contactsRemarkDao;
     @Autowired
     private TranDao tranDao;
+    @Autowired
+    private ActivityDao activityDao;
+    @Autowired
+    private ContactsActivityRelationDao contactsActivityRelationDao;
 
     @Override
     public List<Contacts> getContactsList()
@@ -66,15 +71,44 @@ public class ContactsServiceImpl implements ContactsService
     }
 
     /*删除联系人*/
-
+    @Transactional(
+            propagation = Propagation.REQUIRED,
+            isolation = Isolation.DEFAULT,
+            readOnly = false,
+            rollbackFor = {
+                    ContactsDeleteException.class}
+    )
     @Override
-    public boolean deleteContacts(String[] ids) {
-        int count = 0;
+    public boolean deleteContacts(String[] ids) throws ContactsDeleteException {
+        int acMarkNum1 = 0;
+        int acMarkNum2 = 0;
+        int tranCount = 0;
+        int tranNum = 0;
+        int activityRelationNum = 0;
+        int acNum = 0;
+        for (String id:ids
+        ) {
+            acMarkNum1 += contactsRemarkDao.selectRMarkCount(id);
+            acMarkNum2 += contactsRemarkDao.deleteRemarkByContactsId(id);
+            tranCount += tranDao.getCountByContacts(id);
+            tranNum += tranDao.CleanContactsId(id);
+            activityRelationNum = contactsActivityRelationDao.relieveRelationByContactsId(id);
+            acNum += contactsDao.deleteContacts(id);
+        }
+        if (acMarkNum1==acMarkNum2&&tranNum==tranCount&&activityRelationNum>0){
+
+               return   acNum==ids.length;
+
+        }else throw new ContactsDeleteException("联系人删除失败");
+
+
+
+      /*  int count = 0;
         for (String id:ids
              ) {
             count += contactsDao.deleteContacts(id);
-        }
-        return count==ids.length;
+        }*/
+
     }
 
     @Override
@@ -118,5 +152,40 @@ public class ContactsServiceImpl implements ContactsService
     public boolean deleteTran(String tranId) {
         int count = tranDao.deleteTran(tranId);
         return count>0;
+    }
+
+    /*获取市场活动列表*/
+
+    @Override
+    public List<Activity> getActivityListByCId(String contactsId) {
+        return activityDao.getActivityByContactsId(contactsId);
+    }
+
+    @Override
+    public boolean relieveRelation(String id) {
+        int count  = contactsActivityRelationDao.relieveRelation(id);
+        return count>0;
+    }
+
+    /*查找为关联的市场活动*/
+    @Override
+    public List<Activity> getActivityList(String name, String contactsId) {
+        return activityDao.getActivityList2(name,contactsId);
+    }
+
+    /*保存联系*/
+
+    @Override
+    public boolean saveRelation(String[] activityIds, String contactsId) {
+        int count = 0;
+        for (String activityId:activityIds
+             ) {
+            ContactsActivityRelation contactsActivityRelation = new ContactsActivityRelation();
+            contactsActivityRelation.setContactsId(contactsId);
+            contactsActivityRelation.setActivityId(activityId);
+            contactsActivityRelation.setId(UUIDUtil.getUUID());
+           count += contactsActivityRelationDao.saveRelation(contactsActivityRelation);
+        }
+        return count==activityIds.length;
     }
 }

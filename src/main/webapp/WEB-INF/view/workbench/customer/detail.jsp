@@ -1,10 +1,14 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="java.util.List" %>
 <%@ page import="wyu.xwen.settings.domain.DicValue" %>
+<%@ page import="java.util.Set" %>
+<%@ page import="java.util.Map" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%
 String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath() + "/";
+	Map<String,String> pMap = (Map<String, String>) application.getAttribute("pMap");
+	Set<String> keySet = pMap.keySet();
 %>
 <!DOCTYPE html>
 <html>
@@ -27,6 +31,21 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 	var cancelAndSaveBtnDefault = true;
 	
 	$(function(){
+
+		/*拼接Json*/
+		var jsonObj = {
+			<%
+                 for (String key : keySet) {
+                    String value = pMap.get(key);
+                %>
+
+			"<%=key%>":<%=value%>,
+
+
+			<%
+            }
+            %>
+		}
 
 		$("#remark").focus(function(){
 			if(cancelAndSaveBtnDefault){
@@ -429,11 +448,12 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 				var html = "";
 
 				$.each(data,function (index,element) {
+					var possibility = jsonObj[element.stage];
 					html += '<tr id="'+element.id+'">'
 					html +=		'<td><a href="transaction/detail.html" style="text-decoration: none;">'+element.name+'</a></td>'
 					html +=		'<td>'+element.money+'</td>'
 					html +=		'<td>'+element.stage+'</td>'
-					html +=		'<td>90</td>'
+					html +=		'<td>'+possibility+'</td>'
 					html +=		'<td>'+element.expectedDate+'</td>'
 					html +=		'<td>'+element.type+'</td>'
 					html +=		'<td><a href="javascript:void(0);" onclick=deleteTran(\''+element.id+'\') style="text-decoration: none;"><span class="glyphicon glyphicon-remove"></span>删除</a></td>'
@@ -923,7 +943,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 			</div>
 			
 			<div>
-				<a href="transaction/save.html" style="text-decoration: none;"><span class="glyphicon glyphicon-plus"></span>新建交易</a>
+				<a href="web/system/toTranSave.do" style="text-decoration: none;"><span class="glyphicon glyphicon-plus"></span>新建交易</a>
 			</div>
 		</div>
 	</div>

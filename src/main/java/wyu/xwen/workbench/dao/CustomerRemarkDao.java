@@ -12,4 +12,8 @@ public interface CustomerRemarkDao {
     int updateRemark(CustomerRemark remark);
 
     int deleteRemark(String id);
+
+    int deleteRemarkByCId(String id);
+
+    int getRemarksCount(String id);
 }

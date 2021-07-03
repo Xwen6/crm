@@ -41,5 +41,13 @@
         where id = #{id}
     </update>
 
+    <select id="selectRMarkCount" resultType="int">
+        select  count(*)from tbl_contacts_remark where contactsId = #{id}
+    </select>
+
+    <delete id="deleteRemarkByContactsId">
+        delete from tbl_contacts_remark where contactsId  = #{id}
+    </delete>
+
 
 </mapper>

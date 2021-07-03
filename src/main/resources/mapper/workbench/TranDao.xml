@@ -32,4 +32,159 @@
         where contactsId = #{contactsId}
     </select>
 
+    <select id="getTotalByCondition" resultType="int">
+        select count(*)
+        from tbl_tran tran
+        join tbl_user user
+        on tran.owner = user.id
+        join tbl_customer customer
+        on tran.customerId = customer.id
+        join tbl_contacts contacts
+        on tran.contactsId = contacts.id
+        <where>
+            <if test="name!=null and name!=''">
+                tran.name like '%' #{name} '%'
+            </if>
+
+            <if test="owner!=null and owner!=''">
+
+                and user.name like '%' #{owner} '%'
+
+            </if>
+
+            <if test="customerName!=null and customerName!=''">
+
+                and customer.name like '%' #{customerName} '%'
+
+            </if>
+
+            <if test="contactsName!=null and contactsName!=''">
+
+                and contacts.fullname like '%' #{contactsName} '%'
+
+            </if>
+
+            <if test="source!=null and source!=''">
+
+                and tran.source like '%' #{source} '%'
+
+            </if>
+
+            <if test="type!=null and type!=''">
+
+                and tran.type like '%' #{type} '%'
+
+            </if>
+
+            <if test="stage!=null and stage!=''">
+
+                and tran.stage like '%' #{stage} '%'
+
+            </if>
+
+        </where>
+    </select>
+
+    <select id="getTranListByCondition" resultType="Tran">
+        select tran.id,tran.name,customer.name as customerName,tran.stage,tran.type,user.name as owner,tran.source,contacts.fullname as contactsName
+        from tbl_tran tran
+        join tbl_user user
+        on tran.owner = user.id
+        join tbl_customer customer
+        on tran.customerId = customer.id
+        join tbl_contacts contacts
+        on tran.contactsId = contacts.id
+        <where>
+            <if test="name!=null and name!=''">
+                tran.name like '%' #{name} '%'
+            </if>
+
+            <if test="owner!=null and owner!=''">
+
+                and user.name like '%' #{owner} '%'
+
+            </if>
+
+            <if test="customerName!=null and customerName!=''">
+
+                and customer.name like '%' #{customerName} '%'
+
+            </if>
+
+            <if test="contactsName!=null and contactsName!=''">
+
+                and contacts.fullname like '%' #{contactsName} '%'
+
+            </if>
+
+            <if test="source!=null and source!=''">
+
+                and tran.source like '%' #{source} '%'
+
+            </if>
+
+            <if test="type!=null and type!=''">
+
+                and tran.type like '%' #{type} '%'
+
+            </if>
+
+            <if test="stage!=null and stage!=''">
+
+                and tran.stage like '%' #{stage} '%'
+
+            </if>
+        </where>
+        order by tran.createTime desc
+        limit #{skinPage},#{pageSize}
+    </select>
+
+    <update id="CleanContactsId">
+        update tbl_tran set contactsId='' where contactsId = #{id}
+    </update>
+
+    <select id="getCountByContacts" resultType="int">
+        select count(*) from tbl_tran where contactsId = #{id}
+    </select>
+
+    <select id="getTranById" resultType="Tran">
+        select * from tbl_tran where id = #{id}
+    </select>
+
+    <update id="updateTran">
+        update tbl_tran set
+                            owner = #{owner},money = #{money},name = #{name},expectedDate = #{expectedDate},
+                            customerId = #{customerId},stage = #{stage},type = #{type},source = #{source},
+                            activityId = #{activityId},contactsId = #{contactsId},editBy = #{editBy},editTime = #{editTime},
+                            description = #{description},contactSummary = #{contactSummary},nextContactTime = #{nextContactTime}
+        where id = #{id}
+    </update>
+
+    <select id="getTranById2" resultType="Tran">
+        select
+               customer.name as customerName,
+               user.name as owner,
+               contacts.fullname as contactsName,
+               act.name as activityName,
+               tran.id,tran.name,tran.stage,tran.type,tran.source,tran.stage,tran.editTime,tran.editBy,
+               tran.createBy,tran.createTime,tran.description,tran.nextContactTime,tran.contactSummary,
+               tran.expectedDate
+
+        from tbl_tran tran
+                 join tbl_user user
+                      on tran.owner = user.id
+                 join tbl_customer customer
+                      on tran.customerId = customer.id
+                 join tbl_contacts contacts
+                      on tran.contactsId = contacts.id
+                join tbl_activity act on tran.activityId = act.id
+    </select>
+
+    <update id="changeStage">
+        update tbl_tran
+        set stage = #{stage},editBy = #{editBy},editTime = #{editTime}
+        where id = #{id}
+    </update>
+
+
 </mapper>

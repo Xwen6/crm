@@ -12,4 +12,20 @@ public interface TranDao {
     int deleteTran(String id);
 
     List<Tran> getTranListByContactsId(String contactsId);
+
+    List<Tran> getTranListByCondition(Tran tran);
+
+    int getTotalByCondition(Tran tran);
+
+    int CleanContactsId(String id);
+
+    int getCountByContacts(String id);
+
+    Tran getTranById(String id);
+
+    int updateTran(Tran tran);
+
+    Tran getTranById2(String id);
+
+    int changeStage(Tran tran);
 }

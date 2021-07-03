@@ -20,6 +20,69 @@ public class Tran {
   private String description;
   private String contactSummary;
   private String nextContactTime;
+  private int pageNo;
+  private int pageSize;
+  private int skinPage;
+  private String customerName;
+  private String contactsName;
+  private String activityName;
+  private String possibility;
+
+    public String getActivityName() {
+        return activityName;
+    }
+
+    public void setActivityName(String activityName) {
+        this.activityName = activityName;
+    }
+
+    public String getPossibility() {
+        return possibility;
+    }
+
+    public void setPossibility(String possibility) {
+        this.possibility = possibility;
+    }
+
+    public String getContactsName() {
+        return contactsName;
+    }
+
+    public void setContactsName(String contactsName) {
+        this.contactsName = contactsName;
+    }
+
+    public String getCustomerName() {
+        return customerName;
+    }
+
+    public void setCustomerName(String customerName) {
+        this.customerName = customerName;
+    }
+
+    public int getSkinPage() {
+        return skinPage;
+    }
+
+    public void setSkinPage(int skinPage) {
+        this.skinPage = skinPage;
+    }
+
+    public int getPageNo() {
+        return pageNo;
+    }
+
+    public void setPageNo(int pageNo) {
+        this.pageNo = pageNo;
+    }
+
+    public int getPageSize() {
+        return pageSize;
+    }
+
+    public void setPageSize(int pageSize) {
+        this.pageSize = pageSize;
+    }
 
     public String getId() {
         return id;
@@ -165,27 +228,5 @@ public class Tran {
         this.nextContactTime = nextContactTime;
     }
 
-    @Override
-    public String toString() {
-        return "Tran{" +
-                "id='" + id + '\'' +
-                ", owner='" + owner + '\'' +
-                ", money='" + money + '\'' +
-                ", name='" + name + '\'' +
-                ", expectedDate='" + expectedDate + '\'' +
-                ", customerId='" + customerId + '\'' +
-                ", stage='" + stage + '\'' +
-                ", type='" + type + '\'' +
-                ", source='" + source + '\'' +
-                ", activityId='" + activityId + '\'' +
-                ", contactsId='" + contactsId + '\'' +
-                ", createBy='" + createBy + '\'' +
-                ", createTime='" + createTime + '\'' +
-                ", editBy='" + editBy + '\'' +
-                ", editTime='" + editTime + '\'' +
-                ", description='" + description + '\'' +
-                ", contactSummary='" + contactSummary + '\'' +
-                ", nextContactTime='" + nextContactTime + '\'' +
-                '}';
-    }
+
 }

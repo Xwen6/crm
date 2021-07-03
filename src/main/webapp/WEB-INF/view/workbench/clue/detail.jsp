@@ -49,11 +49,11 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 
 		/*添加联系复选框选中*/
 		$("#relationCheckBox").click(function () {
-			$("input[name=xz]").prop("checked",this.checked)
+			$("input[name=selectCheckBox]").prop("checked",this.checked)
 		})
 
-		$("#activityList2").on("click",$("input[name=xz]"),function (){
-			$("#relationCheckBox").prop("checked",$("input[name=xz]:checked").length==$("input[name=xz]").length)
+		$("#activityList2").on("click",$("input[name=selectCheckBox]"),function (){
+			$("#relationCheckBox").prop("checked",$("input[name=selectCheckBox]:checked").length==$("input[name=selectCheckBox]").length)
 		})
 
 		$("#remark").focus(function(){
@@ -284,7 +284,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 		/*添加关联*/
 		$("#addRelation").click(function (){
 			/*绑定所有选中的复选框*/
-			var $selectCheckBox =  $("input[name=xz]:checked");
+			var $selectCheckBox =  $("input[name=selectCheckBox]:checked");
 			if ($selectCheckBox.length==0){
 				alert("请选择要关联的活动")
 			}else {
@@ -378,7 +378,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
                 var html = "";
                 $.each(data,function (index,element){
                    html += '<tr>'
-                   html += '<td><input type="checkbox" name="xz" value="'+element.id+'"/></td>'
+                   html += '<td><input type="checkbox" name="selectCheckBox" value="'+element.id+'"/></td>'
                    html += '<td>'+element.name+'</td>'
                    html += '<td>'+element.startDate+'</td>'
                    html += '<td>'+element.endDate+'</td>'

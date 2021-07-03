@@ -2,7 +2,7 @@
 <%@ page import="java.util.Set" %>
 <%@ page import="wyu.xwen.settings.domain.DicValue" %>
 <%@ page import="java.util.List" %>
-<%@ page import="wyu.xwen.crm.vo.TranVo" %>
+<%@ page import="wyu.xwen.workbench.domain.Tran" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
 String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath() + "/";
@@ -29,8 +29,6 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 	<base href="<%=basePath%>">
 <meta charset="UTF-8">
 
-<link href="static/jquery/bootstrap_3.3.0/css/bootstrap.min.css" type="text/css" rel="stylesheet" />
-
 <style type="text/css">
 .mystage{
 	font-size: 20px;
@@ -43,10 +41,17 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 	vertical-align: middle;
 }
 </style>
-	
-<script type="text/javascript" src="jquery/jquery-1.11.1-min.js"></script>
-<script type="text/javascript" src="jquery/bootstrap_3.3.0/js/bootstrap.min.js"></script>
 
+	<link href="static/jquery/bootstrap_3.3.0/css/bootstrap.min.css" type="text/css" rel="stylesheet" />
+	<link href="static/jquery/bootstrap-datetimepicker-master/css/bootstrap-datetimepicker.min.css" type="text/css" rel="stylesheet" />
+
+	<script type="text/javascript" src="static/jquery/jquery-1.11.1-min.js"></script>
+	<script type="text/javascript" src="static/jquery/bootstrap_3.3.0/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="static/jquery/bootstrap-datetimepicker-master/js/bootstrap-datetimepicker.js"></script>
+	<script type="text/javascript" src="static/jquery/bootstrap-datetimepicker-master/locale/bootstrap-datetimepicker.zh-CN.js"></script>
+	<link rel="stylesheet" type="text/css" href="static/jquery/bs_pagination/jquery.bs_pagination.min.css">
+	<script type="text/javascript" src="static/jquery/bs_pagination/jquery.bs_pagination.min.js"></script>
+	<script type="text/javascript" src="static/jquery/bs_pagination/en.js"></script>
 <script type="text/javascript">
 
 	//默认情况下取消和保存按钮是隐藏的
@@ -161,7 +166,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 		$.ajax({
 			url : "workbench/transaction/changeStage.do",
 			data : {
-				"tranId":"${requestScope.tran.id}",
+				"id":"${requestScope.tran.id}",
 				"stage":stage,
 			},
 			dataType : "json",
@@ -290,8 +295,8 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 		阶段&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 		<%
 			/*当前页面的状态*/
-			TranVo tranVo = (TranVo) request.getAttribute("tran");
-			String currentStage = tranVo.getStage();
+			Tran tran = (Tran) request.getAttribute("tran");
+			String currentStage = tran.getStage();
 			/*根据当前状态取得当前可能性*/
 			String currentPossibility = pMap.get(currentStage);
 			/*判断当前可能性*/
