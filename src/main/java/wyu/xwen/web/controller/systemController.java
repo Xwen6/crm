@@ -218,4 +218,17 @@ public class systemController {
     {
         return "settings/dept/index";
     }
+
+    /*跳转到权限管理界面*/
+    @RequestMapping("/toQxIndex.do")
+    public String toQxIndex()
+    {
+        return "settings/qx/index";
+    }
+    /*跳转到用户页面*/
+    @RequestMapping("/toUserIndex.do")
+    public String toUserindex()
+    {
+        return "settings/qx/user/index";
+    }
 }

@@ -11,6 +11,7 @@ import wyu.xwen.exception.SelectUserListException;
 
 
 import wyu.xwen.settings.service.UserService;
+import wyu.xwen.vo.UserVo;
 
 
 import java.util.HashMap;
@@ -66,6 +67,43 @@ public class UserServiceImpl implements UserService {
     {
         int count = userdao.updatePassword(id,newPwd);
         return count == 1;
+    }
+
+    @Override
+    public List<UserVo> pageList(UserVo userVo)
+    {
+        return userdao.pageList(userVo);
+    }
+
+    @Override
+    public int getCount(UserVo userVo)
+    {
+        return userdao.getCount(userVo);
+    }
+
+    @Override
+    public Boolean addUser(UserVo userVo)
+    {
+        return userdao.addUser(userVo);
+    }
+
+    @Override
+    public User getUserById(String id)
+    {
+        return userdao.getUserById(id);
+    }
+
+    @Override
+    public Boolean updateUser(User user)
+    {
+        int count = userdao.updateUser(user);
+        return count == 1;
+    }
+
+    @Override
+    public Boolean deleteUser(String[] ids)
+    {
+        return userdao.deleteUser(ids);
     }
 }
 

@@ -1,6 +1,13 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
 	String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath() + "/";
+	Object o = request.getAttribute("flag");
+	String message = (String) request.getAttribute("message");
+	boolean flag = false;
+	if (o != null)
+	{
+		flag = (boolean) o;
+	}
 %>
 <!DOCTYPE html>
 <html>
@@ -8,11 +15,284 @@
 	<base href="<%=basePath%>">
 	<meta charset="UTF-8">
 	<link href="static/jquery/bootstrap_3.3.0/css/bootstrap.min.css" type="text/css" rel="stylesheet" />
+	<link rel="stylesheet" type="text/css" href="static/jquery/bs_pagination/jquery.bs_pagination.min.css">
+	<link href="static/jquery/bootstrap-datetimepicker-master/css/bootstrap-datetimepicker.min.css" type="text/css" rel="stylesheet" />
 
 	<script type="text/javascript" src="static/jquery/jquery-1.11.1-min.js"></script>
 	<script type="text/javascript" src="static/jquery/bootstrap_3.3.0/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="static/jquery/bs_pagination/en.js"></script>
+	<script type="text/javascript" src="static/jquery/bs_pagination/jquery.bs_pagination.min.js"></script>
+	<script type="text/javascript" src="static/jquery/bootstrap-datetimepicker-master/js/bootstrap-datetimepicker.js"></script>
+	<script type="text/javascript" src="static/jquery/bootstrap-datetimepicker-master/locale/bootstrap-datetimepicker.zh-CN.js"></script>
+	<script type="text/javascript">
+		$(function () {
+			$(".time").datetimepicker({
+				minView: "month",
+				language:  'zh-CN',
+				format: 'yyyy-mm-dd',
+				autoclose: true,
+				todayBtn: true,
+				pickerPosition: "bottom-left"
+			});
+			checkFlag();
+			pageList(1,2);
+			$("#saveBtn").on("click",function () {
+				let loginActNo = $.trim($("#create-loginActNo").val());
+				let username = $.trim($("#create-username").val());
+				let loginPwd = $.trim($("#create-loginPwd").val());
+				let email = $.trim($("#create-email").val());
+				let expireTime = $.trim($("#create-expireTime").val());
+				let lockStatus = $.trim($("#create-lockStatus").val());
+				let dept = $.trim($("#create-dept").val());
+				let allowIps = $.trim($("#create-allowIps").val());
+				$.ajax({
+					url:"settings/user/addUser.do",
+					data:{
+						"loginActNo":loginActNo,
+						"username":username,
+						"loginPwd":loginPwd,
+						"email":email,
+						"expireTime":expireTime,
+						"lockStatus":lockStatus,
+						"dept":dept,
+						"allowIps":allowIps,
+						"createBy":"${user.id}"
+					},
+					dataType:"json",
+					type:"post",
+					success:function (resp) {
+						if (resp)
+						{
+							alert("保存成功！")
+							$("#createUserModal").modal("hide")
+							pageList(1,$("#userPage").bs_pagination('getOption', 'rowsPerPage'));
+						}
+						else
+						{
+							alert("保存失败！")
+						}
+					}
+				})
+			})
+			/*添加模态窗口关闭清空内容*/
+			$("#createUserModal").on("hide.bs.modal",function () {
+				$("#addForm")[0].reset();
+			})
+
+			/*全选复选框按钮设置*/
+			$("#qx").on("click",function () {
+				$("input[name=xz]").prop("checked",this.checked);
+			})
+			$("#userTBody").on("click",function () {
+				$("#qx").prop("checked",$("input[name=xz]").length === $("input[name=xz]:checked").length)
+			})
+			/*编辑保存按钮绑定事件*/
+			$("#editUserBtn").on("click",function () {
+				$.ajax({
+					url:"settings/user/updateUser.do",
+					data:{
+						"id":$.trim($("#edit-id").val()),
+						"loginActNo":$.trim($("#edit-loginActNo").val()),
+						"name":$.trim($("#edit-username").val()),
+						"loginPwd":$.trim($("#edit-loginPwd").val()),
+						"email":$.trim($("#edit-email").val()),
+						"expireTime":$.trim($("#edit-expireTime").val()),
+						"lockStatus":$.trim($("#edit-lockStatus").val()),
+						"deptName":$.trim($("#edit-dept").val()),
+						"allowIps":$.trim($("#edit-allowIps").val()),
+						"editBy":"${user.id}"
+					},
+					dataType:"json",
+					type:"post",
+					success:function (resp) {
+						if (resp)
+						{
+							alert("修改成功！");
+							pageList(1,$("#deptDiv").bs_pagination('getOption', 'rowsPerPage'));
+							$("#editUserModal").modal("hide");
+						}
+						else
+						{
+							alert("修改失败");
+						}
+					}
+				})
+			})
+			/*编辑按钮绑定事件*/
+			$("#editBtn").on("click",function () {
+				let $box = $("input[name=xz]:checked");
+				if ($box.length === 0)
+				{
+					alert("请选择您要修改的选项！")
+				}
+				else if ($box.length > 1)
+				{
+					alert("您只能选择一个选项！")
+				}
+				else
+				{
+					$.ajax({
+						url:"settings/user/getUserById.do",
+						data:{"id":$box.val()},
+						dataType:"json",
+						success:function (resp) {
+							$("#edit-id").val(resp.id);
+							$("#edit-loginActNo").val(resp.loginActNo);
+							$("#edit-username").val(resp.name);
+							$("#edit-loginPwd").val(resp.loginPwd);
+							$("#edit-email").val(resp.email);
+							$("#edit-expireTime").val(resp.expireTime);
+							$("#edit-lockStatus").val(resp.lockStatus);
+							$("#edit-dept").val(resp.dept);
+							$("#edit-allowIps").val(resp.allowIps);
+							$("#editUserModal").modal("show");
+						}
+					})
+				}
+			})
+			/*绑定删除事件*/
+			$("#deleteBtn").on("click",function () {
+				let $box = $("input[name=xz]:checked");
+				if ($box.length === 0)
+				{
+					alert("请选择您要删除的选项！")
+				}
+				else
+				{
+					if (confirm("是否要删除选中的记录？"))
+					{
+						let parma = "ids=";
+						$.each($box, function (i, n) {
+							parma += $(n).val();
+							if (i < $box.length - 1)
+							{
+								parma += ",";
+							}
+						})
+						$.ajax({
+							url:"settings/user/deleteUser.do",
+							data:parma,
+							dataType:"json",
+							type:"post",
+							success:function (resp) {
+								if (resp)
+								{
+									pageList(1,$("#visitPage").bs_pagination('getOption', 'rowsPerPage'));
+								}
+								else
+								{
+									alert("删除失败！")
+								}
+							}
+						})
+					}
+				}
+			})
+			//定制字段
+			$("#definedColumns > li").click(function(e) {
+				//防止下拉菜单消失
+				e.stopPropagation();
+			});
+			/*查询按钮绑定事件*/
+			$("#queryBtn").on("click",function () {
+				/*点击查找的时候，将填入到text中的val保存到隐藏域当中*/
+				$("#hide-name").val($.trim($("#search-name").val()));
+				$("#hide-deptName").val($.trim($("#search-deptName").val()));
+				$("#hide-lockState").val($.trim($("#search-lockState").val()));
+				$("#hide-startTime").val($.trim($("#search-startTime").val()));
+				$("#hide-endTime").val($.trim($("#search-endTime").val()));
+				pageList(1,2);
+			})
+		})
+		/*查询用户*/
+		function pageList(pageNo,pageSize){
+			$("#userTBody").empty();
+			/*清空全面复选框*/
+			$("#qx").prop("checked",false);
+			/*执行查找方法的时候,将隐藏保存的值赋予到text当中*/
+			$("#search-name").val($.trim($("#hide-name").val()));
+			$("#search-deptName").val($.trim($("#hide-deptName").val()));
+			$("#search-lockState").val($.trim($("#hide-lockState").val()));
+			$("#search-startTime").val($.trim($("#hide-startTime").val()));
+			$("#search-endTime").val($.trim($("#hide-endTime").val()));
+			$.ajax({
+				url : "settings/user/pageList.do",
+				data: {
+					"pageNo":pageNo,
+					"pageSize":pageSize,
+					"name":$.trim($("#search-name").val()),
+					"deptName":$.trim($("#search-deptName").val()),
+					"lockState":$.trim($("#search-lockState").val()),
+					"startTime":$.trim($("#search-startTime").val()),
+					"endTime":$.trim($("#search-endTime").val())
+				},
+				dataType:"json",
+				type:"get",
+				success:function (data){
+					$.each(data.list,function (i,n) {
+						$("#userTBody").append(
+								'<tr>'+
+								'<td><input type="checkbox" name="xz" value="'+n.id+'"/></td>'+
+								'<td>'+i+'</td>'+
+								'<td><a style="text-decoration: none; cursor: pointer;" onclick="window.location.href=\'web/system/toVisitDetail.do?id='+n.id+'\';">'+n.loginAct+'</a></td>'+
+								'<td>'+n.name+'</td>'+
+								'<td>'+n.deptName+'</td>'+
+								'<td>'+n.email+'</td>'+
+								'<td>'+n.expireTime+'</td>'+
+								'<td>'+n.allowIps+'</td>'+
+								'<td>'+n.lockState+'</td>'+
+								'<td>'+n.createName+'</td>'+
+								'<td>'+n.createTime+'</td>'+
+								'<td>'+n.editName+'</td>'+
+								'<td>'+n.editTime+'</td>'+
+								'</tr>'
+
+						);
+					})
+					var totalPages = data.total%pageSize==0?data.total/pageSize:parseInt(data.total/pageSize)+1;
+					/*数据加载完毕之后，加载分页插件*/
+					//数据处理完毕后，结合分页查询，对前端展现分页信息
+
+					$("#userPage").bs_pagination({
+						currentPage: pageNo, // 页码
+						rowsPerPage: pageSize, // 每页显示的记录条数
+						maxRowsPerPage: 20, // 每页最多显示的记录条数
+						totalPages: totalPages, // 总页数
+						totalRows: data.total, // 总记录条数
+
+						visiblePageLinks: 3, // 显示几个卡片
+
+						showGoToPage: true,
+						showRowsPerPage: true,
+						showRowsInfo: true,
+						showRowsDefaultInfo: true,
+
+						//该回调函数时在，点击分页组件的时候触发的
+						onChangePage : function(event, data){
+							pageList(data.currentPage , data.rowsPerPage);
+						}
+					});
+
+				}
+			})
+		}
+		function checkFlag() {
+			if (<%=flag%>)
+			{
+				alert("<%=message%>");
+				<%
+                flag = false;
+                %>
+			}
+		}
+	</script>
 </head>
 <body>
+	<input type="hidden" id="hide-name">
+	<input type="hidden" id="hide-deptName">
+	<input type="hidden" id="hide-lockState">
+	<input type="hidden" id="hide-startTime">
+	<input type="hidden" id="hide-endTime">
 
 	<!-- 创建用户的模态窗口 -->
 	<div class="modal fade" id="createUserModal" role="dialog">
@@ -67,7 +347,7 @@
 								  <option>锁定</option>
 								</select>
 							</div>
-							<label for="create-org" class="col-sm-2 control-label">部门<span style="font-size: 15px; color: red;">*</span></label>
+							<label for="create-dept" class="col-sm-2 control-label">部门<span style="font-size: 15px; color: red;">*</span></label>
                             <div class="col-sm-10" style="width: 300px;">
                                 <select class="form-control" id="create-dept">
                                     <option></option>
@@ -86,7 +366,86 @@
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-					<button type="button" class="btn btn-primary" data-dismiss="modal">保存</button>
+					<button type="button" id="saveBtn" class="btn btn-primary" data-dismiss="modal">保存</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<%--编辑用户模态窗口--%>
+	<div class="modal fade" id="editUserModal" role="dialog">
+		<div class="modal-dialog" role="document" style="width: 80%;">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">
+						<span aria-hidden="true">×</span>
+					</button>
+					<h4 class="modal-title"><span class="glyphicon glyphicon-edit"></span> 编辑部门</h4>
+				</div>
+				<div class="modal-body">
+
+					<form class="form-horizontal" role="form">
+
+						<div class="form-group">
+							<label for="edit-loginActNo" class="col-sm-2 control-label">登录帐号<span style="font-size: 15px; color: red;">*</span></label>
+							<div class="col-sm-10" style="width: 300px;">
+								<input type="text" class="form-control" id="edit-loginActNo">
+								<input type="hidden" id="edit-id">
+							</div>
+							<label for="edit-username" class="col-sm-2 control-label">用户姓名</label>
+							<div class="col-sm-10" style="width: 300px;">
+								<input type="text" class="form-control" id="edit-username">
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="edit-loginPwd" class="col-sm-2 control-label">登录密码<span style="font-size: 15px; color: red;">*</span></label>
+							<div class="col-sm-10" style="width: 300px;">
+								<input type="password" class="form-control" id="edit-loginPwd">
+							</div>
+							<label for="edit-confirmPwd" class="col-sm-2 control-label">确认密码<span style="font-size: 15px; color: red;">*</span></label>
+							<div class="col-sm-10" style="width: 300px;">
+								<input type="password" class="form-control" id="edit-confirmPwd">
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="edit-email" class="col-sm-2 control-label">邮箱</label>
+							<div class="col-sm-10" style="width: 300px;">
+								<input type="text" class="form-control" id="edit-email">
+							</div>
+							<label for="edit-expireTime" class="col-sm-2 control-label">失效时间</label>
+							<div class="col-sm-10" style="width: 300px;">
+								<input type="text" class="form-control" id="edit-expireTime">
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="edit-lockStatus" class="col-sm-2 control-label">锁定状态</label>
+							<div class="col-sm-10" style="width: 300px;">
+								<select class="form-control" id="edit-lockStatus">
+									<option></option>
+									<option>启用</option>
+									<option>锁定</option>
+								</select>
+							</div>
+							<label for="edit-dept" class="col-sm-2 control-label">部门<span style="font-size: 15px; color: red;">*</span></label>
+							<div class="col-sm-10" style="width: 300px;">
+								<select class="form-control" id="edit-dept">
+									<option></option>
+									<option>市场部</option>
+									<option>策划部</option>
+								</select>
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="edit-allowIps" class="col-sm-2 control-label">允许访问的IP</label>
+							<div class="col-sm-10" style="width: 300px;">
+								<input type="text" class="form-control" id="edit-allowIps" style="width: 280%" placeholder="多个用逗号隔开">
+							</div>
+						</div>
+					</form>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+					<button type="button" id="editUserBtn" class="btn btn-primary">更新</button>
 				</div>
 			</div>
 		</div>
@@ -107,21 +466,21 @@
 		  <div class="form-group">
 		    <div class="input-group">
 		      <div class="input-group-addon">用户姓名</div>
-		      <input class="form-control" type="text">
+		      <input class="form-control" id="search-name" type="text">
 		    </div>
 		  </div>
 		  &nbsp;&nbsp;&nbsp;&nbsp;
 		  <div class="form-group">
 		    <div class="input-group">
 		      <div class="input-group-addon">部门名称</div>
-		      <input class="form-control" type="text">
+		      <input class="form-control" id="search-deptName" type="text">
 		    </div>
 		  </div>
 		  &nbsp;&nbsp;&nbsp;&nbsp;
 		  <div class="form-group">
 		    <div class="input-group">
 		      <div class="input-group-addon">锁定状态</div>
-			  <select class="form-control">
+			  <select class="form-control" id="search-lockState">
 			  	  <option></option>
 			      <option>锁定</option>
 				  <option>启用</option>
@@ -133,7 +492,7 @@
 		  <div class="form-group">
 		    <div class="input-group">
 		      <div class="input-group-addon">失效时间</div>
-			  <input class="form-control" type="text" id="startTime" />
+			  <input class="form-control time" type="text" id="search-startTime" />
 		    </div>
 		  </div>
 		  
@@ -141,11 +500,11 @@
 		  
 		  <div class="form-group">
 		    <div class="input-group">
-			  <input class="form-control" type="text" id="endTime" />
+			  <input class="form-control time" type="text" id="search-endTime" />
 		    </div>
 		  </div>
 		  
-		  <button type="submit" class="btn btn-default">查询</button>
+		  <button type="button" id="queryBtn" class="btn btn-default">查询</button>
 		  
 		</form>
 	</div>
@@ -154,6 +513,7 @@
 	<div class="btn-toolbar" role="toolbar" style="background-color: #F7F7F7; height: 50px; position: relative;left: 30px; width: 110%; top: 20px;">
 		<div class="btn-group" style="position: relative; top: 18%;">
 		  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#createUserModal"><span class="glyphicon glyphicon-plus"></span> 创建</button>
+		  <button type="button" class="btn btn-default" id="editBtn"><span class="glyphicon glyphicon-pencil"></span> 修改</button>
 		  <button type="button" class="btn btn-danger"><span class="glyphicon glyphicon-minus"></span> 删除</button>
 		</div>
 		
@@ -163,7 +523,7 @@
 		<table class="table table-hover">
 			<thead>
 				<tr style="color: #B3B3B3;">
-					<td><input type="checkbox" /></td>
+					<td><input type="checkbox" name="qx" /></td>
 					<td>序号</td>
 					<td>登录帐号</td>
 					<td>用户姓名</td>
@@ -178,8 +538,8 @@
 					<td>修改时间</td>
 				</tr>
 			</thead>
-			<tbody>
-				<tr class="active">
+			<tbody id="userTBody">
+				<%--<tr class="active">
 					<td><input type="checkbox" /></td>
 					<td>1</td>
 					<td><a  href="detail.html">zhangsan</a></td>
@@ -208,43 +568,13 @@
 					<td>2017-02-10 10:10:10</td>
 					<td>admin</td>
 					<td>2017-02-10 20:10:10</td>
-				</tr>
+				</tr>--%>
 			</tbody>
 		</table>
 	</div>
 	
 	<div style="height: 50px; position: relative;top: 30px; left: 30px;">
-		<div>
-			<button type="button" class="btn btn-default" style="cursor: default;">共<b>50</b>条记录</button>
-		</div>
-		<div class="btn-group" style="position: relative;top: -34px; left: 110px;">
-			<button type="button" class="btn btn-default" style="cursor: default;">显示</button>
-			<div class="btn-group">
-				<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-					10
-					<span class="caret"></span>
-				</button>
-				<ul class="dropdown-menu" role="menu">
-					<li><a href="#">20</a></li>
-					<li><a href="#">30</a></li>
-				</ul>
-			</div>
-			<button type="button" class="btn btn-default" style="cursor: default;">条/页</button>
-		</div>
-		<div style="position: relative;top: -88px; left: 285px;">
-			<nav>
-				<ul class="pagination">
-					<li class="disabled"><a href="#">首页</a></li>
-					<li class="disabled"><a href="#">上一页</a></li>
-					<li class="active"><a href="#">1</a></li>
-					<li><a href="#">2</a></li>
-					<li><a href="#">3</a></li>
-					<li><a href="#">4</a></li>
-					<li><a href="#">5</a></li>
-					<li><a href="#">下一页</a></li>
-					<li class="disabled"><a href="#">末页</a></li>
-				</ul>
-			</nav>
+		<div id="userPage">
 		</div>
 	</div>
 			

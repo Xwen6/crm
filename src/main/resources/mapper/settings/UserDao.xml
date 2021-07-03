@@ -29,4 +29,80 @@
     <update id="updatePassword">
         update tbl_user set loginPwd=#{newPwd} where id=#{id}
     </update>
+    <select id="pageList" resultType="wyu.xwen.vo.UserVo">
+        select user.id, user.loginAct, user.name,user.email, user.expireTime, user.lockState,user.allowIps, user.createTime,
+               user.createBy, user.editTime, user.editBy, dept.name as deptName
+        from tbl_user user
+                 join tbl_dept dept
+                      on user.deptno=dept.id
+        <where>
+            <if test="name != null and name != ''">
+                user.name like '%' #{name} '%'
+            </if>
+            <if test="lockState != null and lockState != ''">
+                and user.lockState=#{lockState}
+            </if>
+            <if test="startTime != null and startTime != ''">
+                and user.expireTime &gt;= #{startTime}
+            </if>
+            <if test="endTime != null and endTime != ''">
+                and user.expireTime &lt;= #{endTime}
+            </if>
+        </where>
+        order by user.createTime desc
+        limit #{skipPage},#{pageSize}
+    </select>
+    <select id="getCount" resultType="int">
+        select count(user.id)
+        from tbl_user user
+        join tbl_dept dept
+        on user.deptno=dept.id
+        <where>
+            <if test="name != null and name != ''">
+                user.name like '%' #{name} '%'
+            </if>
+            <if test="lockState != null and lockState != ''">
+                and user.lockState=#{lockState}
+            </if>
+            <if test="startTime != null and startTime != ''">
+                and user.expireTime &gt;= #{startTime}
+            </if>
+            <if test="endTime != null and endTime != ''">
+                and user.expireTime &lt;= #{endTime}
+            </if>
+        </where>
+    </select>
+    <insert id="addUser">
+        insert into tbl_user(id, loginAct, name, loginPwd, email, expireTime, lockState, deptno, allowIps, createTime,
+                             createBy, editTime, editBy)
+        value (#{id},#{loginAct},#{name},#{loginPwd},#{email},#{expireTime},#{lockState},#{deptno},#{allowIps},
+               #{createTime},#{createBy},#{editTime},#{editBy})
+    </insert>
+    <select id="getUserById" resultType="User">
+        select u1.id, u1.loginAct, u1.name, u1.loginPwd, u1.email, u1.expireTime, u1.lockState, u1.deptno, u1.allowIps,
+               u1.createTime, u2.name as createBy, u1.editTime, u1.editBy
+        from tbl_user u1
+        join tbl_user u2
+        on u1.createBy=u2.id;
+    </select>
+    <update id="updateUser">
+        update tbl_user
+        set loginAct=#{loginAct},
+            name=#{name},
+            loginPwd=#{loginPwd},
+            email=#{email},
+            expireTime=#{expireTime},
+            lockState=#{lockState},
+            deptno=#{deptno},
+            allowIps=#{allowIps},
+            editTime=#{editTime},
+            editBy=#{editBy}
+        where id=#{id}
+    </update>
+    <delete id="deleteUser">
+        delete from tbl_user where id in
+        <foreach collection="array" item="ids" open="(" close=")" separator=",">
+            #{ids}
+        </foreach>
+    </delete>
 </mapper>

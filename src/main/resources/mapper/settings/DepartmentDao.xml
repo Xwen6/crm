@@ -28,4 +28,7 @@
             #{ids}
         </foreach>
     </delete>
+    <select id="getDeptIdByName" resultType="wyu.xwen.settings.domain.Department">
+        select id from tbl_dept where name=#{deptName}
+    </select>
 </mapper>

@@ -52,4 +52,10 @@ public class DepartmentServiceImpl implements DepartmentService
         int count = departmentDao.deleteDepartment(ids);
         return count == ids.length;
     }
+
+    @Override
+    public String getDeptIdByName(String deptName)
+    {
+        return departmentDao.getDeptIdByName(deptName);
+    }
 }

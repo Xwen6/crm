@@ -37,7 +37,7 @@
 			});
 
 			//展示市场活动页面
-			window.open("user/index.html","workareaFrame");
+			window.open("web/system/toUserIndex.do","workareaFrame");
 
 		});
 		function updatePassword() {
@@ -206,7 +206,7 @@
 		<div id="navigation" style="left: 0px; width: 18%; position: relative; height: 100%; overflow:auto;">
 		
 			<ul id="no1" class="nav nav-pills nav-stacked">
-				<li class="liClass"><a href="user/index.html" target="workareaFrame"><span class="glyphicon glyphicon-user"></span> 用户维护</a></li>
+				<li class="liClass"><a href="web/system/toUserIndex.do" target="workareaFrame"><span class="glyphicon glyphicon-user"></span> 用户维护</a></li>
 				<!--<li class="liClass"><a href="role/index.html" target="workareaFrame"><span class="glyphicon glyphicon-user"></span> 角色维护</a></li>
 				<li class="liClass"><a href="permission/index.html" target="workareaFrame"><span class="glyphicon glyphicon-user"></span> 许可维护</a></li>-->
 				

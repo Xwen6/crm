@@ -17,4 +17,6 @@ public interface DepartmentService
     Boolean updateDepartment(Department department);
 
     Boolean deleteDepartment(String[] ids);
+
+    String getDeptIdByName(String deptName);
 }

@@ -189,7 +189,7 @@
 				 -->
 				<a href="web/system/toDeptIndex.do">部门管理</a>
 				<br>
-				<a href="qx/index.html">权限管理</a>
+				<a href="web/system/toQxIndex.do">权限管理</a>
 			</div>
 
 			<div style="position: relative; width: 33%; height: 50%; left: 33%; top: -100%">
