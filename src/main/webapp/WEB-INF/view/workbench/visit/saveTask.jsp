@@ -14,12 +14,12 @@
 
 	<script type="text/javascript" src="static/jquery/jquery-1.11.1-min.js"></script>
 	<script type="text/javascript" src="static/jquery/bootstrap_3.3.0/js/bootstrap.min.js"></script>
-	<script type="text/javascript" src="static/jquery/bs_typeahead/bootstrap3-typeahead.min.js"></script>
 	<script type="text/javascript" src="static/jquery/bootstrap-datetimepicker-master/js/bootstrap-datetimepicker.js"></script>
 	<script type="text/javascript" src="static/jquery/bootstrap-datetimepicker-master/locale/bootstrap-datetimepicker.zh-CN.js"></script>
 
 	<script type="text/javascript">
 		$(function(){
+			/*日历插件*/
 			$(".time").datetimepicker({
 				minView: "month",
 				language:  'zh-CN',
@@ -35,6 +35,7 @@
 					$("#reminderTimeDiv").hide("200");
 				}
 			});
+			/*添加任务*/
 			$("#addBtn").on("click",function () {
 				if (!($("#reminderTime").is(":checked")))
 				{
@@ -44,12 +45,14 @@
 				}
 				$("#addVisitForm").submit();
 			})
+			/*将联系人模态窗口的数据填充到相关位置*/
 			$("#submitContacts").on("click",function () {
 				$("#hiddenContactsId").val($("input[name=contacts]:checked").val());
 				let $contactsId = $("#hiddenContactsId").val()
 				$("#create-contacts").val($("#"+$contactsId).text());
 				$("#findContacts").modal("hide");
 			})
+			/*绑定回车键查找联系人*/
 			$("#queryContactsByName").keydown(function (event) {
 				if (event.keyCode == 13)
 				{
@@ -57,20 +60,7 @@
 					return false;
 				}
 			})
-			$("#queryContactsByName").typeahead({
-				source: function (query, process) {
-					$.get(
-							"workbench/contacts/getContactsListByName.do",
-							{ "name" : query },
-							function (data) {
-								//alert(data);
-								process(data);
-							},
-							"json"
-					);
-				},
-				delay: 1500
-			});
+			/*绑定取消按钮*/
 			$("#cancelBtn").on("click",function () {
 				window.history.go(-1);
 			})
@@ -79,7 +69,7 @@
 		function showContacts() {
 			$("#contactsTBody").empty();
 			$.ajax({
-				url:"workbench/contacts/getContactsList.do",
+				url:"workbench/contacts/getContactsListByName.do",
 				data:{"name":$.trim($("#queryContactsByName").val())},
 				dataType:"json",
 				type:"get",

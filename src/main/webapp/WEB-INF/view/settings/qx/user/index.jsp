@@ -48,13 +48,13 @@
 				$.ajax({
 					url:"settings/user/addUser.do",
 					data:{
-						"loginActNo":loginActNo,
-						"username":username,
+						"loginAct":loginActNo,
+						"name":username,
 						"loginPwd":loginPwd,
 						"email":email,
 						"expireTime":expireTime,
 						"lockStatus":lockStatus,
-						"dept":dept,
+						"deptName":dept,
 						"allowIps":allowIps,
 						"createBy":"${user.id}"
 					},
@@ -76,7 +76,7 @@
 			})
 			/*添加模态窗口关闭清空内容*/
 			$("#createUserModal").on("hide.bs.modal",function () {
-				$("#addForm")[0].reset();
+				$("#saveForm")[0].reset();
 			})
 
 			/*全选复选框按钮设置*/
@@ -87,12 +87,12 @@
 				$("#qx").prop("checked",$("input[name=xz]").length === $("input[name=xz]:checked").length)
 			})
 			/*编辑保存按钮绑定事件*/
-			$("#editUserBtn").on("click",function () {
+			/*$("#editUserBtn").on("click",function () {
 				$.ajax({
 					url:"settings/user/updateUser.do",
 					data:{
 						"id":$.trim($("#edit-id").val()),
-						"loginActNo":$.trim($("#edit-loginActNo").val()),
+						"loginAct":$.trim($("#edit-loginActNo").val()),
 						"name":$.trim($("#edit-username").val()),
 						"loginPwd":$.trim($("#edit-loginPwd").val()),
 						"email":$.trim($("#edit-email").val()),
@@ -100,7 +100,7 @@
 						"lockStatus":$.trim($("#edit-lockStatus").val()),
 						"deptName":$.trim($("#edit-dept").val()),
 						"allowIps":$.trim($("#edit-allowIps").val()),
-						"editBy":"${user.id}"
+						"editBy":""
 					},
 					dataType:"json",
 					type:"post",
@@ -108,7 +108,7 @@
 						if (resp)
 						{
 							alert("修改成功！");
-							pageList(1,$("#deptDiv").bs_pagination('getOption', 'rowsPerPage'));
+							pageList(1,$("#userPage").bs_pagination('getOption', 'rowsPerPage'));
 							$("#editUserModal").modal("hide");
 						}
 						else
@@ -117,7 +117,7 @@
 						}
 					}
 				})
-			})
+			})*/
 			/*编辑按钮绑定事件*/
 			$("#editBtn").on("click",function () {
 				let $box = $("input[name=xz]:checked");
@@ -131,23 +131,7 @@
 				}
 				else
 				{
-					$.ajax({
-						url:"settings/user/getUserById.do",
-						data:{"id":$box.val()},
-						dataType:"json",
-						success:function (resp) {
-							$("#edit-id").val(resp.id);
-							$("#edit-loginActNo").val(resp.loginActNo);
-							$("#edit-username").val(resp.name);
-							$("#edit-loginPwd").val(resp.loginPwd);
-							$("#edit-email").val(resp.email);
-							$("#edit-expireTime").val(resp.expireTime);
-							$("#edit-lockStatus").val(resp.lockStatus);
-							$("#edit-dept").val(resp.dept);
-							$("#edit-allowIps").val(resp.allowIps);
-							$("#editUserModal").modal("show");
-						}
-					})
+					window.location.href="web/system/toUserDetail.do?id="+$box.val();
 				}
 			})
 			/*绑定删除事件*/
@@ -177,7 +161,8 @@
 							success:function (resp) {
 								if (resp)
 								{
-									pageList(1,$("#visitPage").bs_pagination('getOption', 'rowsPerPage'));
+									pageList(1,$("#userPage").bs_pagination('getOption', 'rowsPerPage'));
+									alert("删除成功！")
 								}
 								else
 								{
@@ -232,19 +217,19 @@
 					$.each(data.list,function (i,n) {
 						$("#userTBody").append(
 								'<tr>'+
-								'<td><input type="checkbox" name="xz" value="'+n.id+'"/></td>'+
-								'<td>'+i+'</td>'+
-								'<td><a style="text-decoration: none; cursor: pointer;" onclick="window.location.href=\'web/system/toVisitDetail.do?id='+n.id+'\';">'+n.loginAct+'</a></td>'+
-								'<td>'+n.name+'</td>'+
-								'<td>'+n.deptName+'</td>'+
-								'<td>'+n.email+'</td>'+
-								'<td>'+n.expireTime+'</td>'+
-								'<td>'+n.allowIps+'</td>'+
-								'<td>'+n.lockState+'</td>'+
-								'<td>'+n.createName+'</td>'+
-								'<td>'+n.createTime+'</td>'+
-								'<td>'+n.editName+'</td>'+
-								'<td>'+n.editTime+'</td>'+
+									'<td><input type="checkbox" name="xz" value="'+n.id+'"/></td>'+
+									'<td>'+i+'</td>'+
+									'<td><a style="text-decoration: none; cursor: pointer;" onclick="window.location.href=\'web/system/toUserDetail.do?id='+n.id+'\';">'+n.loginAct+'</a></td>'+
+									'<td>'+n.name+'</td>'+
+									'<td>'+n.deptName+'</td>'+
+									'<td>'+n.email+'</td>'+
+									'<td>'+n.expireTime+'</td>'+
+									'<td>'+n.allowIps+'</td>'+
+									'<td>'+n.lockState+'</td>'+
+									'<td>'+n.createName+'</td>'+
+									'<td>'+n.createTime+'</td>'+
+									'<td>'+(n.editName == null ? '无':n.editName)+'</td>'+
+									'<td>'+(n.editTime == null ? '----------------------------':n.editTime)+'</td>'+
 								'</tr>'
 
 						);
@@ -306,7 +291,7 @@
 				</div>
 				<div class="modal-body">
 				
-					<form class="form-horizontal" role="form">
+					<form class="form-horizontal" id="saveForm" role="form">
 					
 						<div class="form-group">
 							<label for="create-loginActNo" class="col-sm-2 control-label">登录帐号<span style="font-size: 15px; color: red;">*</span></label>
@@ -367,85 +352,6 @@
 				<div class="modal-footer">
 					<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
 					<button type="button" id="saveBtn" class="btn btn-primary" data-dismiss="modal">保存</button>
-				</div>
-			</div>
-		</div>
-	</div>
-
-	<%--编辑用户模态窗口--%>
-	<div class="modal fade" id="editUserModal" role="dialog">
-		<div class="modal-dialog" role="document" style="width: 80%;">
-			<div class="modal-content">
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal">
-						<span aria-hidden="true">×</span>
-					</button>
-					<h4 class="modal-title"><span class="glyphicon glyphicon-edit"></span> 编辑部门</h4>
-				</div>
-				<div class="modal-body">
-
-					<form class="form-horizontal" role="form">
-
-						<div class="form-group">
-							<label for="edit-loginActNo" class="col-sm-2 control-label">登录帐号<span style="font-size: 15px; color: red;">*</span></label>
-							<div class="col-sm-10" style="width: 300px;">
-								<input type="text" class="form-control" id="edit-loginActNo">
-								<input type="hidden" id="edit-id">
-							</div>
-							<label for="edit-username" class="col-sm-2 control-label">用户姓名</label>
-							<div class="col-sm-10" style="width: 300px;">
-								<input type="text" class="form-control" id="edit-username">
-							</div>
-						</div>
-						<div class="form-group">
-							<label for="edit-loginPwd" class="col-sm-2 control-label">登录密码<span style="font-size: 15px; color: red;">*</span></label>
-							<div class="col-sm-10" style="width: 300px;">
-								<input type="password" class="form-control" id="edit-loginPwd">
-							</div>
-							<label for="edit-confirmPwd" class="col-sm-2 control-label">确认密码<span style="font-size: 15px; color: red;">*</span></label>
-							<div class="col-sm-10" style="width: 300px;">
-								<input type="password" class="form-control" id="edit-confirmPwd">
-							</div>
-						</div>
-						<div class="form-group">
-							<label for="edit-email" class="col-sm-2 control-label">邮箱</label>
-							<div class="col-sm-10" style="width: 300px;">
-								<input type="text" class="form-control" id="edit-email">
-							</div>
-							<label for="edit-expireTime" class="col-sm-2 control-label">失效时间</label>
-							<div class="col-sm-10" style="width: 300px;">
-								<input type="text" class="form-control" id="edit-expireTime">
-							</div>
-						</div>
-						<div class="form-group">
-							<label for="edit-lockStatus" class="col-sm-2 control-label">锁定状态</label>
-							<div class="col-sm-10" style="width: 300px;">
-								<select class="form-control" id="edit-lockStatus">
-									<option></option>
-									<option>启用</option>
-									<option>锁定</option>
-								</select>
-							</div>
-							<label for="edit-dept" class="col-sm-2 control-label">部门<span style="font-size: 15px; color: red;">*</span></label>
-							<div class="col-sm-10" style="width: 300px;">
-								<select class="form-control" id="edit-dept">
-									<option></option>
-									<option>市场部</option>
-									<option>策划部</option>
-								</select>
-							</div>
-						</div>
-						<div class="form-group">
-							<label for="edit-allowIps" class="col-sm-2 control-label">允许访问的IP</label>
-							<div class="col-sm-10" style="width: 300px;">
-								<input type="text" class="form-control" id="edit-allowIps" style="width: 280%" placeholder="多个用逗号隔开">
-							</div>
-						</div>
-					</form>
-				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-					<button type="button" id="editUserBtn" class="btn btn-primary">更新</button>
 				</div>
 			</div>
 		</div>
@@ -513,8 +419,7 @@
 	<div class="btn-toolbar" role="toolbar" style="background-color: #F7F7F7; height: 50px; position: relative;left: 30px; width: 110%; top: 20px;">
 		<div class="btn-group" style="position: relative; top: 18%;">
 		  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#createUserModal"><span class="glyphicon glyphicon-plus"></span> 创建</button>
-		  <button type="button" class="btn btn-default" id="editBtn"><span class="glyphicon glyphicon-pencil"></span> 修改</button>
-		  <button type="button" class="btn btn-danger"><span class="glyphicon glyphicon-minus"></span> 删除</button>
+		  <button type="button" class="btn btn-danger" id="deleteBtn"><span class="glyphicon glyphicon-minus"></span> 删除</button>
 		</div>
 		
 	</div>

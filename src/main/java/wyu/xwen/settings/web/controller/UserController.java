@@ -8,10 +8,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import wyu.xwen.exception.LoginException;
 import wyu.xwen.exception.SelectUserListException;
+import wyu.xwen.settings.domain.Department;
 import wyu.xwen.settings.domain.User;
 import wyu.xwen.settings.service.DepartmentService;
 import wyu.xwen.settings.service.UserService;
 import wyu.xwen.utils.DateTimeUtil;
+import wyu.xwen.utils.MD5Util;
 import wyu.xwen.utils.UUIDUtil;
 import wyu.xwen.vo.UserVo;
 import wyu.xwen.workbench.domain.Visit;
@@ -122,17 +124,10 @@ public class UserController{
         }
         if (userVo.getDeptName() != null)
         {
-            userVo.setDeptno(departmentService.getDeptIdByName(userVo.getDeptName()));
+            String id = departmentService.getDeptIdByName(userVo.getDeptName());
+            userVo.setDeptno(id);
         }
         return userService.addUser(userVo);
-    }
-
-    /*获取用户*/
-    @RequestMapping("/getUserById.do")
-    @ResponseBody
-    public User getUserById(String id)
-    {
-        return userService.getUserById(id);
     }
 
     /*编辑用户*/
@@ -141,9 +136,10 @@ public class UserController{
     public Boolean updateUser(User user)
     {
         user.setEditTime(DateTimeUtil.getSysTime());
-        if (user.getDeptno() != null)
+        if (user.getDeptName() != null)
         {
-            user.setDeptno(departmentService.getDeptIdByName(user.getDeptno()));
+            String id = departmentService.getDeptIdByName(user.getDeptName());
+            user.setDeptno(id);
         }
         if ("锁定".equals(user.getLockState()))
         {
@@ -152,6 +148,10 @@ public class UserController{
         else
         {
             user.setLockState("1");
+        }
+        if (user.getLoginPwd().length() <= 16)
+        {
+            user.setLoginPwd(MD5Util.getMD5(user.getLoginPwd()));
         }
         return userService.updateUser(user);
     }

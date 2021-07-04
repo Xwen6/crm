@@ -80,10 +80,12 @@
     </insert>
     <select id="getUserById" resultType="User">
         select u1.id, u1.loginAct, u1.name, u1.loginPwd, u1.email, u1.expireTime, u1.lockState, u1.deptno, u1.allowIps,
-               u1.createTime, u2.name as createBy, u1.editTime, u1.editBy
+               u1.createTime, u2.name as createBy, u1.editTime, u1.editBy,dept.name as deptName
         from tbl_user u1
         join tbl_user u2
-        on u1.createBy=u2.id;
+            join tbl_dept dept
+        on u1.createBy=u2.id and u1.deptno=dept.id
+        where u1.id=#{id};
     </select>
     <update id="updateUser">
         update tbl_user

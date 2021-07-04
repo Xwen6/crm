@@ -242,6 +242,15 @@ public class systemController {
         return modelAndView;
     }
 
-
-
+    /*跳转到角色详情页*/
+    @RequestMapping("toUserDetail.do")
+    @ResponseBody
+    public ModelAndView toUserDetail(String id)
+    {
+        User user = userService.getUserById(id);
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.addObject("userDetail",user);
+        modelAndView.setViewName("settings/qx/user/detail");
+        return modelAndView;
+    }
 }

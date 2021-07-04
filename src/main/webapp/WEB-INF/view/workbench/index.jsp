@@ -216,6 +216,9 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 				<li class="liClass"><a href="web/system/toContacts.do" target="workareaFrame"><span class="glyphicon glyphicon-earphone"></span> 联系人</a></li>
 				<li class="liClass"><a href="web/system/toTransaction.do" target="workareaFrame"><span class="glyphicon glyphicon-usd"></span> 交易（商机）</a></li>
 				<li class="liClass"><a href="web/system/toVisit.do" target="workareaFrame"><span class="glyphicon glyphicon-phone-alt"></span> 售后回访</a></li>
+				<li class="liClass"><a href="web/system/toDIcTypeIndex.do" target="workareaFrame"><span class="glyphicon glyphicon-book"></span> 字典类型</a></li>
+				<li class="liClass"><a href="web/system/toDicValueIndex.do" target="workareaFrame"><span class="glyphicon glyphicon-list"></span> 字典值</a></li>
+				<li class="liClass"><a href="web/system/toUserIndex.do" target="workareaFrame"><span class="glyphicon glyphicon-user"></span> 用户维护</a></li>
 				<li class="liClass">
 					<a href="#no2" class="collapsed" data-toggle="collapse"><span class="glyphicon glyphicon-stats"></span> 统计图表</a>
 					<ul id="no2" class="nav nav-pills nav-stacked collapse">

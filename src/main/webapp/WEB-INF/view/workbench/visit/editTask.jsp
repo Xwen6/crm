@@ -26,6 +26,15 @@
 					$("#reminderTimeDiv").hide("200");
 				}
 			});
+			/*绑定回车键查找联系人*/
+			$("#queryContactsByName").keydown(function (event) {
+				if (event.keyCode == 13)
+				{
+					showContacts();
+					return false;
+				}
+			})
+
 			$("#submitContacts").on("click",function () {
 				$("#hiddenContactsId").val($("input[name=contacts]:checked").val());
 				let $contactsId = $("#hiddenContactsId").val()
@@ -42,7 +51,7 @@
 		function showContacts() {
 			$("#contactsTBody").empty();
 			$.ajax({
-				url:"workbench/contacts/getContactsList.do",
+				url:"workbench/contacts/getContactsListByName.do",
 				data:{"name":$.trim($("#queryContactsByName").val())},
 				dataType:"json",
 				type:"get",
