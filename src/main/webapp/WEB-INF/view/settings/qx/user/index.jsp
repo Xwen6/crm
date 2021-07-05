@@ -37,42 +37,103 @@
 			checkFlag();
 			pageList(1,2);
 			$("#saveBtn").on("click",function () {
+				let regExp = /^[A-Za-z0-9]+$/;      //用户名的正则表达式
+				let emailReg = /^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/; //邮箱的正则表达式
 				let loginActNo = $.trim($("#create-loginActNo").val());
 				let username = $.trim($("#create-username").val());
 				let loginPwd = $.trim($("#create-loginPwd").val());
+				let confirmPwd = $.trim($("#create-confirmPwd").val());
 				let email = $.trim($("#create-email").val());
 				let expireTime = $.trim($("#create-expireTime").val());
 				let lockStatus = $.trim($("#create-lockStatus").val());
 				let dept = $.trim($("#create-dept").val());
 				let allowIps = $.trim($("#create-allowIps").val());
-				$.ajax({
-					url:"settings/user/addUser.do",
-					data:{
-						"loginAct":loginActNo,
-						"name":username,
-						"loginPwd":loginPwd,
-						"email":email,
-						"expireTime":expireTime,
-						"lockStatus":lockStatus,
-						"deptName":dept,
-						"allowIps":allowIps,
-						"createBy":"${user.id}"
-					},
-					dataType:"json",
-					type:"post",
-					success:function (resp) {
-						if (resp)
+				if (loginActNo === "")
+				{
+					alert("用户名不能为空！")
+					return false;
+				}
+				else
+				{
+					if (loginActNo.length <6 || loginActNo > 14)
+					{
+						alert("用户名长度不合法")
+						return false;
+					}
+					else
+					{
+						if (regExp.test(loginActNo))
 						{
-							alert("保存成功！")
-							$("#createUserModal").modal("hide")
-							pageList(1,$("#userPage").bs_pagination('getOption', 'rowsPerPage'));
+							if (loginPwd === "" || confirmPwd === "")
+							{
+								alert("密码不能为空！")
+								return false;
+							}
+							else
+							{
+								if (loginPwd === confirmPwd)
+								{
+									if (emailReg.test(email))
+									{
+										if (dept === "")
+										{
+											alert("部门不能为空！")
+											return false;
+										}
+										else
+										{
+											$.ajax({
+												url: "settings/user/addUser.do",
+												data: {
+													"loginAct": loginActNo,
+													"name": username,
+													"loginPwd": loginPwd,
+													"email": email,
+													"expireTime": expireTime,
+													"lockStatus": lockStatus,
+													"deptName": dept,
+													"allowIps": allowIps,
+													"createBy": "${user.id}"
+												},
+												dataType: "json",
+												type: "post",
+												success: function (resp) {
+													if (resp)
+													{
+														alert("保存成功！")
+														$("#createUserModal").modal("hide")
+														pageList(1, $("#userPage").bs_pagination('getOption', 'rowsPerPage'));
+													}
+													else
+													{
+														alert("保存失败！")
+														return false;
+													}
+												}
+											})
+										}
+									}
+									else
+									{
+										alert("邮箱不合法！");
+										return false;
+									}
+								}
+								else
+								{
+									alert("密码和确认密码不一致！")
+									return false;
+								}
+							}
 						}
 						else
 						{
-							alert("保存失败！")
+							alert("用户名含有特殊符号！");
+							return false;
 						}
 					}
-				})
+				}
+
 			})
 			/*添加模态窗口关闭清空内容*/
 			$("#createUserModal").on("hide.bs.modal",function () {

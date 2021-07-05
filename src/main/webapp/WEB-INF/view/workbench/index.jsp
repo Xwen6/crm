@@ -46,18 +46,21 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 			if (oldPwd === '')
 			{
 				alert("原密码不能为空！")
+				return false;
 			}
 			else
 			{
 				if (newPwd === '' || confirmPwd === '')
 				{
 					alert("新密码或确认密码不能为空！")
+					return false;
 				}
 				else
 				{
 					if (newPwd !== confirmPwd)
 					{
 						alert("新密码与确认密码不一致!")
+						return false;
 					}
 					else
 					{
@@ -75,6 +78,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 								else
 								{
 									alert(resp.message)
+									return false;
 								}
 							}
 						})
