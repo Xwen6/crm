@@ -17,6 +17,7 @@
 
     <!-- sql mapper(sql映射文件)的位置-->
     <mappers>
+
         <mapper resource="mapper/settings/UserDao.xml"/>
         <mapper resource="mapper/workbench/ActivityDao.xml"/>
         <mapper resource="mapper/workbench/ContactsDao.xml"/>
@@ -35,7 +36,5 @@
         <mapper resource="mapper/workbench/ClueActivityRelationDao.xml"/>
         <mapper resource="mapper/workbench/VisitRemarkDao.xml"/>
         <mapper resource="mapper/workbench/TranRemarkDao.xml"/>
-
-
     </mappers>
 </configuration>

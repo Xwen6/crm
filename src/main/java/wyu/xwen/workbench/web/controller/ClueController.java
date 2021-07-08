@@ -225,9 +225,14 @@ public class ClueController {
         System.out.println(clueId);
         clueService.convert(clueId,tran,createBy);
         return "workbench/clue/index";
+    }
 
-
-
+    /*workbench/clue/chart.do*/
+    @RequestMapping("chart.do")
+    @ResponseBody
+    public Object chart(){
+        Map<String,Object> resMap = clueService.getChartDate();
+        return resMap;
     }
 
 

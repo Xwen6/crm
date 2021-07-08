@@ -1,12 +1,13 @@
 package wyu.xwen.workbench.dao;
 
+import org.apache.ibatis.annotations.Param;
 import wyu.xwen.workbench.domain.Customer;
 
 import java.util.List;
 import java.util.Map;
 
 public interface CustomerDao {
-    Customer getCustomerByName(String company);
+    Customer getCustomerByName(@Param("name") String company);
 
     int saveCustomer(Customer customer1);
 

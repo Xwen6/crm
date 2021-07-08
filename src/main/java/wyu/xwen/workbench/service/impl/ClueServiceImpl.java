@@ -10,12 +10,14 @@ import wyu.xwen.exception.CLueConvertException;
 import wyu.xwen.exception.ClueDeleteException;
 import wyu.xwen.utils.DateTimeUtil;
 import wyu.xwen.utils.UUIDUtil;
+import wyu.xwen.vo.ChartVO2;
 import wyu.xwen.vo.PageVo;
 import wyu.xwen.workbench.dao.*;
 
 import wyu.xwen.workbench.domain.*;
 import wyu.xwen.workbench.service.ClueService;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -344,5 +346,15 @@ public class ClueServiceImpl implements ClueService {
 
 
         return true;
+    }
+
+    @Override
+    public Map<String, Object> getChartDate() {
+        List<String> typeList = clueDao.getChartType();
+        List<ChartVO2> dataList = clueDao.getChartDate();
+        Map<String,Object> resMap = new HashMap<>();
+        resMap.put("typeList",typeList);
+        resMap.put("dataList1",dataList);
+        return resMap;
     }
 }

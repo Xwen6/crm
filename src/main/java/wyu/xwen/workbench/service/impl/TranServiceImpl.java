@@ -9,15 +9,16 @@ import wyu.xwen.settings.dao.UserDao;
 import wyu.xwen.settings.domain.User;
 import wyu.xwen.utils.DateTimeUtil;
 import wyu.xwen.utils.UUIDUtil;
+import wyu.xwen.vo.ChartVO2;
+import wyu.xwen.vo.ChartVo;
 import wyu.xwen.vo.PageVo;
 import wyu.xwen.workbench.dao.*;
-import wyu.xwen.workbench.domain.Contacts;
-import wyu.xwen.workbench.domain.Customer;
-import wyu.xwen.workbench.domain.Tran;
-import wyu.xwen.workbench.domain.TranHistory;
+import wyu.xwen.workbench.domain.*;
 import wyu.xwen.workbench.service.TranService;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class TranServiceImpl implements TranService {
@@ -68,7 +69,7 @@ public class TranServiceImpl implements TranService {
     public boolean saveTran(Tran tran) {
         int count1 = 0;
         int count2 = 0;
-       Customer customer1 =  customerDao.getCustomerByName(tran.getContactsName());
+       Customer customer1 =  customerDao.getCustomerByName(tran.getCustomerName());
         if (customer1==null){
             Customer customer = new Customer();
             customer.setId(UUIDUtil.getUUID());
@@ -82,9 +83,8 @@ public class TranServiceImpl implements TranService {
         }
 
         tran.setCustomerId(customer1.getId());
-        if (count1>0){
+
            count2 =  tranDao.saveTran(tran);
-        }
         /*创建交易的同时，创建交易历史*/
         TranHistory tranHistory = new TranHistory();
         tranHistory.setId(UUIDUtil.getUUID());
@@ -95,7 +95,7 @@ public class TranServiceImpl implements TranService {
         tranHistory.setCreateBy(tran.getCreateBy());
         tranHistory.setStage(tran.getStage());
         int count3 = tranHistoryDao.saveTranHistory(tranHistory);
-        return count1>0&&count2>0&count3>0;
+        return count1>=0&&count2>0&count3>0;
     }
     /*删除交易*/
 
@@ -134,7 +134,7 @@ public class TranServiceImpl implements TranService {
     }
 
     @Override
-    public boolean updateTran(Tran tran) {
+    public Tran updateTran(Tran tran) {
         int count1 = 0;
         int count2 = 0;
         Customer customer1 =  customerDao.getCustomerByName(tran.getContactsName());
@@ -145,15 +145,32 @@ public class TranServiceImpl implements TranService {
             customer.setCreateBy(tran.getCreateBy());
             customer.setOwner(tran.getOwner());
             customer.setName(tran.getCustomerName());
-            tran.setCustomerId(customer.getId());
             count1 =  customerDao.saveCustomer(customer);
             customer1 = customer;
         }
         tran.setCustomerId(customer1.getId());
         if (count1>0){
+            /*更新之前查看阶段有没有改变*/
+            String stage  = tranDao.getStageById(tran.getId());
+            /*如果阶段不相等*/
+            if (!(stage.equals(tran.getStage()))){
+                /*创建交易的同时，创建交易历史*/
+                TranHistory tranHistory = new TranHistory();
+                tranHistory.setId(UUIDUtil.getUUID());
+                tranHistory.setTranId(tran.getId());
+                tranHistory.setCreateTime(DateTimeUtil.getSysTime());
+                tranHistory.setMoney(tran.getMoney());
+                tranHistory.setExpectedDate(tran.getExpectedDate());
+                tranHistory.setCreateBy(tran.getCreateBy());
+                tranHistory.setStage(tran.getStage());
+                tranHistoryDao.saveTranHistory(tranHistory);
+            }
             count2 =  tranDao.updateTran(tran);
         }
-        return count1>0&&count2>0;
+
+          return tranDao.getTranById2(tran.getId());
+
+
     }
 
     @Override
@@ -178,5 +195,57 @@ public class TranServiceImpl implements TranService {
         int count3 = tranHistoryDao.saveTranHistory(tranHistory);
         return count>0&&count3>0;
 
+    }
+
+    @Override
+    public List<TranHistory> getTranHistory(String id) {
+
+      return tranHistoryDao.getTranHistoryByTranId(id);
+    }
+
+    @Override
+    public List<TranRemark> getTranRemarks(String tranId) {
+        return tranRemarkDao.getRemarkList(tranId);
+    }
+
+    @Override
+    public boolean updateRemark(TranRemark remark) {
+        int count = tranRemarkDao.updateRemark(remark);
+        return count>0;
+    }
+
+    @Override
+    public boolean deleteRemark(String id) {
+        int count = tranRemarkDao.deleteRemark(id);
+        return count>0;
+    }
+
+    @Override
+    public boolean saveRemark(TranRemark remark) {
+
+        int count = tranRemarkDao.saveRemark(remark);
+        return count>0;
+    }
+
+    /*获取图表数据*/
+
+    @Override
+    public List<ChartVo> getCharData() {
+       return tranDao.getDate();
+    }
+
+    @Override
+    public List<ChartVO2> getCharData2() {
+      return   tranDao.getChartDate2();
+    }
+
+    @Override
+    public List<ChartVo> getCharData3() {
+        return tranDao.getChartDate3();
+    }
+
+    @Override
+    public List<ChartVO2> getCharData4() {
+        return tranDao.getChartDate4();
     }
 }

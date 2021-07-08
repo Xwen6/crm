@@ -168,7 +168,7 @@
                act.name as activityName,
                tran.id,tran.name,tran.stage,tran.type,tran.source,tran.stage,tran.editTime,tran.editBy,
                tran.createBy,tran.createTime,tran.description,tran.nextContactTime,tran.contactSummary,
-               tran.expectedDate
+               tran.expectedDate,tran.money
 
         from tbl_tran tran
                  join tbl_user user
@@ -178,6 +178,7 @@
                  join tbl_contacts contacts
                       on tran.contactsId = contacts.id
                 join tbl_activity act on tran.activityId = act.id
+        where tran.id = #{id}
     </select>
 
     <update id="changeStage">
@@ -185,6 +186,44 @@
         set stage = #{stage},editBy = #{editBy},editTime = #{editTime}
         where id = #{id}
     </update>
+
+    <select id="getStageById" resultType="String">
+        select stage from tbl_tran where id = #{id}
+    </select>
+
+    <select id="getDate" resultType="wyu.xwen.vo.ChartVo">
+        select DATE_FORMAT(mycreatedate,'%m-%d') as countKey,ifnull(COUNT(pv.createTime), 0) as countValue from (
+             SELECT curdate() as mycreatedate
+             union all
+             SELECT date_sub(curdate(), interval 1 day) as mycreatedate
+             union all
+             SELECT date_sub(curdate(), interval 2 day) as mycreatedate
+             union all
+             SELECT date_sub(curdate(), interval 3 day) as mycreatedate
+             union all
+             SELECT date_sub(curdate(), interval 4 day) as mycreatedate
+             union all
+             SELECT date_sub(curdate(), interval 5 day) as mycreatedate
+             union all
+             SELECT date_sub(curdate(), interval 6 day) as mycreatedate
+      ) as total
+          LEFT JOIN tbl_tran pv on DATE_FORMAT(pv.createTime,'%Y-%m-%d')=total.mycreatedate GROUP BY mycreatedate
+          ORDER BY countKey
+    </select>
+
+    <select id="getChartDate2" resultType="wyu.xwen.vo.ChartVO2">
+        select stage as name,count(*) as value from tbl_tran  group by stage
+    </select>
+
+    <select id="getChartDate3" resultType="wyu.xwen.vo.ChartVo">
+        select source as countKey,count(*) as countValue from tbl_tran group by source
+    </select>
+
+    <select id="getChartDate4" resultType="wyu.xwen.vo.ChartVO2">
+        select type as name,count(*) as value from tbl_tran  group by type
+    </select>
+
+
 
 
 </mapper>

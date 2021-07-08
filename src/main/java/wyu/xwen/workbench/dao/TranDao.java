@@ -1,8 +1,12 @@
 package wyu.xwen.workbench.dao;
 
+import wyu.xwen.vo.ChartVO2;
+import wyu.xwen.vo.ChartVo;
 import wyu.xwen.workbench.domain.Tran;
+import wyu.xwen.workbench.domain.TranHistory;
 
 import java.util.List;
+import java.util.Map;
 
 public interface TranDao {
     int saveTran(Tran tran);
@@ -28,4 +32,16 @@ public interface TranDao {
     Tran getTranById2(String id);
 
     int changeStage(Tran tran);
+
+
+    String getStageById(String id);
+
+    List<ChartVo> getDate();
+
+
+   List<ChartVO2> getChartDate2();
+
+    List<ChartVo> getChartDate3();
+
+    List<ChartVO2> getChartDate4();
 }

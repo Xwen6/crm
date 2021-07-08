@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import wyu.xwen.exception.ActivityDeleteException;
 import wyu.xwen.settings.dao.UserDao;
 import wyu.xwen.settings.domain.User;
+import wyu.xwen.vo.ChartVO2;
 import wyu.xwen.vo.PageVo;
 import wyu.xwen.workbench.dao.ActivityDao;
 import wyu.xwen.workbench.dao.ActivityRemarkDao;
@@ -152,5 +153,10 @@ public class ActivityServiceImpl implements ActivityService {
             }return false;
         }
         return false;
+    }
+
+    @Override
+    public List<ChartVO2> chart() {
+        return activityDao.getChartDate();
     }
 }

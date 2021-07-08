@@ -13,81 +13,131 @@
 <head>
     <base href="<%=basePath%>">
     <title>mytitle</title>
-    <script src="ECharts/echarts.min.js"></script>
-    <script src="jquery/jquery-1.11.1-min.js"></script>
+    <style type="text/css">
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        .main{
+            width: 100%;
+            height: 100%;
+            position: absolute;
+
+        }
+        .quarter-div{
+            width: 50%;
+            height: 50%;
+            float: left;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+
+        }
+
+        .content {
+            width: 95%;
+            height: 90%;
+            margin: 0 auto;
+            background:#fafcfd;
+
+
+        }
+    </style>
+
+    <script src="static/jquery/jquery-1.11.1-min.js"></script>
+    <script src="static/ECharts/echarts.min.js"></script>
+
+</head>
+<body>
+    <div class="main">
+        <div class="quarter-div blue">
+            <div id="main1" class="content"></div>
+        </div>
+
+        <div class="quarter-div green">
+            <div id="main2" class="content">	 </div>
+        </div>
+
+        <div class="quarter-div orange">
+            <div id="main3" class="content" >	 </div>
+        </div>
+
+        <div class="quarter-div yellow">
+            <div id="main4" class="content" >	 </div>
+        </div>
+    </div>
 
     <script type="text/javascript">
-        $(function (){
 
-         getChars();
-
-        })
-        function getChars(){
-            /*后台获取数据*/
+        $(function () {
             $.ajax({
-                url : "workbench/transaction/getChars.do",
+                url : "workbench/transaction/chart1.do",
                 dataType : "json",
                 type : "get",
-                success : function (data) {
-                    // 基于准备好的dom，初始化echarts实例
-                    var myChart = echarts.init(document.getElementById('main'));
+                success : function (result) {
 
+                    // 基于准备好的dom，初始化echarts实例
+                    var myChart = echarts.init(document.getElementById('main1'));
                     // 指定图表的配置项和数据
                     var option = {
                         title: {
-                            text: '交易漏斗图',
-                            subtext: '统计交易阶段数量的漏斗图'
+                            text: '近七日新增交易'
                         },
-
+                        tooltip: {},
                         legend: {
-                            data: ['展现','点击','访问','咨询','订单']
+                            data:['交易']
                         },
+                        xAxis: {
+                            data: result.countKey
+                        },
+                        yAxis: {},
+                        series: [{
+                            name: '交易',
+                            type: 'bar',
+                            data: result.countValue
+                        }]
+                    };
+                    // 使用刚指定的配置项和数据显示图表。
+                    myChart.setOption(option);
+                }
+            })
 
+            $.ajax({
+                url: "workbench/transaction/chart2.do",
+                dataType : "json",
+                type : "get",
+                success : function (result) {
+                    var myChart = echarts.init(document.getElementById('main2'));
+                    option = {
+                        tooltip: {
+                            trigger: 'item'
+                        },
+                        legend: {
+                            top: '5%',
+                            left: 'center'
+                        },
                         series: [
                             {
-                                name:'漏斗图',
-                                type:'funnel',
-                                left: '10%',
-                                top: 60,
-                                //x2: 80,
-                                bottom: 60,
-                                width: '80%',
-                                // height: {totalHeight} - y - y2,
-                                min: 0,
-                                max: data.total,
-                                minSize: '0%',
-                                maxSize: '100%',
-                                sort: 'descending',
-                                gap: 2,
+                                name: '访问来源',
+                                type: 'pie',
+                                radius: ['40%', '80%'],
+                                avoidLabelOverlap: false,
                                 label: {
-                                    show: true,
-                                    position: 'inside'
-                                },
-                                labelLine: {
-                                    length: 10,
-                                    lineStyle: {
-                                        width: 1,
-                                        type: 'solid'
-                                    }
-                                },
-                                itemStyle: {
-                                    borderColor: '#fff',
-                                    borderWidth: 1
+                                    show: false,
+                                    position: 'center'
                                 },
                                 emphasis: {
                                     label: {
-                                        fontSize: 20
+                                        show: true,
+                                        fontSize: '40',
+                                        fontWeight: 'bold'
                                     }
                                 },
-                                data: data.dataList
-
-                                /*[
-                                    {value: 60, name: '访问'},
-                                    {value: 40, name: '咨询'},
-                                    {value: 20, name: '订单'},
-                                    {value: 80, name: '点击'},
-                                    {value: 100, name: '展现'}
-                                ]*/
+                                labelLine: {
+                                    show: false
+                                },
+                                data: result
                             }
                         ]
                     };
@@ -96,11 +146,71 @@
                 }
             })
 
-        }
+            $.ajax({
+                url : "workbench/transaction/chart3.do",
+                dataType : "json",
+                type : "get",
+                success : function (result) {
+                    // 基于准备好的dom，初始化echarts实例
+                    var myChart = echarts.init(document.getElementById('main3'));
+                    option = {
+                        xAxis: {
+                            type: 'category',
+                            data: result.countKey
+                        },
+                        yAxis: {
+                            type: 'value'
+                        },
+                        series: [{
+                            data: result.countValue,
+                            type: 'line',
+                            smooth: true
+                        }]
+                    };
+                    // 使用刚指定的配置项和数据显示图表。
+                    myChart.setOption(option);
+                }
+            })
+            $.ajax({
+                url : "workbench/transaction/chart4.do",
+                dataType : "json",
+                type : "get",
+                success : function (result) {
+                    var myChart = echarts.init(document.getElementById('main4'));
+                    option = {
+                        title: {
+                            text: '每种类型的交易',
+                            left: 'center'
+                        },
+                        tooltip: {
+                            trigger: 'item'
+                        },
+                        legend: {
+                            orient: 'vertical',
+                            left: 'left',
+                        },
+                        series: [
+                            {
+                                name: '访问来源',
+                                type: 'pie',
+                                radius: '50%',
+                                data:result,
+                                emphasis: {
+                                    itemStyle: {
+                                        shadowBlur: 10,
+                                        shadowOffsetX: 0,
+                                        shadowColor: 'rgba(0, 0, 0, 0.5)'
+                                    }
+                                }
+                            }
+                        ]
+                    };
+                    // 使用刚指定的配置项和数据显示图表。
+                    myChart.setOption(option);
+                }
+            })
+        })
+
     </script>
-</head>
-<body>
-    <!-- 为 ECharts 准备一个具备大小（宽高）的 DOM -->
-    <div id="main" style="width: 600px;height:400px;"></div>
 </body>
 </html>

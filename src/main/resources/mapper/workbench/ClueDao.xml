@@ -154,7 +154,13 @@
     <select id="getClueById2" resultType="Clue">
         select * from tbl_clue where id = #{clueId}
     </select>
+    <select id="getChartType" resultType="String">
+        select source from tbl_clue
+    </select>
 
+    <select id="getChartDate" resultType="wyu.xwen.vo.ChartVO2">
+        select source as name,count(*) as value from tbl_clue group by  source
+    </select>
 
 
 
