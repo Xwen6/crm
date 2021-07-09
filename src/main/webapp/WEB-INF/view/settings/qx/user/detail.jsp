@@ -10,10 +10,13 @@
 	<meta charset="UTF-8">
 	<link href="static/jquery/bootstrap_3.3.0/css/bootstrap.min.css" type="text/css" rel="stylesheet" />
 	<link href="static/jquery/zTree_v3-master/css/zTreeStyle/zTreeStyle.css" type="text/css" rel="stylesheet" />
+	<link href="static/jquery/bootstrap-datetimepicker-master/css/bootstrap-datetimepicker.min.css" type="text/css" rel="stylesheet" />
 
 	<script type="text/javascript" src="static/jquery/jquery-1.11.1-min.js"></script>
 	<script type="text/javascript" src="static/jquery/bootstrap_3.3.0/js/bootstrap.min.js"></script>
 	<script type="text/javascript" src="static/jquery/zTree_v3-master/js/jquery.ztree.all.min.js"></script>
+	<script type="text/javascript" src="static/jquery/bootstrap-datetimepicker-master/js/bootstrap-datetimepicker.js"></script>
+	<script type="text/javascript" src="static/jquery/bootstrap-datetimepicker-master/locale/bootstrap-datetimepicker.zh-CN.js"></script>
 
 
 	<script type="text/javascript">
@@ -30,8 +33,112 @@
 			$.fn.zTree.init($("#treeDemo"), setting, zNodes);
 		});*/
 		$(function () {
+			$(".time").datetimepicker({
+				minView: "month",
+				language:  'zh-CN',
+				format: 'yyyy-mm-dd',
+				autoclose: true,
+				todayBtn: true,
+				pickerPosition: "bottom-left"
+			});
 			$("#updateBtn").on("click",function () {
-				let pwd = $.trim($("#edit-loginPwd").val());
+				let regExp = /^[A-Za-z0-9]+$/;      //用户名的正则表达式
+				let emailReg = /^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/; //邮箱的正则表达式
+				let loginActNo = $.trim($("#edit-loginActNo").val());
+				let username = $.trim($("#edit-username").val());
+				let loginPwd = $.trim($("#edit-loginPwd").val());
+				let confirmPwd = $.trim($("#edit-confirmPwd").val());
+				let email = $.trim($("#edit-email").val());
+				let expireTime = $.trim($("#edit-expireTime").val());
+				let lockStatus = $.trim($("#edit-lockStatus").val());
+				let dept = $.trim($("#edit-dept").val());
+				let allowIps = $.trim($("#edit-allowIps").val());
+				if (loginActNo === "")
+				{
+					alert("用户名不能为空！")
+					return false;
+				}
+				else
+				{
+					if (loginActNo.length <1 || loginActNo > 14)
+					{
+						alert("用户名长度不合法")
+						return false;
+					}
+					else
+					{
+						if (regExp.test(loginActNo))
+						{
+							if (loginPwd === "" || confirmPwd === "")
+							{
+								alert("密码不能为空！")
+								return false;
+							}
+							else
+							{
+								if (loginPwd === confirmPwd)
+								{
+									if (emailReg.test(email))
+									{
+										if (dept === "")
+										{
+											alert("部门不能为空！")
+											return false;
+										}
+										else
+										{
+											$.ajax({
+												url: "settings/user/updateUser.do",
+												data: {
+													"id":$.trim($("#edit-id").val()),
+													"loginAct": loginActNo,
+													"name": username,
+													"loginPwd": loginPwd,
+													"email": email,
+													"expireTime": expireTime,
+													"lockStatus": lockStatus,
+													"deptName": dept,
+													"allowIps": allowIps,
+													"createBy": "${user.id}"
+												},
+												dataType: "json",
+												type: "post",
+												success: function (resp) {
+													if (resp)
+													{
+														alert("保存成功！")
+														window.location.href="web/system/toUserIndex.do";
+													}
+													else
+													{
+														alert("保存失败！")
+														return false;
+													}
+												}
+											})
+										}
+									}
+									else
+									{
+										alert("邮箱不合法！");
+										return false;
+									}
+								}
+								else
+								{
+									alert("密码和确认密码不一致！")
+									return false;
+								}
+							}
+						}
+						else
+						{
+							alert("用户名含有特殊符号！");
+							return false;
+						}
+					}
+				}
+				/*let pwd = $.trim($("#edit-loginPwd").val());
 				let com = $.trim($("#edit-confirmPwd").val());
 				if (pwd === com)
 				{
@@ -69,7 +176,7 @@
 				{
 					alert("密码和确认密码不一致！")
 					return false;
-				}
+				}*/
 
 			})
 		})
@@ -196,7 +303,7 @@
 							</div>
 							<label for="edit-expireTime" class="col-sm-2 control-label">失效时间</label>
 							<div class="col-sm-10" style="width: 300px;">
-								<input type="text" class="form-control" id="edit-expireTime" value="${userDetail.expireTime}">
+								<input type="text" class="form-control time" id="edit-expireTime" value="${userDetail.expireTime}">
 							</div>
 						</div>
 						<div class="form-group">

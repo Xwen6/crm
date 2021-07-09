@@ -1,4 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%
 	String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath() + "/";
 	Object o = request.getAttribute("flag");
@@ -136,9 +137,9 @@
 
 			})
 			/*添加模态窗口关闭清空内容*/
-			$("#createUserModal").on("hide.bs.modal",function () {
+			/*$("#createUserModal").on("hide.bs.modal",function () {
 				$("#saveForm")[0].reset();
-			})
+			})*/
 
 			/*全选复选框按钮设置*/
 			$("#qx").on("click",function () {
@@ -249,6 +250,12 @@
 				$("#hide-endTime").val($.trim($("#search-endTime").val()));
 				pageList(1,2);
 			})
+			$("#cancelBtn").on("click",function () {
+				$("#saveForm")[0].reset();
+			})
+			$("#closeBtn").on("click",function () {
+				$("#saveForm")[0].reset();
+			})
 		})
 		/*查询用户*/
 		function pageList(pageNo,pageSize){
@@ -345,7 +352,7 @@
 		<div class="modal-dialog" role="document" style="width: 90%;">
 			<div class="modal-content">
 				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal">
+					<button type="button" id="closeBtn" class="close" data-dismiss="modal">
 						<span aria-hidden="true">×</span>
 					</button>
 					<h4 class="modal-title" id="myModalLabel">新增用户</h4>
@@ -381,7 +388,7 @@
 							</div>
 							<label for="create-expireTime" class="col-sm-2 control-label">失效时间</label>
 							<div class="col-sm-10" style="width: 300px;">
-								<input type="text" class="form-control" id="create-expireTime">
+								<input type="text" class="form-control time" id="create-expireTime">
 							</div>
 						</div>
 						<div class="form-group">
@@ -411,7 +418,7 @@
 					</form>
 				</div>
 				<div class="modal-footer">
-					<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+					<button type="button" id="cancelBtn" class="btn btn-default" data-dismiss="modal">关闭</button>
 					<button type="button" id="saveBtn" class="btn btn-primary" data-dismiss="modal">保存</button>
 				</div>
 			</div>
@@ -449,8 +456,9 @@
 		      <div class="input-group-addon">锁定状态</div>
 			  <select class="form-control" id="search-lockState">
 			  	  <option></option>
-			      <option>锁定</option>
-				  <option>启用</option>
+				  <c:forEach items="${applicationScope.lockStatus}" var="l">
+					  <option value="${l.value}">${l.text}</option>
+				  </c:forEach>
 			  </select>
 		    </div>
 		  </div>

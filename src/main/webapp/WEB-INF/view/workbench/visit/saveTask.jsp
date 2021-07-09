@@ -181,7 +181,7 @@
 			</div>
 			<label for="create-contacts" class="col-sm-2 control-label">联系人&nbsp;&nbsp;<a href="javascript:void(0);" onclick="showContacts()" id="showContacts"><span class="glyphicon glyphicon-search"></span></a></label>
 			<div class="col-sm-10" style="width: 300px;">
-				<input type="text" class="form-control" id="create-contacts">
+				<input type="text" class="form-control" id="create-contacts" readonly>
 				<input type="hidden" name="contactsId" id="hiddenContactsId">
 			</div>
 		</div>

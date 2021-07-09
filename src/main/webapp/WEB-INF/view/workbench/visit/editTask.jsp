@@ -14,11 +14,20 @@
 
 	<script type="text/javascript" src="static/jquery/jquery-1.11.1-min.js"></script>
 	<script type="text/javascript" src="static/jquery/bootstrap_3.3.0/js/bootstrap.min.js"></script>
-	<script type="text/javascript" src="static/jquery/bootstrap-datetimepicker-master/js/bootstrap-datetimepicker.min.js"></script>
+	<script type="text/javascript" src="static/jquery/bootstrap-datetimepicker-master/js/bootstrap-datetimepicker.js"></script>
 	<script type="text/javascript" src="static/jquery/bootstrap-datetimepicker-master/locale/bootstrap-datetimepicker.zh-CN.js"></script>
 
 	<script type="text/javascript">
 		$(function(){
+			/*日历插件*/
+			$(".time").datetimepicker({
+				minView: "month",
+				language:  'zh-CN',
+				format: 'yyyy-mm-dd',
+				autoclose: true,
+				todayBtn: true,
+				pickerPosition: "button-left"
+			});
 			$("#reminderTime").click(function(){
 				if(this.checked){
 					$("#reminderTimeDiv").show("200");
@@ -45,6 +54,12 @@
 				window.history.go(-1);
 			})
 			$("#updateBtn").on("click",function () {
+				if (!($("#reminderTime").is(":checked")))
+				{
+					$("#create-startTime").val("");
+					$("#create-repeatType").val("");
+					$("#create-noticeType").val("");
+				}
 				$("#updateForm").submit();
 			})
 		});
@@ -161,11 +176,11 @@
 		<div class="form-group">
 			<label for="create-expiryDate" class="col-sm-2 control-label">到期日期</label>
 			<div class="col-sm-10" style="width: 300px;">
-				<input type="text" class="form-control" id="create-expiryDate" name="endDate" value=${visit.endDate}>
+				<input type="text" class="form-control time" id="create-expiryDate" name="endDate" value=${visit.endDate}>
 			</div>
 			<label for="create-contacts" class="col-sm-2 control-label">联系人&nbsp;&nbsp;<a href="javascript:void(0);" onclick="showContacts()" id="showContacts"><span class="glyphicon glyphicon-search"></span></a></label>
 			<div class="col-sm-10" style="width: 300px;">
-				<input type="text" class="form-control" id="create-contacts" value=${visit.contactsName}>
+				<input type="text" class="form-control" id="create-contacts" readonly value=${visit.contactsName}>
 				<input type="hidden" name="contactsId" id="hiddenContactsId" value=${visit.contactsId}>
 			</div>
 		</div>
@@ -218,7 +233,7 @@
 			<div class="form-group" style="position: relative; top: 10px;">
 				<label for="create-startTime" class="col-sm-2 control-label">开始日期</label>
 				<div class="col-sm-10" style="width: 300px;">
-					<input type="text" class="form-control" id="create-startTime" name="startTime" value=${visit.startTime}>
+					<input type="text" class="form-control time" id="create-startTime" name="startTime" value=${visit.startTime}>
 				</div>
 			</div>
 			
@@ -226,11 +241,15 @@
 				<label for="create-repeatType" class="col-sm-2 control-label">重复类型</label>
 				<div class="col-sm-10" style="width: 300px;">
 					<select class="form-control" id="create-repeatType" name="repeatType">
-					  <option></option>
+						<option></option>
+						<c:forEach items="${applicationScope.repeatType}" var="r">
+							<option value="${r.value}" ${r.value == visit.repeatType ? "selected":""}>${r.text}</option>
+						</c:forEach>
+					  <%--<option></option>
 					  <option selected>每天</option>
 					  <option>每周</option>
 					  <option>每月</option>
-					  <option>每年</option>
+					  <option>每年</option>--%>
 					</select>
 				</div>
 			</div>
@@ -239,9 +258,13 @@
 				<label for="create-noticeType" class="col-sm-2 control-label">通知类型</label>
 				<div class="col-sm-10" style="width: 300px;">
 					<select class="form-control" id="create-noticeType" name="noticeType">
-					  <option></option>
+						<option></option>
+						<c:forEach items="${applicationScope.noticeType}" var="n">
+							<option value="${n.value}" ${n.value == visit.noticeType ? "selected":""}>${n.text}</option>
+						</c:forEach>
+					  <%--<option></option>
 					  <option selected>邮箱</option>
-					  <option>弹窗</option>
+					  <option>弹窗</option>--%>
 					</select>
 				</div>
 			</div>
