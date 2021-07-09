@@ -20,22 +20,31 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 				$("#msg").html("账号密码不能为空");
 				return false;
 			}
-			$.ajax({
-				url : "settings/user/login.do" ,
-				data :{"loginAct":loginAct,"loginPwd":loginPwd},
-				dataType :"json",
-				type : "post",
-				success : function (data) {
-					if (data.success){
+			//判断用户名是否有特殊字符的正则表达式
+			var UsernameRgeExp = /^[a-zA-Z0-9]+$/
+			//alert(!(UsernameRgeExp.test(usname)))
+			if(!(UsernameRgeExp.test($.trim($("#loginAct").val())))){
+				$("#msg").html("用户名只能由数字和字母组成");
+			}
+			else{
+				$.ajax({
+					url : "settings/user/login.do" ,
+					data :{"loginAct":loginAct,"loginPwd":loginPwd},
+					dataType :"json",
+					type : "post",
+					success : function (data) {
+						if (data.success){
 
-						window.location.href = "web/system/toWorkBench.do";
+							window.location.href = "web/system/toWorkBench.do";
+						}
+						else {
+							$("#msg").html("");
+							$("#msg").html(data.msg)
+						}
 					}
-					else {
-						$("#msg").html("");
-						$("#msg").html(data.msg)
-					}
-				}
-			})
+				})
+			}
+
 		}
 		$(function (){
 			if(window.top!=window){
