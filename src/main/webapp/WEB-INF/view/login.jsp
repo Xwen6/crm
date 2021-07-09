@@ -13,6 +13,8 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 	<script>
 
 		function login(){
+			//判断用户名是否有特殊字符的正则表达式
+			var UsernameRgeExp = /^[a-zA-Z0-9]+$/
 			var loginAct = $.trim($("#loginAct").val());
 			var loginPwd = $.trim($("#loginPwd").val());
 			if (loginAct === "" ||loginPwd === ""){
@@ -20,10 +22,13 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 				$("#msg").html("账号密码不能为空");
 				return false;
 			}
-			//判断用户名是否有特殊字符的正则表达式
-			var UsernameRgeExp = /^[a-zA-Z0-9]+$/
+			//判断用户名是否在6-14位之间
+		  else if($.trim($("#loginAct").val()).length<6||$.trim($("#loginAct").val()).length>14){
+				$("#msg").html("用户名要在6-14位之间");
+			}
+
 			//alert(!(UsernameRgeExp.test(usname)))
-			if(!(UsernameRgeExp.test($.trim($("#loginAct").val())))){
+			else if(!(UsernameRgeExp.test($.trim($("#loginAct").val())))){
 				$("#msg").html("用户名只能由数字和字母组成");
 			}
 			else{
