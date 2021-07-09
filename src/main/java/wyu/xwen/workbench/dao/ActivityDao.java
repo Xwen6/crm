@@ -1,6 +1,7 @@
 package wyu.xwen.workbench.dao;
 
 import org.apache.ibatis.annotations.Param;
+import wyu.xwen.vo.ChartVO2;
 import wyu.xwen.workbench.domain.Activity;
 
 import java.util.List;
@@ -28,4 +29,6 @@ public interface ActivityDao {
     List<Activity> getActivityByContactsId(String contactsId);
 
     List<Activity> getActivityList2(@Param("name")String name,@Param("contactsId")String contactsId);
+
+    List<ChartVO2> getChartDate();
 }

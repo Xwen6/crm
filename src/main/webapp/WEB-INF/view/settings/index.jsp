@@ -185,7 +185,7 @@
 				安全控制
 				<br><br>
 				<!--
-				<a href="org/index.html" style="text-decoration: none; color: red;">组织机构</a>
+				<a href="org/index.jsp" style="text-decoration: none; color: red;">组织机构</a>
 				 -->
 				<a href="web/system/toDeptIndex.do">部门管理</a>
 				<br>

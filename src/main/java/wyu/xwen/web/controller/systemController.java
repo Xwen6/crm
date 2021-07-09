@@ -242,6 +242,26 @@ public class systemController {
         return modelAndView;
     }
 
+    /*web/system/toTranChar.do*/
+    @RequestMapping("toTranChar.do")
+    public String toTranChart(){
+        return "workbench/chart/transaction/index";
+    }
+
+    /*web/system/toActivityChar.do*/
+    @RequestMapping("toActivityChar.do")
+    public String toActivityChart(){
+        return "workbench/chart/activity/index";
+    }
+
+    /*web/system/toActivityChar.do*/
+    @RequestMapping("toClueChar.do")
+    public String toClueChart(){
+        return "workbench/chart/clue/index";
+    }
+
+
+
     /*跳转到角色详情页*/
     @RequestMapping("toUserDetail.do")
     @ResponseBody

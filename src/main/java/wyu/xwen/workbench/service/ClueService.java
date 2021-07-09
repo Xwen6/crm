@@ -40,4 +40,6 @@ public interface ClueService {
     List<Activity> getActivityList(String name);
 
     Boolean convert(String clueId, Tran tran, String createBy)throws CLueConvertException;
+
+    Map<String, Object> getChartDate();
 }

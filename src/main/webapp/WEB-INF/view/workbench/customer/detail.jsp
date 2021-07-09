@@ -858,7 +858,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
         </div>
 	</div>
 
-	<!-- 修改市场活动备注的模态窗口 -->
+	<!-- 备注的模态窗口 -->
 	<div class="modal fade" id="editRemarkModal" role="dialog">
 		<%-- 备注的id --%>
 		<input type="hidden" id="remarkId">

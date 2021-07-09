@@ -13,6 +13,7 @@ import wyu.xwen.utils.DateTimeUtil;
 import wyu.xwen.utils.PringFlag;
 import wyu.xwen.utils.UUIDUtil;
 import wyu.xwen.vo.ActivityVo;
+import wyu.xwen.vo.ChartVO2;
 import wyu.xwen.vo.PageVo;
 import wyu.xwen.workbench.domain.Activity;
 import wyu.xwen.workbench.domain.ActivityRemark;
@@ -151,6 +152,13 @@ public class ActivityController {
         activityRemark.setCreateBy(((User) request.getSession().getAttribute("user")).getName());
         Boolean success = activityService.saveRemark(activityRemark);
         return PringFlag.printnFlag(success);
+    }
+    /*workbench/activity/chart.do*/
+    @RequestMapping("chart.do")
+    @ResponseBody
+    public Object chart(){
+        List<ChartVO2> resList = activityService.chart();
+        return resList;
     }
 
 

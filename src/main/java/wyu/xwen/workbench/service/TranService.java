@@ -2,9 +2,10 @@ package wyu.xwen.workbench.service;
 
 import wyu.xwen.exception.TranDeleteException;
 import wyu.xwen.settings.domain.User;
-import wyu.xwen.workbench.domain.Contacts;
-import wyu.xwen.workbench.domain.Customer;
-import wyu.xwen.workbench.domain.Tran;
+import wyu.xwen.vo.ChartVO2;
+import wyu.xwen.vo.ChartVo;
+import wyu.xwen.vo.PageVo;
+import wyu.xwen.workbench.domain.*;
 
 import java.util.List;
 import java.util.Map;
@@ -24,10 +25,28 @@ public interface TranService {
 
     List<User> getUserList();
 
-    boolean updateTran(Tran tran);
+    Tran updateTran(Tran tran);
 
     Tran detail(String id);
 
 
     boolean changeStage(Tran tran);
+
+    List<TranHistory> getTranHistory(String id);
+
+    List<TranRemark> getTranRemarks(String tranId);
+
+    boolean updateRemark(TranRemark remark);
+
+    boolean deleteRemark(String id);
+
+    boolean saveRemark(TranRemark remark);
+
+    List<ChartVo> getCharData();
+
+    List<ChartVO2> getCharData2();
+
+    List<ChartVo> getCharData3();
+
+    List<ChartVO2> getCharData4();
 }

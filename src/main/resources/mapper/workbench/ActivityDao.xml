@@ -233,4 +233,8 @@
         </where>
     </select>
 
+    <select id="getChartDate" resultType="wyu.xwen.vo.ChartVO2">
+        select startDate as name,count(*) as value from tbl_activity group by startDate order by startDate
+    </select>
+
 </mapper>
