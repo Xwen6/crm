@@ -235,6 +235,15 @@ public class ClueController {
         return resMap;
     }
 
+    /*workbench/clue/toConvert.do*/
+    @RequestMapping("toConvert.do")
+    public ModelAndView toConvert(Clue clue){
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.addObject("clue",clue);
+        modelAndView.setViewName("workbench/clue/convert");
+        return modelAndView;
+    }
+
 
 
 
